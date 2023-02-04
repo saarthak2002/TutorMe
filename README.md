@@ -1,6 +1,5 @@
-# Django Practice Assessment
+# Tutor Me Project
 
-__Name:__
+**Team:** A-29
 
-__Computing ID:__
-
+**Members:** Eric Miller, Maya Kalidindi, Alex Catahan, Saarthak Gupta, Mihika Rao
