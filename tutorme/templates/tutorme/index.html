@@ -7,11 +7,19 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% bootstrap_messages %}
+
+    {% load socialaccount %}
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
   </head>
 
   <body>
     <h1 class="display-1 heading">Welcome to Tutor Me!</h1>
+    {% if user.is_authenticated %}
+      <p>Welcome, You are logged in as {{ user.username }}</p>
+    {% else %}
+      <a href="{% provider_login_url 'google' %}">Login With Google</a>
+    {% endif %}
   </body>
 </html>
