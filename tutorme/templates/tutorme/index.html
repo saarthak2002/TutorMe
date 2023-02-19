@@ -24,7 +24,9 @@
       </div>
     </div>
     {% else %}
-      <a href="{% provider_login_url 'google' %}">Login With Google</a>
+      <div class="d-flex justify-content-center">
+        <a href="{% provider_login_url 'google' %}">Login With Google</a>
+      </div>
     {% endif %}
   </body>
 </html>
