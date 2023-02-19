@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.sites",
     "tutorme.apps.TutormeConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    
 ]
 
 MIDDLEWARE = [
@@ -149,10 +151,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-SITE_ID = 2
+SITE_ID = 3
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'tutorme/'
+LOGOUT_REDIRECT_URL = 'tutorme/'
 
 # Activate Django-Heroku.
 # Use this code to avoid the psycopg2 / django-heroku error!  
