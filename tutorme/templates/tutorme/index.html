@@ -17,7 +17,12 @@
   <body>
     <h1 class="display-1 heading">Welcome to Tutor Me!</h1>
     {% if user.is_authenticated %}
-      <p>Welcome, You are logged in as {{ user.username }}</p>
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-column">
+        <div><p>Welcome, You are logged in as {{ user.username }}</p></div>
+        <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
+      </div>
+    </div>
     {% else %}
       <a href="{% provider_login_url 'google' %}">Login With Google</a>
     {% endif %}
