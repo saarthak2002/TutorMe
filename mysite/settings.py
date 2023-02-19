@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-
+import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-!zxbxm@m#l4&fnz!-*@7hy$1rv@c4p2_a5f*w6pual0$)6ptd5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'tutor-me-a29.herokuapp.com', 'ec2-3-225-213-67.compute-1.amazonaws.com']
 
 
 # Application definition
@@ -85,8 +85,12 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':'db5e2esj9c3h3f',
+        'USER': 'vylibzxhkuuwxh',
+        'PASSWORD': 'fd6cd684e2d7de16ee11ebd240bafe804cbaea68270fef5ca87ddac9455259bb',
+        'HOST': 'ec2-3-225-213-67.compute-1.amazonaws.com',
+        'PORT':  '5432'
     }
 }
 
