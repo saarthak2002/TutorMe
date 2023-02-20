@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
+#import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'tutor-me-a29.herokuapp.com', 'ec2-3-225-213-67.co
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.sites",
     "tutorme.apps.TutormeConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -40,6 +41,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "bootstrap5",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    
 ]
 
 MIDDLEWARE = [
@@ -130,6 +136,30 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Set up for Google Login
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+SITE_ID = 2
+
+
+LOGIN_REDIRECT_URL = 'tutorme/'
+LOGOUT_REDIRECT_URL = 'tutorme/'
 
 # Activate Django-Heroku.
 # Use this code to avoid the psycopg2 / django-heroku error!  
