@@ -17,12 +17,16 @@
   <body>
     <h1 class="display-1 heading">Welcome to Tutor Me!</h1>
     {% if user.is_authenticated %}
-    <div class="d-flex justify-content-center">
-      <div class="d-flex flex-column">
-        <div><p>Welcome, You are logged in as {{ user.username }}</p></div>
-        <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
-      </div>
-    </div>
+      
+      {% if user.appuser.user_type == 1 %}
+        {% include "tutorme/studentView.html" %}
+      {% elif user.appuser.user_type == 2 %}
+        {% include "tutorme/tutorView.html" %}
+      {% else %}
+        <p>ERROR: Invalid Entry For User Type</p>
+        <a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a>
+      {% endif %}
+    
     {% else %}
       <div class="d-flex justify-content-center">
         <a href="{% provider_login_url 'google' %}">Login With Google</a>
