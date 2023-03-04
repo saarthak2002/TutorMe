@@ -15,39 +15,53 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-center">
-    <div class="d-flex flex-column text-center">
-        <table id="example" class="table table-striped" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Subject</th>
-                    <th>Catalog Number</th>
-                    <th>Section</th>
-                    <th>Name</th>
-                    <th>Instructor</th>
-                    <th>Request</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for section in classList %}
+{% if classList %}
+    <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column text-center">
+            <table id="example" class="table table-striped" style="width:100%">
+                <thead>
                     <tr>
-                        <td>{{section.subject}}</td>
-                        <td>{{section.catalog}}</td>
-                        <td>{{section.section}}</td>
-                        <td>{{section.class_name}}</td>
-                        <td>{{section.instructor}}</td>
-                        <td><button type="submit" class="btn btn-secondary request-button" request-data="{{ section.class_name }}">Request</button></td>
+                        <th>Subject</th>
+                        <th>Catalog Number</th>
+                        <th>Section</th>
+                        <th>Name</th>
+                        <th>Instructor</th>
+                        <th>Request</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for section in classList %}
+                        <tr>
+                            <td>{{section.subject}}</td>
+                            <td>{{section.catalog}}</td>
+                            <td>{{section.section}}</td>
+                            <td>{{section.class_name}}</td>
+                            <td>{{section.instructor}}</td>
+                            <td><button type="submit" class="btn btn-secondary request-button" request-data="{{ section.class_name }}">Request</button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>  
+{% else %}
+    <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column text-center">
+            <p>No Classes Found</p>
+        </div>
+    </div>
+{% endif %}  
+<br>
+{% if requestedClass %}
 <div class="d-flex justify-content-center">
     <div class="d-flex flex-column text-center">
         <h1>Tutors For {{ requestedClass }}</h1>
+        {% include "tutorme/cardView.html" %}
     </div>
 </div>
+
+{% else %}
+{% endif %}
 
 
     

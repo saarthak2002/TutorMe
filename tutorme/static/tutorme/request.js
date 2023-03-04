@@ -1,9 +1,7 @@
  if (document.readyState !== 'loading') {
-    console.log('document is already ready, just execute code here');
     handleButtonPress();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
-        console.log('document was not ready, place code here');
         handleButtonPress();
     });
 }
@@ -21,7 +19,6 @@ function handleButtonPress() {
             xhr.open('GET', url.toString());
             xhr.onload = function() {
                 const response = xhr.responseText;
-                // Update the DOM as needed
                 window.location.href = url.toString();
               };
             xhr.send();
