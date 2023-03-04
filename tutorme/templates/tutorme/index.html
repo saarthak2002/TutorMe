@@ -16,12 +16,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" /> 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" />
 
-    {% load static %} 
-    <script src="{% static 'tutorme/table.js' %}"></script>
     
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+
+    {% load static %} 
+    <script src="{% static 'tutorme/table.js' %}"></script>
+    {% load static %} 
+    <script src="{% static 'tutorme/request.js' %}" async></script>
+    
   </head>
 
   <body>

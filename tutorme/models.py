@@ -13,7 +13,7 @@ class AppUser(models.Model):
     )
     user_type = models.PositiveSmallIntegerField(default=1, choices=USER_TYPE_CHOICES)
     def __str__(self):
-        return self.user.username
+        return self.user.username+' - '+ str(self.user_type)
 
 @receiver(post_save, sender=User)
 def app_user_create(sender, instance=None, created=False, **kwargs):

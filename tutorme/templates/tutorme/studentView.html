@@ -36,13 +36,18 @@
                         <td>{{section.section}}</td>
                         <td>{{section.class_name}}</td>
                         <td>{{section.instructor}}</td>
-                        <td><button type="button" class="btn btn-secondary">Request</button></td>
+                        <td><button type="submit" class="btn btn-secondary request-button" request-data="{{ section.class_name }}">Request</button></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>  
+<div class="d-flex justify-content-center">
+    <div class="d-flex flex-column text-center">
+        <h1>Tutors For {{ requestedClass }}</h1>
+    </div>
+</div>
 
 
     

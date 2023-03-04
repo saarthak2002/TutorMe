@@ -1,3 +1,3 @@
-$(document).ready(function () {
-    $('#example').DataTable();
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('#example').DataTable();
 });
