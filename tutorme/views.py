@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor, AppUser
+from .models import Tutor, AppUser, Request
 
 def index(request):
     
@@ -19,6 +19,14 @@ def index(request):
         print(from_student,to_tutor,course)
         print(user_student)
         print(user_tutor)
+
+        new_request , created = Request.objects.get_or_create(
+            from_student = user_student,
+            to_tutor = user_tutor,
+            course = course,
+            status = 1
+        )
+        new_request.save()
 
     if request.method == 'GET' and 'search' in request.GET:
         searchParams = request.GET.get('search', '')

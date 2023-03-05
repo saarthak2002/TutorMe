@@ -36,4 +36,7 @@ class Request(models.Model):
       (3, 'declined')
     )
     status = models.PositiveSmallIntegerField(choices=REQUEST_STATUS_CHOICES, default=1)
+
+    def __str__(self):
+        return 'from: ' + self.from_student.user.username + ' to: ' + self.to_tutor.user.username + ' course: ' + self.course + ' status: ' + ('pending' if self.status == 1 else 'accepted' if self.status == 2 else 'declined')
     
