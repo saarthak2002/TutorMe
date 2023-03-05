@@ -19,3 +19,11 @@ class AppUser(models.Model):
 def app_user_create(sender, instance=None, created=False, **kwargs):
     if created:
         AppUser.objects.create(user=instance,)
+
+class Tutor(models.Model):
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    course = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.user.user.username + ' - ' + self.course
+    

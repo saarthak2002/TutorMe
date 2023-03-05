@@ -3,6 +3,7 @@ from django.http import HttpResponse
 import requests
 import tutorme.apiutils as sisapi
 import urllib.parse
+from .models import Tutor
 
 
 # Create your views here.
@@ -19,19 +20,12 @@ def index(request):
     if request.method == 'GET' and 'data' in request.GET:
         data = urllib.parse.unquote(request.GET.get('data', ''))
         default_bio = 'Hello, I am a tutor for {}. Nice to meet you!'.format(data)
-        
-        # TESTER DATA
-        tutorList = [
-            {'name':'John Doe', 'class': data, 'Bio': default_bio},
-            {'name':'Jane Doe', 'class': data, 'Bio': default_bio},
-            {'name':'Sarah Myers', 'class': data, 'Bio': default_bio},
-            {'name':'The Rock', 'class': data, 'Bio': default_bio},
-            {'name':'Forrest Gump', 'class': data, 'Bio': default_bio},
-            {'name':'Robert Sun', 'class': data, 'Bio': default_bio},
-            {'name':'Vaughn Scott', 'class': data, 'Bio': default_bio},
-            {'name':'Michael Kim', 'class': data, 'Bio': default_bio},
-            {'name':'Dorothy Parker', 'class': data, 'Bio': default_bio}
-        ]
+        query_result = Tutor.objects.filter(course__contains = data)
+        for tutor in query_result:
+            name = tutor.user.user.first_name + ' ' + tutor.user.user.last_name
+            username = tutor.user.user.username
+            email = tutor.user.user.email
+            tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email})
         
     context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList}
 
