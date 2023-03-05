@@ -16,9 +16,6 @@ def index(request):
         course = request.POST.get('course')
         user_student = AppUser.objects.filter(user__username__contains = from_student).first()
         user_tutor = AppUser.objects.filter(user__username__contains = to_tutor).first()
-        print(from_student,to_tutor,course)
-        print(user_student)
-        print(user_tutor)
 
         new_request , created = Request.objects.get_or_create(
             from_student = user_student,
@@ -49,13 +46,28 @@ def index(request):
 
 def student_requests_view(request):
     request_list = []
+
+    if request.method == 'POST':
+        remove_from_student = request.POST.get('from') #username
+        remove_to_tutor = request.POST.get('to')
+        remove_course = request.POST.get('course')
+        user_student = AppUser.objects.filter(user__username__contains = remove_from_student).first()
+        user_tutor = AppUser.objects.filter(user__username__contains = remove_to_tutor).first()
+        
+        remove_query = Request.objects.filter(
+            from_student = user_student,
+            to_tutor = user_tutor,
+            course = remove_course
+        ).delete()
+
     username = request.user.username
     query_result = Request.objects.filter(from_student__user__username__contains = username)
     for item in query_result:
         to_tutor = item.to_tutor.user.username
         tutor_name = item.to_tutor.user.first_name + ' ' + item.to_tutor.user.last_name
         course = item.course
-        request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course})
+        status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
+        request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course, 'status':status})
     
     context = {'request_list': request_list}
     return render(request, 'tutorme/studentRequestsView.html', context)

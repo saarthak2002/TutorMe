@@ -1,21 +1,19 @@
 <div class="container">
-{% for tutor in tutorList %}
-    {% if forloop.first %}<div class="row">{% endif %}
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">{{ tutor.name }}</h5>
-                  <h6 class="text-black-50">username: {{ tutor.username }}</h6>
-                  <h6 class="text-black-50">{{ tutor.email }}</h6>
-                  <p class="card-text">{{ tutor.Bio }}</p>
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}">Request Help</button>
-                </div>
+
+<div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+    {% for tutor in tutorList %}
+        <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">{{ tutor.name }}</h5>
+            <h6 class="text-black-50">username: {{ tutor.username }}</h6>
+            <h6 class="text-black-50">{{ tutor.email }}</h6>
+            <p class="card-text">{{ tutor.Bio }}</p>
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}">Request Help</button>
             </div>
         </div>
+    {% endfor %}
+</div>
 
-    {% if forloop.counter|divisibleby:3 %}</div><br><div class="row">{% endif %}
-    {% if forloop.last %}</div>{% endif %}
-{% endfor %}
 </div>

@@ -1,10 +1,12 @@
  if (document.readyState !== 'loading') {
     handleButtonPress();
     handleCardButtonPress();
+    handleCardRemovePress();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
         handleCardButtonPress();
+        handleCardRemovePress();
     });
 }
 
@@ -43,6 +45,35 @@ function handleCardButtonPress() {
             url.searchParams.set('from', encodeURIComponent(from));
             this.disabled = true;
             this.innerHTML = "Request Sent";
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+            formData.append('from', from);
+            formData.append('to', to);
+            formData.append('course', course);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+
+        });
+    });
+}
+
+function handleCardRemovePress() {
+    const buttons = document.querySelectorAll('.request-card-remove-button');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            
+            var csrftoken = Cookies.get('csrftoken');
+            const from = this.getAttribute('from_user');
+            const to = this.getAttribute('to_tutor');
+            const course = this.getAttribute('course');
+            const url = new URL(window.location.href);
+
+
+            url.searchParams.set('from', encodeURIComponent(from));
+            this.disabled = true;
+            this.innerHTML = "Removed";
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', url.toString());
