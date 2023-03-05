@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor
+from .models import Tutor, AppUser
 
 def index(request):
     
@@ -10,10 +10,15 @@ def index(request):
     data = request.GET.get('data')
     tutorList = []
 
-    from_student = 'hi'
-
     if request.method == 'POST':
         from_student = request.POST.get('from')
+        to_tutor = request.POST.get('to')
+        course = request.POST.get('course')
+        user_student = AppUser.objects.filter(user__username__contains = from_student).first()
+        user_tutor = AppUser.objects.filter(user__username__contains = to_tutor).first()
+        print(from_student,to_tutor,course)
+        print(user_student)
+        print(user_tutor)
 
     if request.method == 'GET' and 'search' in request.GET:
         searchParams = request.GET.get('search', '')
@@ -28,7 +33,8 @@ def index(request):
             username = tutor.user.user.username
             email = tutor.user.user.email
             tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email})
+            
         
-    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'from_student':from_student}
+    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList}
 
     return render(request, 'tutorme/index.html', context)
