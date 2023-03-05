@@ -26,3 +26,14 @@ class Tutor(models.Model):
     def __str__(self):
         return self.user.user.username + ' - ' + self.course
     
+class Request(models.Model):
+    from_student = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='from_student')
+    to_tutor = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='to_tutor')
+    course = models.CharField(max_length=150)
+    REQUEST_STATUS_CHOICES = (
+      (1, 'pending'),
+      (2, 'accepted'),
+      (3, 'declined')
+    )
+    status = models.PositiveSmallIntegerField(choices=REQUEST_STATUS_CHOICES, default=1)
+    
