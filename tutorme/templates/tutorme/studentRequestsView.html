@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Tutor Me</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+
+        {% load socialaccount %}
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+
+        {% load static %} 
+        <script src="{% static 'tutorme/request.js' %}" async></script>
+    </head>
+
+    <body>
+        <div style="margin: 0; padding: 0;">
+            <div class="row" style="width: 100%;">
+                <div class="col">
+                    {% include "tutorme/navMenu.html" %}
+                </div>
+
+                <div class="col-9">
+                    <h1 class="display-1 heading"> My Requests</h1>
+                    <div class="d-flex justify-content-center" style="gap: 10px;">
+                        {% for request in request_list %}
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                              <h5 class="card-title">{{ request.tutor_name }}</h5>
+                              <h6 class="text-black-50">username: {{ request.to_tutor }}</h6>
+                              <h6 class="text-black-50"></h6>
+                              <p class="card-text">Class: {{ request.course }}</p>
+                              {% csrf_token %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

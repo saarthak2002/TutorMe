@@ -26,6 +26,8 @@
     <script src="{% static 'tutorme/table.js' %}"></script>
     {% load static %} 
     <script src="{% static 'tutorme/request.js' %}" async></script>
+    {% load static %} 
+    <script src="{% static 'tutorme/studentNav.js' %}" async></script>
     
   </head>
 
@@ -46,6 +48,13 @@
       <div class="d-flex justify-content-center">
         <a href="{% provider_login_url 'google' %}">Login With Google</a>
       </div>
+      <footer class="fixed-bottom">
+        <div class="text-center p-4" style="background-color: lightblue;">
+          <span style="color: white">© 2023 Copyright</span>
+          <a class="fw-bold" href="#" style="color: white; text-decoration: none;">Tutor Me</a>
+        </div>
+      </footer>
     {% endif %}
+
   </body>
 </html>

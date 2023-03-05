@@ -46,3 +46,18 @@ def index(request):
     context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList}
 
     return render(request, 'tutorme/index.html', context)
+
+def student_requests_view(request):
+    request_list = []
+    username = request.user.username
+    query_result = Request.objects.filter(from_student__user__username__contains = username)
+    for item in query_result:
+        to_tutor = item.to_tutor.user.username
+        tutor_name = item.to_tutor.user.first_name + ' ' + item.to_tutor.user.last_name
+        course = item.course
+        request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course})
+    
+    context = {'request_list': request_list}
+    return render(request, 'tutorme/studentRequestsView.html', context)
+
+    
