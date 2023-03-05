@@ -1,67 +1,77 @@
-<div class="d-flex justify-content-center">
-    <div class="d-flex flex-column">
-        <h1 style="text-align: center;">This is the Student View</h1>
-        <div><p style="text-align: center;">Welcome, You are logged in as {{ user.username }}</p></div>
-        <a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
-    </div>
-</div>
+<div style="margin: 0; padding: 0;">
+    <div class="row" style="width: 100%;">
 
-<div class="d-flex justify-content-center">
-    <div class="d-flex flex-column text-center">
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" >
-            <div style="padding: 10px;"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
-        </form>
-    </div>
-</div>
+        <div class="col">
+            {% include "tutorme/navMenu.html" %}
+        </div>
 
-{% if classList %}
-    <div class="d-flex justify-content-center">
-        <div class="d-flex flex-column text-center">
-            <table id="example" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Catalog Number</th>
-                        <th>Section</th>
-                        <th>Name</th>
-                        <th>Instructor</th>
-                        <th>Request</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for section in classList %}
-                        <tr>
-                            <td>{{section.subject}}</td>
-                            <td>{{section.catalog}}</td>
-                            <td>{{section.section}}</td>
-                            <td>{{section.class_name}}</td>
-                            <td>{{section.instructor}}</td>
-                            <td><button type="submit" class="btn btn-secondary request-button" request-data="{{ section.class_name }}">Request</button></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="col-9">
+            <h1 class="display-1 heading">Welcome to Tutor Me!</h1>
+            <div>
+                <div class="d-flex justify-content-center">
+                    <div clas="d-flex flex-column">
+                        <h1 style="text-align: center;">This is the Student View</h1>
+                        <div><p style="text-align: center;">Welcome, You are logged in as {{ user.username }}</p></div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center">
+                    <div class="d-flex flex-column text-center">
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" >
+                            <div style="padding: 10px;"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
+                        </form>
+                    </div>
+                </div>
+                
+                {% if classList %}
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex flex-column text-center">
+                            <table id="example" class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Catalog Number</th>
+                                        <th>Section</th>
+                                        <th>Name</th>
+                                        <th>Instructor</th>
+                                        <th>Request</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for section in classList %}
+                                        <tr>
+                                            <td>{{section.subject}}</td>
+                                            <td>{{section.catalog}}</td>
+                                            <td>{{section.section}}</td>
+                                            <td>{{section.class_name}}</td>
+                                            <td>{{section.instructor}}</td>
+                                            <td><button type="submit" class="btn btn-secondary request-button" request-data="{{ section.class_name }}">Request</button></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex flex-column text-center">
+                            <p>No Classes Found</p>
+                        </div>
+                    </div>
+                {% endif %}  
+                <br>
+                {% if requestedClass %}
+                <div class="d-flex justify-content-center">
+                    <div class="d-flex flex-column text-center">
+                        <h1>Tutors For {{ requestedClass }}</h1>
+                        {% include "tutorme/cardView.html" %}
+                    </div>
+                </div>
+                
+                {% else %}
+                {% endif %}
+            </div>
         </div>
     </div>
-{% else %}
-    <div class="d-flex justify-content-center">
-        <div class="d-flex flex-column text-center">
-            <p>No Classes Found</p>
-        </div>
-    </div>
-{% endif %}  
-<br>
-{% if requestedClass %}
-<div class="d-flex justify-content-center">
-    <div class="d-flex flex-column text-center">
-        <h1>Tutors For {{ requestedClass }}</h1>
-        {% include "tutorme/cardView.html" %}
-    </div>
 </div>
-
-{% else %}
-{% endif %}
-
-
-    

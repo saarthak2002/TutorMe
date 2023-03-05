@@ -10,6 +10,11 @@ def index(request):
     data = request.GET.get('data')
     tutorList = []
 
+    from_student = 'hi'
+
+    if request.method == 'POST':
+        from_student = request.POST.get('from')
+
     if request.method == 'GET' and 'search' in request.GET:
         searchParams = request.GET.get('search', '')
         classList = sisapi.search_matcher(searchParams)
@@ -24,6 +29,6 @@ def index(request):
             email = tutor.user.user.email
             tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email})
         
-    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList}
+    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'from_student':from_student}
 
     return render(request, 'tutorme/index.html', context)

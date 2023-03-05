@@ -20,6 +20,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 
     {% load static %} 
     <script src="{% static 'tutorme/table.js' %}"></script>
@@ -29,7 +30,7 @@
   </head>
 
   <body>
-    <h1 class="display-1 heading">Welcome to Tutor Me!</h1>
+    
     {% if user.is_authenticated %}
       
       {% if user.appuser.user_type == 1 %}
@@ -42,6 +43,7 @@
       {% endif %}
     
     {% else %}
+      <h1 class="display-1 heading">Welcome to Tutor Me!</h1>
       <div class="d-flex justify-content-center">
         <a href="{% provider_login_url 'google' %}">Login With Google</a>
       </div>

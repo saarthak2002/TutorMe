@@ -9,10 +9,12 @@
                   <h6 class="text-black-50">username: {{ tutor.username }}</h6>
                   <h6 class="text-black-50">{{ tutor.email }}</h6>
                   <p class="card-text">{{ tutor.Bio }}</p>
-                  <a href="#" class="btn btn-primary">Request Help</a>
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}">Request Help</button>
                 </div>
             </div>
         </div>
+
     {% if forloop.counter|divisibleby:3 %}</div><br><div class="row">{% endif %}
     {% if forloop.last %}</div>{% endif %}
 {% endfor %}
