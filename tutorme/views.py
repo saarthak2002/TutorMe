@@ -1,18 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-import requests
 import tutorme.apiutils as sisapi
 import urllib.parse
 from .models import Tutor
 
-
-# Create your views here.
 def index(request):
     
     classList = []
     searchParams = ''
     data = request.GET.get('data')
     tutorList = []
+
     if request.method == 'GET' and 'search' in request.GET:
         searchParams = request.GET.get('search', '')
         classList = sisapi.search_matcher(searchParams)
