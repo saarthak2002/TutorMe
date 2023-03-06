@@ -34,10 +34,12 @@
                             <div class="card-body">
                               <h5 class="card-title">{{ request.tutor_name }}</h5>
                               <h6 class="text-black-50">username: {{ request.to_tutor }}</h6>
-                              <h6 class="text-black-50">{{ request.status}}</h6>
+                              <h6 class="text-black-50">{{ request.tutor_email }}</h6>
+                              <h6 class="text-black-50">{{ request.status }}</h6>
                               <p class="card-text">Class: {{ request.course }}</p>
                               {% csrf_token %}
                               <button type="submit" class="btn btn-danger request-card-remove-button" from_user="{{ user.username }}" to_tutor = "{{ request.to_tutor }}" course = "{{ request.course }}">Remove</button>
+                              <p class="text-black-50" style="margin-bottom: 0; margin-top: 3px; font-size: 9px; font-style: italic;">{{ request.time }}</p>
                             </div>
                         </div>
                         {% endfor %}

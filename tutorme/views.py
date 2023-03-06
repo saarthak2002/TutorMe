@@ -65,9 +65,12 @@ def student_requests_view(request):
     for item in query_result:
         to_tutor = item.to_tutor.user.username
         tutor_name = item.to_tutor.user.first_name + ' ' + item.to_tutor.user.last_name
+        tutor_email = item.to_tutor.user.email
         course = item.course
+        time = item.created_timestamp
+        str_time = time.strftime("sent on %m-%d-%Y at %H:%M:%S")
         status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
-        request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course, 'status':status})
+        request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course, 'status':status, 'tutor_email':tutor_email, 'time':str_time})
     
     context = {'request_list': request_list}
     return render(request, 'tutorme/studentRequestsView.html', context)

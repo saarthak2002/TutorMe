@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from datetime import datetime
 
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -27,6 +28,7 @@ class Tutor(models.Model):
         return self.user.user.username + ' - ' + self.course
     
 class Request(models.Model):
+    created_timestamp = models.DateTimeField(auto_now_add=True)
     from_student = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='from_student')
     to_tutor = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='to_tutor')
     course = models.CharField(max_length=150)
