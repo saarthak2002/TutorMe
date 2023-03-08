@@ -1,7 +1,14 @@
-<div class="d-flex justify-content-center">
-    <div class="d-flex flex-column">
-        <h1 style="text-align: center;">This is the Tutor View</h1>
-        <div><p style="text-align: center;">Welcome, You are logged in as {{ user.username }}</p></div>
-        <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
+<div style="margin: 0; padding: 0;">
+    <div class="row" style="width: 100%;">
+        <div class="col">
+            {% include "tutorme/navMenuTutor.html" %}
+        </div>
+
+        <div class="col-9">
+            <h1 class="display-1 heading">Welcome to Tutor Me!</h1>
+            <h1 style="text-align: center;">This is the Tutor View</h1>
+            <div><p style="text-align: center;">Welcome, You are logged in as {{ user.username }}</p></div>
+            <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
+        </div>
     </div>
 </div>
