@@ -2,11 +2,15 @@
     handleButtonPress();
     handleCardButtonPress();
     handleCardRemovePress();
+    handleRequestAccept();
+    handleRequestReject();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
         handleCardButtonPress();
         handleCardRemovePress();
+        handleRequestAccept();
+        handleRequestReject();
     });
 }
 
@@ -81,6 +85,66 @@ function handleCardRemovePress() {
             formData.append('from', from);
             formData.append('to', to);
             formData.append('course', course);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+
+        });
+    });
+}
+
+function handleRequestAccept() {
+    const buttons = document.querySelectorAll('.request-card-accept-button');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            
+            var csrftoken = Cookies.get('csrftoken');
+            const from = this.getAttribute('student');
+            const to = this.getAttribute('tutor');
+            const course = this.getAttribute('course');
+            const type = this.getAttribute('request_type');
+            const url = new URL(window.location.href);
+
+            url.searchParams.set('from', encodeURIComponent(from));
+            this.disabled = true;
+            this.innerHTML = "Accepted";
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+            formData.append('from', from);
+            formData.append('to', to);
+            formData.append('course', course);
+            formData.append('request_type', type)
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+
+        });
+    });
+}
+
+function handleRequestReject() {
+    const buttons = document.querySelectorAll('.request-card-reject-button');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            
+            var csrftoken = Cookies.get('csrftoken');
+            const from = this.getAttribute('student');
+            const to = this.getAttribute('tutor');
+            const course = this.getAttribute('course');
+            const type = this.getAttribute('request_type');
+            const url = new URL(window.location.href);
+
+            url.searchParams.set('from', encodeURIComponent(from));
+            this.disabled = true;
+            this.innerHTML = "Rejected";
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+            formData.append('from', from);
+            formData.append('to', to);
+            formData.append('course', course);
+            formData.append('request_type', type)
             formData.append('csrfmiddlewaretoken', csrftoken);
             xhr.send(formData);
 

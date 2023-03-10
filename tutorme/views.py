@@ -77,6 +77,15 @@ def student_requests_view(request):
 
 def tutor_requests_view(request):
     request_list = []
+
+    if request.method == 'POST':
+        change_status_request_type = request.POST.get('request_type')
+        change_status_from_student = request.POST.get('from')
+        change_status_to_tutor = request.POST.get('to')
+        change_status_course = request.POST.get('course')
+        print('from:{} to: {} for: {} change to: {}'.format(change_status_from_student,change_status_to_tutor,change_status_course,change_status_request_type))
+        # change DB data here
+
     username = request.user.username
     query_result = Request.objects.filter(to_tutor__user__username__contains = username)
 
@@ -89,9 +98,6 @@ def tutor_requests_view(request):
         str_time = time.strftime("sent on %m-%d-%Y at %H:%M:%S")
         status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
         request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time})
-        
+
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
-
-
-    

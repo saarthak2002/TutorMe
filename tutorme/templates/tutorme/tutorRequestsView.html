@@ -38,7 +38,10 @@
                               <h6 class="text-black-50">{{ request.status }}</h6>
                               <p class="card-text">Class: {{ request.course }}</p>
                               {% csrf_token %}
-                              
+                              <div class="d-flex justify-content-center" style="gap: 10px;">
+                                <button type="submit" class="btn btn-success request-card-accept-button" tutor="{{ user.username }}" student = "{{ request.from_student }}" course = "{{ request.course }}" request_type="accept">Accept</button>
+                                <button type="submit" class="btn btn-danger request-card-reject-button" tutor="{{ user.username }}" student = "{{ request.from_student }}" course = "{{ request.course }}" request_type="reject">Reject</button>
+                              </div>
                               <p class="text-black-50" style="margin-bottom: 0; margin-top: 3px; font-size: 9px; font-style: italic;">{{ request.time }}</p>
                             </div>
                         </div>
