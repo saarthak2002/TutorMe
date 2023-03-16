@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Tutor Me</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+
+    {% load socialaccount %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" /> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" />
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+    {% load static %} 
+    <script src="{% static 'tutorme/table.js' %}"></script>
+    {% load static %} 
+    <script src="{% static 'tutorme/request.js' %}" async></script>
+    {% load static %} 
+    <script src="{% static 'tutorme/studentNav.js' %}" async></script>
+    
+  </head>
+
+  <body>
+    <div style="margin: 0; padding: 0;">
+        <div class="row" style="width: 100%;">
+    
+            <div class="col">
+                {% include "tutorme/navMenuTutor.html" %}
+            </div>
+    
+            <div class="col-9">
+                <div>
+                    <div class="d-flex justify-content-center">
+                        <div clas="d-flex flex-column">
+                            <h1 class="display-1 heading"> Add Classes</h1>
+                            <h3 style="text-align: center;">Search for a class to add</h1>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex flex-column text-center">
+                            <form class="form-inline my-2 my-lg-0">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" >
+                                <div style="padding: 10px;"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    {% if classList %}
+                        <div class="d-flex justify-content-center">
+                            <div class="d-flex flex-column text-center">
+                                <table id="example" class="table table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Catalog Number</th>
+                                            <th>Section</th>
+                                            <th>Name</th>
+                                            <th>Instructor</th>
+                                            <th>Request</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for section in classList %}
+                                            <tr>
+                                                <td>{{section.subject}}</td>
+                                                <td>{{section.catalog}}</td>
+                                                <td>{{section.section}}</td>
+                                                <td>{{section.class_name}}</td>
+                                                <td>{{section.instructor}}</td>
+                                                {% csrf_token %}
+                                                <td><button type="submit" class="btn btn-secondary tutor-add-class-request-button" course="{{ section.class_name }}">Add</button></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="d-flex justify-content-center">
+                            <div class="d-flex flex-column text-center">
+                                <p>No Classes Found</p>
+                            </div>
+                        </div>
+                    {% endif %}  
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

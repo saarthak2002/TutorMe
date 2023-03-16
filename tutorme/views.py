@@ -131,3 +131,27 @@ def tutor_my_classes_view(request):
 
     context = {'course_list' : course_list}
     return render(request, 'tutorme/tutorMyClassesView.html', context)
+
+def tutor_add_classes_view(request):
+    classList = []
+    searchParams = ''
+
+    if request.method == 'POST':
+        course = request.POST.get('course')
+        curr_user = request.user.username
+        current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
+        
+        new_tutor, created = Tutor.objects.get_or_create(
+            user = current_tutor,
+            course = course
+        )
+        new_tutor.save()
+        print('added')
+
+    if request.method == 'GET' and 'search' in request.GET:
+        searchParams = request.GET.get('search', '')
+        classList = sisapi.search_matcher(searchParams)
+
+    context = {'classList': classList, 'search':searchParams}
+
+    return render(request, 'tutorme/tutorAddClassesView.html', context)
