@@ -35,7 +35,15 @@
                               <h5 class="card-title">{{ request.tutor_name }}</h5>
                               <h6 class="text-black-50">username: {{ request.to_tutor }}</h6>
                               <h6 class="text-black-50">{{ request.tutor_email }}</h6>
-                              <h6 class="text-black-50">{{ request.status }}</h6>
+
+                              {% if request.status == "Accepted" %}
+                                <h6 class="" style="color: rgb(64, 133, 88); font-weight: bold;">{{ request.status }}</h6>
+                              {% elif request.status == "Declined" %}
+                                <h6 class="" style="color: rgb(203, 68, 74); font-weight: bold;">{{ request.status }}</h6>
+                              {% else %}
+                                <h6 class="text-black-50">{{ request.status }}</h6>
+                              {% endif %}
+
                               <p class="card-text">Class: {{ request.course }}</p>
                               {% csrf_token %}
                               <button type="submit" class="btn btn-danger request-card-remove-button" from_user="{{ user.username }}" to_tutor = "{{ request.to_tutor }}" course = "{{ request.course }}">Remove</button>

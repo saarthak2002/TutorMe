@@ -84,7 +84,20 @@ def tutor_requests_view(request):
         change_status_to_tutor = request.POST.get('to')
         change_status_course = request.POST.get('course')
         print('from:{} to: {} for: {} change to: {}'.format(change_status_from_student,change_status_to_tutor,change_status_course,change_status_request_type))
-        # change DB data here
+        user_student = AppUser.objects.filter(user__username__contains = change_status_from_student).first()
+        user_tutor = AppUser.objects.filter(user__username__contains = change_status_to_tutor).first()
+        
+        request_to_change = Request.objects.filter(
+            from_student = user_student,
+            to_tutor = user_tutor,
+            course = change_status_course
+        ).first()
+        if change_status_request_type == 'accept':
+            request_to_change.status = 2
+            request_to_change.save()
+        elif change_status_request_type == 'reject':
+            request_to_change.status = 3
+            request_to_change.save()
 
     username = request.user.username
     query_result = Request.objects.filter(to_tutor__user__username__contains = username)
