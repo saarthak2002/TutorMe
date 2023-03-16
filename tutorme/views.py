@@ -114,3 +114,20 @@ def tutor_requests_view(request):
 
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
+
+def tutor_my_classes_view(request):
+
+    course_list = []
+    curr_user = request.user.username
+    current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
+    course_query = Tutor.objects.filter(
+        user = current_tutor
+    )
+    print(course_query)
+
+    for item in course_query:
+        course = item.course
+        course_list.append(course)
+
+    context = {'course_list' : course_list}
+    return render(request, 'tutorme/tutorMyClassesView.html', context)
