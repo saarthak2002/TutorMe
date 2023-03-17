@@ -163,5 +163,4 @@ def tutor_add_classes_view(request):
         classList = sisapi.search_matcher(searchParams)
 
     context = {'classList': classList, 'search':searchParams}
-
     return render(request, 'tutorme/tutorAddClassesView.html', context)
