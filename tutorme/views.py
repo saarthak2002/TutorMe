@@ -3,6 +3,7 @@ import tutorme.apiutils as sisapi
 import urllib.parse
 from .models import Tutor, AppUser, Request, Ratings
 
+# student view class search page (Search)
 def index(request):
     
     classList = []
@@ -10,6 +11,7 @@ def index(request):
     data = request.GET.get('data')
     tutorList = []
 
+    # handle clicking "Request Help" button after search and display tutor list, adds new Request to database
     if request.method == 'POST':
         from_student = request.POST.get('from')
         to_tutor = request.POST.get('to')
@@ -25,10 +27,13 @@ def index(request):
         )
         new_request.save()
 
+    # displays list of classes in table on clicking "Search" button after entering search parameters in search bar
+    # queries SIS API for list of classes based on parameters
     if request.method == 'GET' and 'search' in request.GET:
         searchParams = request.GET.get('search', '')
         classList = sisapi.search_matcher(searchParams)
 
+    # displays list of tutor cards on clicking "Request" button for a course in the search results table
     if request.method == 'GET' and 'data' in request.GET:
         data = urllib.parse.unquote(request.GET.get('data', ''))
         default_bio = 'Hello, I am a tutor for {}. Nice to meet you!'.format(data)
@@ -44,9 +49,11 @@ def index(request):
 
     return render(request, 'tutorme/index.html', context)
 
+# student view requests page (My Requests)
 def student_requests_view(request):
     request_list = []
 
+    # handle clicking "Remove" button on a card in the My Requests page in the Student View, removes Request from database
     if request.method == 'POST':
         remove_from_student = request.POST.get('from') #username
         remove_to_tutor = request.POST.get('to')
@@ -60,6 +67,8 @@ def student_requests_view(request):
             course = remove_course
         ).delete()
 
+    # queries database for list of all Requests the current student has made, 
+    # displaying all of them as cards in the My Requests view in the Student View
     username = request.user.username
     query_result = Request.objects.filter(from_student__user__username__contains = username)
     for item in query_result:
@@ -75,9 +84,12 @@ def student_requests_view(request):
     context = {'request_list': request_list}
     return render(request, 'tutorme/studentRequestsView.html', context)
 
+# tutor view requests page (My Requests)
 def tutor_requests_view(request):
     request_list = []
 
+    # handles clicking "Accept" or "Reject" button on a card in the My Requests page in the Tutor View,
+    # changes the status of an existing Request in the database to Accepted or Declined- initially Pending
     if request.method == 'POST':
         change_status_request_type = request.POST.get('request_type')
         change_status_from_student = request.POST.get('from')
@@ -99,6 +111,8 @@ def tutor_requests_view(request):
             request_to_change.status = 3
             request_to_change.save()
 
+    # queries database for list of all Requests the current tutor has received, 
+    # displaying all of them as cards in the My Requests view in the Tutor View
     username = request.user.username
     query_result = Request.objects.filter(to_tutor__user__username__contains = username)
 
@@ -115,13 +129,15 @@ def tutor_requests_view(request):
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
 
+# tutor view classes page (My Classes)
 def tutor_my_classes_view(request):
 
     course_list = []
     curr_user = request.user.username
     current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
 
-    # Implement Remove POST
+    # handles clicking "Remove" button in any card in the My Classes page in the Tutor View,
+    # removes the corresponding entry from the Tutor model in the database
     if request.method == 'POST':
         curr_user = request.user.username
         current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
@@ -132,6 +148,8 @@ def tutor_my_classes_view(request):
             course = remove_course
         ).delete()
 
+    # queries database for list of all courses the tutor teaches in the Tutor model, 
+    # displaying all of them as cards in the My Classes page in the Tutor View
     course_query = Tutor.objects.filter(
         user = current_tutor
     )
@@ -143,10 +161,13 @@ def tutor_my_classes_view(request):
     context = {'course_list' : course_list}
     return render(request, 'tutorme/tutorMyClassesView.html', context)
 
+# tutor view search classes (Add Classes)
 def tutor_add_classes_view(request):
     classList = []
     searchParams = ''
 
+    # handles clicking "Add" button in a table row that displays search results, 
+    # adds Tutor entry to database based on the course the tutor wants to teach
     if request.method == 'POST':
         course = request.POST.get('course')
         curr_user = request.user.username
@@ -158,6 +179,8 @@ def tutor_add_classes_view(request):
         )
         new_tutor.save()
 
+    # handles clicking "Search" button in the Add Classes page in the Tutor View,
+    # queries SIS API based on search parameters enetered in the search bar, displays classes in table view
     if request.method == 'GET' and 'search' in request.GET:
         searchParams = request.GET.get('search', '')
         classList = sisapi.search_matcher(searchParams)
