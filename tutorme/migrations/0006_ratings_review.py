@@ -8,7 +8,6 @@ class Migration(migrations.Migration):
     dependencies = [
         ('tutorme', '0005_ratings'),
     ]
-
     operations = [
         migrations.AddField(
             model_name='ratings',
