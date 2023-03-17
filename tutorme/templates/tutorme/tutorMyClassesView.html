@@ -34,7 +34,8 @@
                             <div class="card-body">
                               <h5 class="card-title">{{ course }}</h5>
                               <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-danger request-card-remove-button" course = "{{ course }}">Remove</button>
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger tutor-class-card-remove-button" course = "{{ course }}">Remove</button>
                               </div>
                             </div>
                         </div>

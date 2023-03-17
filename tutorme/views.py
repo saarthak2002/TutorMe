@@ -120,10 +120,21 @@ def tutor_my_classes_view(request):
     course_list = []
     curr_user = request.user.username
     current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
+
+    # Implement Remove POST
+    if request.method == 'POST':
+        curr_user = request.user.username
+        current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
+        remove_course = request.POST.get('course')
+        print(remove_course)
+        tutor_to_remove = Tutor.objects.filter(
+            user = current_tutor,
+            course = remove_course
+        ).delete()
+
     course_query = Tutor.objects.filter(
         user = current_tutor
     )
-    print(course_query)
 
     for item in course_query:
         course = item.course

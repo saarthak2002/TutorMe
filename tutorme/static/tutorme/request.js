@@ -5,6 +5,7 @@
     handleRequestAccept();
     handleRequestReject();
     handleTutorAddPress();
+    handleTutorRemovePress();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -13,6 +14,7 @@
         handleRequestAccept();
         handleRequestReject();
         handleTutorAddPress();
+        handleTutorRemovePress();
     });
 }
 
@@ -169,6 +171,30 @@ function handleTutorAddPress() {
             const xhr = new XMLHttpRequest();
             xhr.open('POST', url.toString());
 
+            const formData = new FormData();
+            formData.append('course', course);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+
+        });
+    });
+}
+
+function handleTutorRemovePress() {
+    const buttons = document.querySelectorAll('.tutor-class-card-remove-button');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            
+            var csrftoken = Cookies.get('csrftoken');
+            const course = this.getAttribute('course');
+            const url = new URL(window.location.href);
+
+            this.disabled = true;
+            this.innerHTML = "Removed";
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            
             const formData = new FormData();
             formData.append('course', course);
             formData.append('csrfmiddlewaretoken', csrftoken);
