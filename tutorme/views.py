@@ -83,8 +83,34 @@ def tutor_requests_view(request):
         change_status_from_student = request.POST.get('from')
         change_status_to_tutor = request.POST.get('to')
         change_status_course = request.POST.get('course')
-        print('from:{} to: {} for: {} change to: {}'.format(change_status_from_student,change_status_to_tutor,change_status_course,change_status_request_type))
-        # change DB data here
+        
+        user_student = AppUser.objects.filter(user__username__contains = change_status_from_student).first()
+        user_tutor = AppUser.objects.filter(user__username__contains = change_status_to_tutor).first()
+        
+        request_to_change = Request.objects.filter(
+            from_student = user_student,
+            to_tutor = user_tutor,
+            course = change_status_course
+        ).first()
+        if change_status_request_type == 'accept':
+            request_to_change.status = 2
+            request_to_change.save()
+        elif change_status_request_type == 'reject':
+            request_to_change.status = 3
+            request_to_change.save()
+
+    username = request.user.username
+    query_result = Request.objects.filter(to_tutor__user__username__contains = username)
+
+    for item in query_result:
+        from_student = item.from_student.user.username
+        student_name = item.from_student.user.first_name + ' ' + item.from_student.user.last_name
+        student_email = item.from_student.user.email
+        course = item.course
+        time = item.created_timestamp
+        str_time = time.strftime("sent on %m-%d-%Y at %H:%M:%S")
+        status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
+        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time})
 
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
@@ -138,7 +164,7 @@ def tutor_add_classes_view(request):
 
     context = {'classList': classList, 'search':searchParams}
     return render(request, 'tutorme/tutorAddClassesView.html', context)
-
+    
 def tutor_profile_view(request):
     classes_list = []
     ratings_list = []
