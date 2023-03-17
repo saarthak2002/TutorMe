@@ -2,3 +2,12 @@
     color: lightblue;
     text-align: center;
 }
+
+.login-container {
+    background-color: lightblue;
+    color: #fcfcfc;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+}
