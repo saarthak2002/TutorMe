@@ -57,6 +57,7 @@ class Ratings(models.Model):
   ]
   rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, default=3)
   review = models.CharField(max_length=500, default='')
+  
   def __str__(self):
         return 'from: ' + self.student_who_rated.user.username + ' to: ' + self.tutor_who_was_rated.user.username + ' rating: ' + ('Poor' if self.rating == 1 else 'Fair' if self.rating == 2 else 'Good' if self.rating == 3 else 'Very Good' if self.rating == 4 else 'Excellent') + ' review: ' + self.review
 
