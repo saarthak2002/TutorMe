@@ -14,5 +14,5 @@ urlpatterns = [
     path('accounts/logout/tutorme/', index),
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),
-    path('tutor/profiles/', tutor_profile_view)
+    path('tutor/profiles/', tutor_profile_view),
 ]
