@@ -83,7 +83,7 @@ def tutor_requests_view(request):
         change_status_from_student = request.POST.get('from')
         change_status_to_tutor = request.POST.get('to')
         change_status_course = request.POST.get('course')
-        print('from:{} to: {} for: {} change to: {}'.format(change_status_from_student,change_status_to_tutor,change_status_course,change_status_request_type))
+        
         user_student = AppUser.objects.filter(user__username__contains = change_status_from_student).first()
         user_tutor = AppUser.objects.filter(user__username__contains = change_status_to_tutor).first()
         
@@ -126,7 +126,7 @@ def tutor_my_classes_view(request):
         curr_user = request.user.username
         current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
         remove_course = request.POST.get('course')
-        print(remove_course)
+        
         tutor_to_remove = Tutor.objects.filter(
             user = current_tutor,
             course = remove_course
@@ -157,7 +157,6 @@ def tutor_add_classes_view(request):
             course = course
         )
         new_tutor.save()
-        print('added')
 
     if request.method == 'GET' and 'search' in request.GET:
         searchParams = request.GET.get('search', '')
