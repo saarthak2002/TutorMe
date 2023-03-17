@@ -164,7 +164,7 @@ def tutor_add_classes_view(request):
 
     context = {'classList': classList, 'search':searchParams}
     return render(request, 'tutorme/tutorAddClassesView.html', context)
-    
+
 def tutor_profile_view(request):
     classes_list = []
     ratings_list = []
@@ -183,5 +183,4 @@ def tutor_profile_view(request):
         course = class_tutored.course
         classes_list.append({'course': course})
     context = {'ratings_list': ratings_list, 'classes_list': classes_list}
-
     return render(request, 'tutorme/tutorProfile.html', context)
