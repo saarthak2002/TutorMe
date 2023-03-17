@@ -42,3 +42,21 @@ class Request(models.Model):
     def __str__(self):
         return 'from: ' + self.from_student.user.username + ' to: ' + self.to_tutor.user.username + ' course: ' + self.course + ' status: ' + ('pending' if self.status == 1 else 'accepted' if self.status == 2 else 'declined')
     
+
+
+class Ratings(models.Model):
+  created_timestamp_rating = models.DateTimeField(auto_now_add=True)
+  student_who_rated = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='student_who_rated')
+  tutor_who_was_rated = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='tutor_who_was_rated')
+  RATING_CHOICES = [
+    (1, 'Poor'),
+    (2, 'Fair'),
+    (3, 'Good'),
+    (4, 'Very Good'),
+    (5, 'Excellent')
+  ]
+  rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, default=3)
+  review = models.CharField(max_length=500, default='')
+  def __str__(self):
+        return 'from: ' + self.student_who_rated.user.username + ' to: ' + self.tutor_who_was_rated.user.username + ' rating: ' + ('Poor' if self.rating == 1 else 'Fair' if self.rating == 2 else 'Good' if self.rating == 3 else 'Very Good' if self.rating == 4 else 'Excellent') + ' review: ' + self.review
+

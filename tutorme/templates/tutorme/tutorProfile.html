@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Tutor Me</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+
+        {% load socialaccount %}
+
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+
+        {% load static %} 
+        <script src="{% static 'tutorme/request.js' %}" async></script>
+    </head>
+
+    <body>
+        <div style="margin: 0; padding: 0;">
+            <div class="row" style="width: 100%;">
+                <div class="col">
+                    {% include "tutorme/navMenuTutor.html" %}
+                </div>
+                <div class="col-9">
+                    <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+                        <div class="card w-100 mt-2" style ="font-size: large;">
+                            <div class="card-body">
+                                <h4 class="display-5 heading">{{ user.username }}'s Tutoring Profile!</h1>
+                                <a href=# style="text-align: center; padding-left: 95%;">Edit</a>
+                              <h6 class="text-black-100 fs-3" >{{ user.first_name }}  {{ user.last_name }}</h6>
+                              <h6 class="text-muted" >{{ user.email }}</h6>
+                              <!--
+                                  maybe create a new model so tutors can add a little bio for their profile
+                                  <h6 class="text-black-100">About myself: Add new model with tutor intro to put here</h6>
+                              -->
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="text-black-100" style="font-size: xx-large;">Tutored Courses</h6>
+                    <div class="d-flex justify-content-start flex-wrap" style="gap: 10px;">
+                        {% for classes in classes_list %}
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                              <h6 class="text-black-50">{{classes.course }}</h6>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <h6 class="text-black-100" style="font-size: xx-large;">Reviews</h6>
+                    <div class="d-flex justify-content-start flex-wrap" style="gap: 10px;">
+                        {% for rating in ratings_list %}
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                              <h5 class="card-title">{{ rating.student_name }}'s Review</h5>
+                              <h6 class="text-black-50">Rating: {{ rating.rating }}</h6>
+                              <h6 class="text-black-50">Review: {{ rating.review }}</h6>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
+                </div>                
+            </div>
+        </div>
+    </body>
+
+</html>

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
-from .views import index, student_requests_view, tutor_requests_view, tutor_my_classes_view, tutor_add_classes_view
+from .views import index, student_requests_view, tutor_requests_view, tutor_my_classes_view, tutor_add_classes_view, tutor_profile_view
 
 urlpatterns = [
     path('', index, name='index'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path('accounts/logout/tutorme/', index),
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),
+    path('tutor/profiles/', tutor_profile_view)
 ]
