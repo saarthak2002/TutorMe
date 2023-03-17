@@ -18,6 +18,8 @@
     });
 }
 
+// Student View - "Search" tab
+// "Request" button in student search table
 function handleButtonPress() {
     const buttons = document.querySelectorAll('.request-button');
     buttons.forEach(function(button) {
@@ -38,6 +40,8 @@ function handleButtonPress() {
     });
 }
 
+// Student View - "Search" tab
+// "Request Help" button in tutor cards from search results
 function handleCardButtonPress() {
     const buttons = document.querySelectorAll('.tutor-card-request-button');
     buttons.forEach(function(button) {
@@ -67,6 +71,8 @@ function handleCardButtonPress() {
     });
 }
 
+// Student View - "My Requests" tab
+// "Remove" button in student request cards, removes a particular Request a student has made from the database
 function handleCardRemovePress() {
     const buttons = document.querySelectorAll('.request-card-remove-button');
     buttons.forEach(function(button) {
@@ -96,6 +102,8 @@ function handleCardRemovePress() {
     });
 }
 
+// Tutor View - "My Requests" tab
+// "Accept" button in cards in My Requests page in the Tutor View, changes the status of a particular request to "Accepted"
 function handleRequestAccept() {
     const buttons = document.querySelectorAll('.request-card-accept-button');
     buttons.forEach(function(button) {
@@ -126,6 +134,8 @@ function handleRequestAccept() {
     });
 }
 
+// Tutor View - "My Requests" tab
+// "Reject" button in cards in My Requests page in the Tutor View, changes the status of a particular request to "Declined"
 function handleRequestReject() {
     const buttons = document.querySelectorAll('.request-card-reject-button');
     buttons.forEach(function(button) {
@@ -156,6 +166,8 @@ function handleRequestReject() {
     });
 }
 
+// Tutor View - "Add Classes" tab
+// "Add" button in table in Add Classes page in the Tutor View, adds a particular course to the Tutor model- After Search
 function handleTutorAddPress() {
     const buttons = document.querySelectorAll('.tutor-add-class-request-button');
     buttons.forEach(function(button) {
@@ -180,6 +192,8 @@ function handleTutorAddPress() {
     });
 }
 
+// Tutor View - "My Classes" tab
+// "Remove" button in cards in My Classes page in the Tutor View, removes a particular course from the Tutor model
 function handleTutorRemovePress() {
     const buttons = document.querySelectorAll('.tutor-class-card-remove-button');
     buttons.forEach(function(button) {
