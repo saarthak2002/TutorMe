@@ -207,3 +207,8 @@ def tutor_profile_view(request):
         classes_list.append({'course': course})
     context = {'ratings_list': ratings_list, 'classes_list': classes_list}
     return render(request, 'tutorme/tutorProfile.html', context)
+
+def student_profile_view(request):
+    context = {}
+    return render(request, 'tutorme/studentProfile.html', context)
+
