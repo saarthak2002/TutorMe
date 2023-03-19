@@ -90,7 +90,10 @@ DATABASES = {
         'USER': 'zqkdpaozbaqcrs',
         'PASSWORD': 'cab1e03546dc1b4434a9e8ca17e4233d3148d3d8c7dde55403ca4594dcf64c83',
         'HOST': 'ec2-3-217-113-25.compute-1.amazonaws.com',
-        'PORT':  '5432'
+        'PORT':  '5432',
+        'TEST' : {
+            'MIRROR' : 'default'
+        }
     }
 }
 
