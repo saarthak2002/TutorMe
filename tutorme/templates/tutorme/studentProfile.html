@@ -23,13 +23,13 @@
         <div style="margin: 0; padding: 0;">
             <div class="row" style="width: 100%;">
                 <div class="col">
-                    {% include "tutorme/navMenuTutor.html" %}
+                    {% include "tutorme/navMenu.html" %}
                 </div>
                 <div class="col-9">
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
                         <div class="card w-100 mt-2" style ="font-size: large;">
                             <div class="card-body">
-                                <h4 class="display-5 heading">{{ user.username }}'s Student Profile!</h1>
+                                <h4 class="display-5 heading">{{ user.first_name }}'s Student Profile!</h1>
                                 <a href=# style="text-align: center; padding-left: 95%;">Edit</a>
                               <h6 class="text-black-100 fs-3" >{{ user.first_name }}  {{ user.last_name }}</h6>
                               <h6 class="text-muted" >{{ user.email }}</h6>
