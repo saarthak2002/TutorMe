@@ -212,3 +212,7 @@ def student_profile_view(request):
     context = {}
     return render(request, 'tutorme/studentProfile.html', context)
 
+def edit_profile_view(request):
+    context = {}
+    return render(request, 'tutorme/editProfile.html', context)
+
