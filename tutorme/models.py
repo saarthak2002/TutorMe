@@ -62,7 +62,7 @@ class Ratings(models.Model):
         return 'from: ' + self.student_who_rated.user.username + ' to: ' + self.tutor_who_was_rated.user.username + ' rating: ' + ('Poor' if self.rating == 1 else 'Fair' if self.rating == 2 else 'Good' if self.rating == 3 else 'Very Good' if self.rating == 4 else 'Excellent') + ' review: ' + self.review
 
 class Student_Profile(models.Model):
-  student_profile = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='student_profile')
+  user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
   uva_year = models.TextField()
   help_description = models.TextField()
   bio = models.TextField()
