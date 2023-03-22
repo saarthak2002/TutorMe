@@ -42,8 +42,7 @@ class Request(models.Model):
     def __str__(self):
         return 'from: ' + self.from_student.user.username + ' to: ' + self.to_tutor.user.username + ' course: ' + self.course + ' status: ' + ('pending' if self.status == 1 else 'accepted' if self.status == 2 else 'declined')
     
-
-
+    
 class Ratings(models.Model):
   created_timestamp_rating = models.DateTimeField(auto_now_add=True)
   student_who_rated = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='student_who_rated')
