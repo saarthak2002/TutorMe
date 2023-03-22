@@ -38,7 +38,7 @@
                               <form method="post">
                                 <!-- <h4 style="padding-top: 20px">Personal Information</h6> -->
                                 
-                                <h6 style="padding-top: 20px">Year at UVA</h6>
+                                <!-- <h6 style="padding-top: 20px">Year at UVA</h6>
                                 <select class="form-select" aria-label="uva-year">
                                     <option selected>Select</option>
                                     <option value="first">1st Year</option>
@@ -46,24 +46,31 @@
                                     <option value="third">3rd Year</option>
                                     <option value="fourth">4th Year</option>
                                     <option value="grad">Graduate</option>
-                                </select>
+                                </select> -->
 
                                 <!-- maybe add a search feature to add a class you want help with? -->
 
-                                <h6 style="padding-top: 20px">Description</h6>
+                                <!-- <h6 style="padding-top: 20px">Description</h6>
                                 <div class="mb-3">
                                     <textarea class="form-control" id="help-description" rows="3"></textarea>
                                     <div class="form-text">Please provide a description of what you would like your tutor to help you with</div>
-                                </div>
+                                </div> -->
 
-                                <h6 style="padding-top: 20px">About Me</h6>
+                                <!-- <h6 style="padding-top: 20px">About Me</h6>
                                 <div class="mb-3">
                                     <textarea class="form-control" id="fun-facts" rows="5"></textarea>
                                     <div class="form-text">Use this space to tell potential tutors about yourself! You can include information such as your major, hobbies, favorite things, etc.</div>
-                                </div>
+                                </div> -->
+
+                                <h6 class="text-muted">{{ profile_form.year }}</h6>
+                                <h6 class="text-black-100 fs-3" >What I Need Help With</h6> {{ profile_form.help_description }}
+                                <h6 class="text-black-100 fs-3" >About Me</h6> {{ profile_form.bio }}
+                              
 
                                 <input class="btn btn-primary" type="submit" style="background-color: blue" value="Save Changes">
                                 <input class="btn btn-primary" type="reset" style="background-color: gray" value="Cancel">
+
+                                <!-- https://dev.to/earthcomfy/django-update-user-profile-33ho -->
 
                                 <!-- <button type="submit" class="btn btn-primary">Save Changes</button>
                                 <button type="reset" class="btn btn-primary" stlye="background-color: gray">Cancel</button> -->

@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor, AppUser, Request, Ratings
+from .models import Tutor, AppUser, Request, Ratings, Student_Profile
+from .forms import UpdateProfileForm
 
 # student view class search page (Search)
 def index(request):
@@ -210,9 +212,29 @@ def tutor_profile_view(request):
 
 def student_profile_view(request):
     context = {}
-    return render(request, 'tutorme/studentProfile.html', context)
+    # if request.method == 'POST':
+    #     profile_form = UpdateProfileForm(request.POST, instance=request.user)
+
+    #     if profile_form.is_valid():
+    #         profile_form.save()
+    #         messages.success(request, 'Your profile is updated successfully')
+    #         return redirect(to='users-profile')
+    # else:
+    #     profile_form = UpdateProfileForm(instance=request.user.profile)
+    # return render(request, 'tutorme/studentProfile.html', {'profile_form': profile_form})
+    return render(request, 'tutorme/StudentProfile.html', context)
 
 def edit_profile_view(request):
-    context = {}
-    return render(request, 'tutorme/editProfile.html', context)
+    # context = {}
+    if request.method == 'POST':
+        profile_form = UpdateProfileForm(request.POST, instance=request.user.student_profile)
+
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='tutorme/profile')
+    else:
+        profile_form = UpdateProfileForm(instance=request.user.student_profile)
+    return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
+    # return render(request, 'tutorme/editProfile.html', context)
 

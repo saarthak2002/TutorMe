@@ -60,9 +60,11 @@ class Ratings(models.Model):
   
   def __str__(self):
         return 'from: ' + self.student_who_rated.user.username + ' to: ' + self.tutor_who_was_rated.user.username + ' rating: ' + ('Poor' if self.rating == 1 else 'Fair' if self.rating == 2 else 'Good' if self.rating == 3 else 'Very Good' if self.rating == 4 else 'Excellent') + ' review: ' + self.review
-#student bio model
-class Student_Bio(models.Model):
-  student_bio_name = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='student_bio_name')
+
+class Student_Profile(models.Model):
+  student_profile = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='student_profile')
+  uva_year = models.TextField()
+  help_description = models.TextField()
   bio = models.TextField()
   def __str__(self):
-      return str(self.student_bio_name)
+      return str(self.student_profile)
