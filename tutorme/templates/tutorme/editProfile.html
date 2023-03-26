@@ -35,7 +35,7 @@
 
                               <!-- year dropdown, class search and description on what they need help in, about me/fun facts (major, hobbies, fun facts, favorite things) -->
 
-                              <form method="post">
+                              <form method="post" action="/tutorme/profile/">
                                 {% csrf_token %}
                                 <!-- <h4 style="padding-top: 20px">Personal Information</h6> -->
                                 
@@ -73,8 +73,8 @@
 
                                 <!-- https://dev.to/earthcomfy/django-update-user-profile-33ho -->
 
-                               <!----<button type="submit" class="btn btn-primary" style="background-color: blue">Save Changes</button> -->
-                                <button type="submit" class="btn btn-primary" style="background-color: rgb(228, 231, 233)"><a href="/tutorme/profile/">Save Changes</a></button> 
+                                <button type="submit" class="btn btn-primary" style="background-color: blue">Save Changes</button> 
+                                <!--<button type="submit" class="btn btn-primary" style="background-color: rgb(228, 231, 233)"><a href="/tutorme/profile/">Save Changes</a></button> -->
                                 <button type="reset" class="btn btn-primary" style="background-color: gray">Cancel</button>
 
                               </form>
