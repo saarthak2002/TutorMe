@@ -238,4 +238,3 @@ def edit_profile_view(request):
         profile_form = UpdateProfileForm(instance=request.user)
     return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
     # return render(request, 'tutorme/editProfile.html', context)
-

@@ -36,6 +36,7 @@
                               <!-- year dropdown, class search and description on what they need help in, about me/fun facts (major, hobbies, fun facts, favorite things) -->
 
                               <form method="post">
+                                {% csrf_token %}
                                 <!-- <h4 style="padding-top: 20px">Personal Information</h6> -->
                                 
                                 <!-- <h6 style="padding-top: 20px">Year at UVA</h6>
@@ -62,18 +63,18 @@
                                     <div class="form-text">Use this space to tell potential tutors about yourself! You can include information such as your major, hobbies, favorite things, etc.</div>
                                 </div> -->
 
-                                <h6 class="text-muted">{{ profile_form.year }}</h6>
-                                <h6 class="text-black-100 fs-3" >What I Need Help With</h6> {{ profile_form.help_description }}
-                                <h6 class="text-black-100 fs-3" >About Me</h6> {{ profile_form.bio }}
+                                <h6 class="text-black-100 fs-3">Year at UVA</h6> {{ profile_form.year }}
+                                <h6 class="text-black-100 fs-3">What I Need Help With</h6> {{ profile_form.help_description }}
+                                <h6 class="text-black-100 fs-3">About Me</h6> {{ profile_form.bio }}
                               
 
-                                <input class="btn btn-primary" type="submit" style="background-color: blue" value="Save Changes">
-                                <input class="btn btn-primary" type="reset" style="background-color: gray" value="Cancel">
+                                <!-- <input class="btn btn-primary" type="submit" style="background-color: blue" value="Save Changes">
+                                <input class="btn btn-primary" type="reset" style="background-color: gray" value="Cancel"> -->
 
                                 <!-- https://dev.to/earthcomfy/django-update-user-profile-33ho -->
 
-                                <!-- <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <button type="reset" class="btn btn-primary" stlye="background-color: gray">Cancel</button> -->
+                                <button type="submit" class="btn btn-primary" style="background-color: blue">Save Changes</button>
+                                <button type="reset" class="btn btn-primary" style="background-color: gray">Cancel</button>
 
                               </form>
 
