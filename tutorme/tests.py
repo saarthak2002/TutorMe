@@ -4,7 +4,7 @@ from tutorme import views
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-server = "127.0.0.1" #"https://tutor-me-a29.herokuapp.com/tutorme/"
+server = "https://tutor-me-a29.herokuapp.com/tutorme/"
 # returns a student user
 def create_student():
     username_student='test_user_student'
@@ -156,7 +156,6 @@ class TutorProfileView(TestCase):
         self.assertContains(response, rating_level)
         self.assertContains(response, rating_review)
     
-
 """
 class StudentRequestsView():
 
