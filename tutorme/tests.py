@@ -4,7 +4,7 @@ from tutorme import views
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-server = "https://tutor-me-a29.herokuapp.com/tutorme/"
+server = "tutor-me-a29.herokuapp.com" #"127.0.0.1" 
 # returns a student user
 def create_student():
     username_student='test_user_student'
