@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor, AppUser, Request, Ratings
+from .models import Tutor, AppUser, Request, Ratings, Student_Profile
+from .forms import UpdateProfileForm
 
 # student view class search page (Search)
 def index(request):
@@ -207,3 +209,43 @@ def tutor_profile_view(request):
         classes_list.append({'course': course})
     context = {'ratings_list': ratings_list, 'classes_list': classes_list}
     return render(request, 'tutorme/tutorProfile.html', context)
+
+def student_profile_view(request):
+    user = request.user.id
+    student_app_id = AppUser.objects.filter(user_id__id = user).values('id')[0]['id']
+    stu_bio = Student_Profile.objects.filter(user_id__id=student_app_id)
+    #student = Student_Profile.objects.filter(user=user)
+    bio = Student_Profile.objects.filter(bio=bio)
+
+   
+    # if request.method == 'POST':
+    #     profile_form = UpdateProfileForm(request.POST, instance=request.user)
+
+    #     if profile_form.is_valid():
+    #         profile_form.save()
+    #         messages.success(request, 'Your profile is updated successfully')
+    #         return redirect(to='users-profile')
+    # else:
+    #     profile_form = UpdateProfileForm(instance=request.user.profile)
+    # return render(request, 'tutorme/studentProfile.html', {'profile_form': profile_form})
+    return render(request, 'tutorme/StudentProfile.html', context)
+
+def edit_profile_view(request):
+    # context = {}
+   # print("here")
+    user = request.user
+    if request.method == 'POST':
+        profile_form = UpdateProfileForm(request.POST, instance=request.user)
+        if profile_form.is_valid():
+            profile_form.save()
+            #user.year = profile_form.cleaned_data['year']
+            #user.bio = profile_form.cleaned_data['bio']
+
+            print("bio: ", profile_form.cleaned_data['bio'])
+            messages.success(request, 'Your profile is updated successfully')
+            args = {'UpdateProfileForm': UpdateProfileForm}
+            return render(request, 'tutorme/studentProfile.html', args)
+    else:
+        profile_form = UpdateProfileForm(instance=request.user)
+    return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
+    # return render(request, 'tutorme/editProfile.html', context)
