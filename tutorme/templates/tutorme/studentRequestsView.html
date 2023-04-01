@@ -35,6 +35,8 @@
                               <h5 class="card-title">{{ request.tutor_name }}</h5>
                               <h6 class="text-black-50">username: {{ request.to_tutor }}</h6>
                               <h6 class="text-black-50">{{ request.tutor_email }}</h6>
+                              <h6 class="text-black-50">date: {{ request.date }}</h6>
+                              <h6 class="text-black-50">time: {{ request.start }} to {{ request.end }}</h6>
 
                               {% if request.status == "Accepted" %}
                                 <h6 class="" style="color: rgb(64, 133, 88); font-weight: bold;">{{ request.status }}</h6>
