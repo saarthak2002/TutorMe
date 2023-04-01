@@ -53,23 +53,74 @@ function handleCardButtonPress() {
             const course = this.getAttribute('course');
             const url = new URL(window.location.href);
 
+            //get position of button to know where to place popup
+            const buttonRect = button.getBoundingClientRect();
+            const buttonTop = buttonRect.top;
+            const buttonLeft = buttonRect.left;
 
-            url.searchParams.set('from', encodeURIComponent(from));
-            this.disabled = true;
-            this.innerHTML = "Request Sent";
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', url.toString());
-            const formData = new FormData();
-            formData.append('from', from);
-            formData.append('to', to);
-            formData.append('course', course);
-            formData.append('csrfmiddlewaretoken', csrftoken);
-            xhr.send(formData);
+            //Show popup to ask the student what time they want to request
+            const popup = document.createElement('div')
+            popup.classList.add('time-request-popup')
+            popup.innerHTML=`
+                <h2>Request Help</h2>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+                <br>
+                <label for="start-time">Start Time:</label>
+                <input type="time" id="start-time" name="start-time" required>
+                <br>
+                <label for="end-time">End Time:</label>
+                <input type="time" id="end-time" name="end-time" required>
+                <br>
+                <button id="submit">Submit</button>
+            `;
+            //position the pop up correctly
+            popup.style.position = 'absolute';
+            popup.style.top = buttonTop + button.offsetHeight + 'px';
+            popup.style.left = buttonLeft + 'px';
+            
+            document.body.appendChild(popup)
+            const submitButton = popup.querySelector('#submit');
+            submitButton.addEventListener('click', function() {
+                const date = popup.querySelector('#date').value;
+                const startTime = popup.querySelector('#start-time').value;
+                const endTime = popup.querySelector('#end-time').value;
+                
+                // Create the form data object with the necessary data
+                const formData = new FormData();
+                formData.append('from', from);
+                formData.append('to', to);
+                formData.append('course', course);
+                formData.append('date', date);
+                formData.append('start', startTime);
+                formData.append('end', endTime);
+                formData.append('csrfmiddlewaretoken', csrftoken);
+                
+                // Send the POST request to the server
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', url.toString());
+                xhr.send(formData);
+                
+                // Update the button to indicate that the request has been sent
+                this.disabled = true;
+                this.innerHTML = 'Request Sent';
+                
+                // Hide the popup form
+                popup.remove();
+            });
+            // const xhr = new XMLHttpRequest();
+            // xhr.open('POST', url.toString());
+            // const formData = new FormData();
+            // formData.append('from', from);
+            // formData.append('to', to);
+            // formData.append('course', course);
+            // formData.append('csrfmiddlewaretoken', csrftoken);
+            // xhr.send(formData);
 
         });
     });
 }
+
 
 // Student View - "My Requests" tab
 // "Remove" button in student request cards, removes a particular Request a student has made from the database
