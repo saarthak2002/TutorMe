@@ -211,7 +211,13 @@ def tutor_profile_view(request):
     return render(request, 'tutorme/tutorProfile.html', context)
 
 def student_profile_view(request):
-    context = {}
+    user = request.user.id
+    student_app_id = AppUser.objects.filter(user_id__id = user).values('id')[0]['id']
+    stu_bio = Student_Profile.objects.filter(user_id__id=student_app_id)
+    #student = Student_Profile.objects.filter(user=user)
+    bio = Student_Profile.objects.filter(bio=bio)
+
+   
     # if request.method == 'POST':
     #     profile_form = UpdateProfileForm(request.POST, instance=request.user)
 
@@ -226,14 +232,16 @@ def student_profile_view(request):
 
 def edit_profile_view(request):
     # context = {}
-    print("here")
+   # print("here")
     user = request.user
     if request.method == 'POST':
         profile_form = UpdateProfileForm(request.POST, instance=request.user)
-
         if profile_form.is_valid():
-            user.year = profile_form.cleaned_data['year']
-            user.bio = profile_form.cleaned_data['bio']
+            profile_form.save()
+            #user.year = profile_form.cleaned_data['year']
+            #user.bio = profile_form.cleaned_data['bio']
+
+            print("bio: ", profile_form.cleaned_data['bio'])
             messages.success(request, 'Your profile is updated successfully')
             args = {'UpdateProfileForm': UpdateProfileForm}
             return render(request, 'tutorme/studentProfile.html', args)
