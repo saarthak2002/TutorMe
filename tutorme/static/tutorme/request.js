@@ -60,27 +60,40 @@ function handleCardButtonPress() {
 
             //Show popup to ask the student what time they want to request
             const popup = document.createElement('div')
-            popup.classList.add('time-request-popup')
-            popup.innerHTML=`
-                <h2>Request Help</h2>
+            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded')
+            popup.innerHTML = `
+            <h2 class="mb-4">Test a time</h2>
+            <div class="form-group">
                 <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-                <br>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+            <div class="form-group">
                 <label for="start-time">Start Time:</label>
-                <input type="time" id="start-time" name="start-time" required>
-                <br>
+                <input type="time" id="start-time" name="start-time" class="form-control" required>
+            </div>
+            <div class="form-group">
                 <label for="end-time">End Time:</label>
-                <input type="time" id="end-time" name="end-time" required>
-                <br>
-                <button id="submit">Submit</button>
-            `;
+                <input type="time" id="end-time" name="end-time" class="form-control" required>
+            </div>
+            <div class = "buttons">
+                <button id="submit" class="btn btn-primary">Submit</button>
+                <button id="cancel" class="btn btn-danger">Cancel</button>
+            </div>
+        `;
+
             //position the pop up correctly
+            const { top, left, height } = button.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const popupTop = top + scrollTop + height;
             popup.style.position = 'absolute';
-            popup.style.top = buttonTop + button.offsetHeight + 'px';
-            popup.style.left = buttonLeft + 'px';
+            popup.style.top = popupTop + 'px';
+            popup.style.left = left + 'px';
+            
+
             
             document.body.appendChild(popup)
             const submitButton = popup.querySelector('#submit');
+            const cancelButton = popup.querySelector('#cancel');
             submitButton.addEventListener('click', function() {
                 const date = popup.querySelector('#date').value;
                 const startTime = popup.querySelector('#start-time').value;
@@ -106,6 +119,9 @@ function handleCardButtonPress() {
                 this.innerHTML = 'Request Sent';
                 
                 // Hide the popup form
+                popup.remove();
+            });
+            cancelButton.addEventListener('click', function(){
                 popup.remove();
             });
             // const xhr = new XMLHttpRequest();

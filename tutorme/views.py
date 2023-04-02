@@ -135,7 +135,10 @@ def tutor_requests_view(request):
         time = item.created_timestamp
         str_time = time.strftime("sent on %m-%d-%Y at %H:%M:%S")
         status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
-        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time})
+        date = item.date_requested
+        start = item.start_time_requested
+        end = item.end_time_requested
+        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end})
 
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
@@ -223,6 +226,12 @@ def student_profile_view(request):
     user = request.user.id
     student_app_id = AppUser.objects.filter(user_id__id = user).values('id')[0]['id']
     stu_bio = Student_Profile.objects.filter(user_id__id=student_app_id)
+    class_request_query = Request.objects.filter(from_student=student_app_id)
+    courses_requested_list = []
+    for class_requested in class_request_query:
+        course = class_requested.course
+        courses_requested_list.append(course)
+    context = {'courses_requested': courses_requested_list}
     #student = Student_Profile.objects.filter(user=user)
     #bio = Student_Profile.objects.filter(bio=bio)
 
@@ -237,7 +246,7 @@ def student_profile_view(request):
     # else:
     #     profile_form = UpdateProfileForm(instance=request.user.profile)
     # return render(request, 'tutorme/studentProfile.html', {'profile_form': profile_form})
-    return render(request, 'tutorme/studentProfile.html')
+    return render(request, 'tutorme/studentProfile.html', context)
 
 def edit_profile_view(request):
     # context = {}
