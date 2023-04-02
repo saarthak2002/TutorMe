@@ -169,11 +169,11 @@ class TutorProfileView(TestCase):
         self.assertContains(response, rating_level)
         self.assertContains(response, rating_review)
     
-"""
 class StudentRequestsViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.client, cls.student = login_as_student()
+        _, cls.tutor = login_as_tutor()
         cls.course = 'Test course'
     
     def setUp(self):
@@ -204,4 +204,3 @@ class StudentRequestsViewTests(TestCase):
         self.response = self.client.get(reverse(views.student_requests_view)) 
         # check request status is declined
         self.assertContains(self.response, 'Declined')
-        """
