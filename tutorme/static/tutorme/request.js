@@ -6,6 +6,7 @@
     handleRequestReject();
     handleTutorAddPress();
     handleTutorRemovePress();
+    handleTutorEditProfileButton();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -15,6 +16,7 @@
         handleRequestReject();
         handleTutorAddPress();
         handleTutorRemovePress();
+        handleTutorEditProfileButton();
     });
 }
 
@@ -53,16 +55,15 @@ function handleCardButtonPress() {
             const course = this.getAttribute('course');
             const url = new URL(window.location.href);
 
-            //get position of button to know where to place popup
+
             const buttonRect = button.getBoundingClientRect();
             const buttonTop = buttonRect.top;
             const buttonLeft = buttonRect.left;
 
-            //Show popup to ask the student what time they want to request
             const popup = document.createElement('div')
             popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded')
             popup.innerHTML = `
-            <h2 class="mb-4">Test a time</h2>
+            <h2 class="mb-4">Select a time</h2>
             <div class="form-group">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" class="form-control" required>
@@ -81,7 +82,6 @@ function handleCardButtonPress() {
             </div>
         `;
 
-            //position the pop up correctly
             const { top, left, height } = button.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const popupTop = top + scrollTop + height;
@@ -99,7 +99,6 @@ function handleCardButtonPress() {
                 const startTime = popup.querySelector('#start-time').value;
                 const endTime = popup.querySelector('#end-time').value;
                 
-                // Create the form data object with the necessary data
                 const formData = new FormData();
                 formData.append('from', from);
                 formData.append('to', to);
@@ -109,16 +108,13 @@ function handleCardButtonPress() {
                 formData.append('end', endTime);
                 formData.append('csrfmiddlewaretoken', csrftoken);
                 
-                // Send the POST request to the server
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', url.toString());
                 xhr.send(formData);
                 
-                // Update the button to indicate that the request has been sent
                 this.disabled = true;
                 this.innerHTML = 'Request Sent';
                 
-                // Hide the popup form
                 popup.remove();
             });
             cancelButton.addEventListener('click', function(){
@@ -283,4 +279,26 @@ function handleTutorRemovePress() {
 
         });
     });
+}
+
+function handleTutorEditProfileButton(){
+    const buttons = document.querySelectorAll('.tutor-edit-bio-button')
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(){
+            let csrftoken = Cookies.get('csrftoken');
+            const bioText = document.getElementById("edit-tutor-bio-textbox").value;
+
+            const url = new URL(window.location.href);
+
+            xhr.open('POST', url.toString());
+            
+            const formData = new FormData();
+            formData.append('bio', bio);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+
+            xhr.send(formData);
+            
+        });
+    });
+
 }

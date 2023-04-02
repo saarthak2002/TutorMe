@@ -11,6 +11,7 @@ class AppUser(models.Model):
       (1, 'student'),
       (2, 'tutor'),
     )
+    bio = models.TextField(default="Hi, I'm excited to use TutorMe!")
     user_type = models.PositiveSmallIntegerField(default=1, choices=USER_TYPE_CHOICES)
     def __str__(self):
         return self.user.username + ' - ' + ('Tutor' if self.user_type == 2 else 'Student')
@@ -23,7 +24,6 @@ def app_user_create(sender, instance=None, created=False, **kwargs):
 class Tutor(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     course = models.CharField(max_length=150)
-
     def __str__(self):
         return self.user.user.username + ' - ' + self.course
     

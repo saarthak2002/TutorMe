@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Tutor Me</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+
+        {% load socialaccount %}
+
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+
+        {% load static %} 
+        <script src="{% static 'tutorme/request.js' %}" async></script>
+    </head>
+
+    <body>
+        <div style="margin: 0; padding: 0;">
+            <div class="row" style="width: 100%;">
+                <div class="col">
+                    {% include "tutorme/navMenuTutor.html" %}
+                </div>
+                <div class="col-9">
+                    <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+                        <div class="card w-100 mt-2" style ="font-size: large;">
+                            <div class="card-body">
+                            <h4 class="display-5 heading">Edit Tutor Bio</h1>
+
+                              <!-- year dropdown, class search and description on what they need help in, about me/fun facts (major, hobbies, fun facts, favorite things) -->
+
+                              <form method="post" action="/tutorme/tutor/profiles/edit">
+                                {% csrf_token %}
+                               
+
+                                <h6 class="text-black-100 fs-3">About Me</h6> {{ profile_form.bio }}
+                                <textarea name="bio" id="edit-tutor-bio-textbox" class="form-control" rows="5" placeholder="Enter your bio here" required></textarea>
+
+
+                            
+                                <div class = 'buttons' style=" margin-top: 20px;">
+                                    <button type="submit" class="btn btn-primary tutor-edit-bio-button" style="background-color: blue;" >Save Changes</button> 
+                                    <a href="/tutorme/tutor/profiles/" class="btn btn-danger">Cancel</a>
+                                </div>
+
+                              </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </body>
+
+</html>

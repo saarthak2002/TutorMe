@@ -205,10 +205,12 @@ def tutor_add_classes_view(request):
 def tutor_profile_view(request):
     classes_list = []
     ratings_list = []
+    bio_list = []
     tutor_user_id = request.user.id
     tutor_app_id = AppUser.objects.filter(user_id__id = tutor_user_id).values('id')[0]['id']
     rating_query_result = Ratings.objects.filter(tutor_who_was_rated__id = tutor_app_id)
     classes_query_result = Tutor.objects.filter(user_id__id = tutor_app_id)
+    tutor_query_result = AppUser.objects.filter(user_id__id = tutor_user_id)
     for rating in rating_query_result:
         from_student = rating.student_who_rated.user.username
         student_name = rating.student_who_rated.user.first_name + ' ' + rating.student_who_rated.user.last_name
@@ -219,7 +221,8 @@ def tutor_profile_view(request):
     for class_tutored in classes_query_result:
         course = class_tutored.course
         classes_list.append({'course': course})
-    context = {'ratings_list': ratings_list, 'classes_list': classes_list}
+    bio_list.append({'bio': tutor_query_result[0].bio})
+    context = {'ratings_list': ratings_list, 'classes_list': classes_list, 'bio_list': bio_list}
     return render(request, 'tutorme/tutorProfile.html', context)
 
 def student_profile_view(request):
@@ -267,3 +270,13 @@ def edit_profile_view(request):
         profile_form = UpdateProfileForm(instance=request.user)
     return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
     # return render(request, 'tutorme/editProfile.html', context)
+
+def edit_tutor_profile_view(request):
+    tutor_user_id = request.user.id
+
+    if request.method == 'POST':
+        bio = request.POST.get('bio')
+        current_tutor = AppUser.objects.get(user_id__id = tutor_user_id)
+        current_tutor.bio = bio
+        current_tutor.save()
+    return render(request, 'tutorme/editTutorProfile.html')
