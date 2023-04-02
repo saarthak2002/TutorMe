@@ -254,15 +254,17 @@ def student_profile_view(request):
 def edit_profile_view(request):
     # context = {}
    # print("here")
-    user = request.user
+    student_user_id = request.user.id
     if request.method == 'POST':
         profile_form = UpdateProfileForm(request.POST, instance=request.user)
         if profile_form.is_valid():
             profile_form.save()
-            #user.year = profile_form.cleaned_data['year']
-            #user.bio = profile_form.cleaned_data['bio']
-
-            print("bio: ", profile_form.cleaned_data['bio'])
+            year = request.POST.get('year')
+            bio = request.POST.get('bio')
+            student = Student_Profile.objects.get(user_id__id = student_user_id)
+            student.year = year
+            student.bio = bio
+            student.save()
             messages.success(request, 'Your profile is updated successfully')
             args = {'UpdateProfileForm': UpdateProfileForm}
             return render(request, 'tutorme/studentProfile.html', args)
