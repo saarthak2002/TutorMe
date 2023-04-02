@@ -5,47 +5,60 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 server = "tutor-me-a29.herokuapp.com" #"127.0.0.1" 
-# returns a student user
-def create_student():
-    username_student='test_user_student'
-    password_student='student_password'
+global_student_username='test_user_student'
+global_student_password='student_password'
+global_tutor_username='test_user_tutor'
+global_tutor_password='tutor_password'
 
-    try:
-        test_user = User.objects.get(username=username_student, email='', password=password_student)
-        test_student = AppUser.objects.get(user=test_user)
+# returns a client with the student logged in
+# parameter c: optional client to use
+def login_as_student(c = None):
+    if c == None:
+        c = Client(SERVER_NAME=server)
 
-    except:
-        test_user = User.objects.create_user(username=username_student, email='', password=password_student)
-        test_user.save()
-        test_student = AppUser.objects.get(user=test_user)
-        test_student.user_type = 1
-        test_student.save()
-    
-    return test_student
-
-# returns a client with the tutor logged in
-def login_as_tutor():
-    c = Client(SERVER_NAME=server)
-    c.get('/tutorme/')
-    username_tutor='test_user_tutor'
-    password_tutor='tutor_password'
+    c.get('/studentme/')
 
     # try logging in if the user already exists
-    if c.login(username=username_tutor, password=password_tutor):
-        test_user = User.objects.get(username=username_tutor)
+    if c.login(username=global_student_username, password=global_student_password):
+        test_user = User.objects.get(username=global_student_username)
+        test_student = AppUser.objects.get(user=test_user)
+        return c, test_student
+
+    # create a student user
+    
+    test_user = User.objects.create_user(username=global_student_username, email='', password=global_student_password)
+    test_user.save()
+    test_student = AppUser.objects.get(user=test_user)
+    test_student.user_type = 2
+    test_student.save()
+
+    # log in as the student
+    c.login(username=global_student_username, password=global_student_password)
+    return c, test_student
+    
+# returns a client with the tutor logged in
+def login_as_tutor(c = None):
+    if c == None:
+        c = Client(SERVER_NAME=server)
+
+    c.get('/tutorme/')
+
+    # try logging in if the user already exists
+    if c.login(username=global_tutor_username, password=global_tutor_password):
+        test_user = User.objects.get(username=global_tutor_username)
         test_tutor = AppUser.objects.get(user=test_user)
         return c, test_tutor
 
     # create a tutor user
     
-    test_user = User.objects.create_user(username=username_tutor, email='', password=password_tutor)
+    test_user = User.objects.create_user(username=global_tutor_username, email='', password=global_tutor_password)
     test_user.save()
     test_tutor = AppUser.objects.get(user=test_user)
     test_tutor.user_type = 2
     test_tutor.save()
 
     # log in as the tutor
-    c.login(username=username_tutor, password=password_tutor)
+    c.login(username=global_tutor_username, password=global_tutor_password)
     return c, test_tutor
 
 # add a course to the tutor profile
@@ -103,7 +116,7 @@ class TutorRequestsViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.client, cls.tutor = login_as_tutor()
-        cls.student = create_student()
+        _, cls.student = login_as_student()
         cls.course = 'Test course'
     
     def setUp(self):
@@ -140,7 +153,7 @@ class TutorProfileView(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.client, cls.tutor = login_as_tutor()
-        cls.student = create_student()
+        _, cls.student = login_as_student()
 
     def setUp(self):
         self.client = TutorProfileView.client
@@ -156,15 +169,38 @@ class TutorProfileView(TestCase):
         self.assertContains(response, rating_level)
         self.assertContains(response, rating_review)
     
-"""
-class StudentRequestsView():
-
-    def test_remove_request():
+class StudentRequestsViewTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.client, cls.student = login_as_student()
+        _, cls.tutor = login_as_tutor()
+        cls.course = 'Test course'
+    
+    def setUp(self):
+        self.client = StudentRequestsViewTests.client
         # create request
-        # remove request by clicking button
-        # check the request no longer exists
+        self.tutoring_request = Request.objects.create(from_student=self.student, to_tutor=self.student, course=self.course)
+        # navigate to request view
+        self.response = self.client.get(reverse(views.student_requests_view)) 
 
-    def test_display_request():
-        # create request
-        # check the request is shown on the page
-"""
+    def test_display_pending_request(self):
+        # check it appears on the page
+        self.assertContains(self.response, self.course)
+
+    def test_accept_request(self):
+        # accept request 
+        self.tutoring_request.status = 2
+        self.tutoring_request.save()
+        #reload page
+        self.response = self.client.get(reverse(views.student_requests_view)) 
+        # check request status is accept
+        self.assertContains(self.response, 'Accepted')
+
+    def test_reject_request(self):
+        # reject request 
+        self.tutoring_request.status = 3
+        self.tutoring_request.save()
+        #reload page
+        self.response = self.client.get(reverse(views.student_requests_view)) 
+        # check request status is declined
+        self.assertContains(self.response, 'Declined')
