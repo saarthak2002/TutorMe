@@ -16,7 +16,6 @@ def login_as_student(c = None):
     if c == None:
         c = Client(SERVER_NAME=server)
 
-    c = Client(SERVER_NAME=server)
     c.get('/studentme/')
 
     # try logging in if the user already exists
@@ -38,8 +37,10 @@ def login_as_student(c = None):
     return c, test_student
     
 # returns a client with the tutor logged in
-def login_as_tutor():
-    c = Client(SERVER_NAME=server)
+def login_as_tutor(c = None):
+    if c == None:
+        c = Client(SERVER_NAME=server)
+
     c.get('/tutorme/')
 
     # try logging in if the user already exists
@@ -115,7 +116,7 @@ class TutorRequestsViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.client, cls.tutor = login_as_tutor()
-        _, cls.student = login_as_student(c = cls.client)
+        _, cls.student = login_as_student()
         cls.course = 'Test course'
     
     def setUp(self):
@@ -152,7 +153,7 @@ class TutorProfileView(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.client, cls.tutor = login_as_tutor()
-        _, cls.student = login_as_student(c = cls.client)
+        _, cls.student = login_as_student()
 
     def setUp(self):
         self.client = TutorProfileView.client
