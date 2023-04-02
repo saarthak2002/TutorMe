@@ -16,7 +16,7 @@ def login_as_student(c = None):
     if c == None:
         c = Client(SERVER_NAME=server)
 
-    c.get('/studentme/')
+    c.get('/tutorme/')
 
     # try logging in if the user already exists
     if c.login(username=global_student_username, password=global_student_password):
@@ -29,7 +29,7 @@ def login_as_student(c = None):
     test_user = User.objects.create_user(username=global_student_username, email='', password=global_student_password)
     test_user.save()
     test_student = AppUser.objects.get(user=test_user)
-    test_student.user_type = 2
+    test_student.user_type = 1
     test_student.save()
 
     # log in as the student
@@ -84,6 +84,7 @@ class TutorMyClassesViewTests(TestCase):
         response = self.client.get(reverse(views.tutor_my_classes_view)) 
         self.assertContains(response, course_name)
 
+
 class TutorAddClassesViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -111,6 +112,7 @@ class TutorAddClassesViewTests(TestCase):
         self.assertContains(response, 'Financial Mathematics')
         self.assertContains(response, '1140')
         self.assertContains(response, 'MATH')
+
 
 class TutorRequestsViewTests(TestCase):
     @classmethod
@@ -169,6 +171,7 @@ class TutorProfileView(TestCase):
         self.assertContains(response, rating_level)
         self.assertContains(response, rating_review)
     
+
 class StudentRequestsViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -204,3 +207,41 @@ class StudentRequestsViewTests(TestCase):
         self.response = self.client.get(reverse(views.student_requests_view)) 
         # check request status is declined
         self.assertContains(self.response, 'Declined')
+
+    def test_delete_request(self):
+        # reject request 
+        self.tutoring_request.status = 3
+        self.tutoring_request.save()
+        #reload page
+        self.response = self.client.get(reverse(views.student_requests_view)) 
+        # check request status is declined
+        self.assertContains(self.response, 'Declined')
+
+
+class StudentSearchClassesViewTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.client, cls.student = login_as_student()
+
+    def setUp(self):
+        self.client = StudentSearchClassesViewTests.client
+
+    def test_search_courses_by_mnemonic(self):
+        # search courses with MATH mnemonic
+        response = self.client.get(reverse(views.index), {'search': 'MATH'}) 
+        # MATH courses appear
+        self.assertContains(response, 'MATH')
+
+    def test_search_courses_by_number(self):
+        # search courses with number MATH 1140
+        response = self.client.get(reverse(views.index), {'search': 'MATH 1140'}) 
+        # courses with number 1140 appear
+        self.assertContains(response, '1140')
+
+    def test_search_courses_by_name(self):
+        # search courses with name 'Financial'
+        response = self.client.get(reverse(views.index), {'search': 'Financial Math'}) 
+        # the course 'Financial Mathematics' appears
+        self.assertContains(response, 'Financial Mathematics')
+        self.assertContains(response, '1140')
+        self.assertContains(response, 'MATH')
