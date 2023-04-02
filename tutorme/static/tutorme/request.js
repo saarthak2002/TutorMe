@@ -6,6 +6,7 @@
     handleRequestReject();
     handleTutorAddPress();
     handleTutorRemovePress();
+    handleTutorEditProfileButton();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -15,6 +16,7 @@
         handleRequestReject();
         handleTutorAddPress();
         handleTutorRemovePress();
+        handleTutorEditProfileButton();
     });
 }
 
@@ -53,40 +55,50 @@ function handleCardButtonPress() {
             const course = this.getAttribute('course');
             const url = new URL(window.location.href);
 
-            //get position of button to know where to place popup
+
             const buttonRect = button.getBoundingClientRect();
             const buttonTop = buttonRect.top;
             const buttonLeft = buttonRect.left;
 
-            //Show popup to ask the student what time they want to request
             const popup = document.createElement('div')
-            popup.classList.add('time-request-popup')
-            popup.innerHTML=`
-                <h2>Request Help</h2>
+            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded')
+            popup.innerHTML = `
+            <h2 class="mb-4">Select a time</h2>
+            <div class="form-group">
                 <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-                <br>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+            <div class="form-group">
                 <label for="start-time">Start Time:</label>
-                <input type="time" id="start-time" name="start-time" required>
-                <br>
+                <input type="time" id="start-time" name="start-time" class="form-control" required>
+            </div>
+            <div class="form-group">
                 <label for="end-time">End Time:</label>
-                <input type="time" id="end-time" name="end-time" required>
-                <br>
-                <button id="submit">Submit</button>
-            `;
-            //position the pop up correctly
+                <input type="time" id="end-time" name="end-time" class="form-control" required>
+            </div>
+            <div class = "buttons">
+                <button id="submit" class="btn btn-primary">Submit</button>
+                <button id="cancel" class="btn btn-danger">Cancel</button>
+            </div>
+        `;
+
+            const { top, left, height } = button.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const popupTop = top + scrollTop + height;
             popup.style.position = 'absolute';
-            popup.style.top = buttonTop + button.offsetHeight + 'px';
-            popup.style.left = buttonLeft + 'px';
+            popup.style.top = popupTop + 'px';
+            popup.style.left = left + 'px';
+            
+
             
             document.body.appendChild(popup)
             const submitButton = popup.querySelector('#submit');
+            const cancelButton = popup.querySelector('#cancel');
             submitButton.addEventListener('click', function() {
                 const date = popup.querySelector('#date').value;
                 const startTime = popup.querySelector('#start-time').value;
                 const endTime = popup.querySelector('#end-time').value;
                 
-                // Create the form data object with the necessary data
                 const formData = new FormData();
                 formData.append('from', from);
                 formData.append('to', to);
@@ -96,16 +108,16 @@ function handleCardButtonPress() {
                 formData.append('end', endTime);
                 formData.append('csrfmiddlewaretoken', csrftoken);
                 
-                // Send the POST request to the server
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', url.toString());
                 xhr.send(formData);
                 
-                // Update the button to indicate that the request has been sent
                 this.disabled = true;
                 this.innerHTML = 'Request Sent';
                 
-                // Hide the popup form
+                popup.remove();
+            });
+            cancelButton.addEventListener('click', function(){
                 popup.remove();
             });
             // const xhr = new XMLHttpRequest();
@@ -267,4 +279,26 @@ function handleTutorRemovePress() {
 
         });
     });
+}
+
+function handleTutorEditProfileButton(){
+    const buttons = document.querySelectorAll('.tutor-edit-bio-button')
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(){
+            let csrftoken = Cookies.get('csrftoken');
+            const bioText = document.getElementById("edit-tutor-bio-textbox").value;
+
+            const url = new URL(window.location.href);
+
+            xhr.open('POST', url.toString());
+            
+            const formData = new FormData();
+            formData.append('bio', bio);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+
+            xhr.send(formData);
+            
+        });
+    });
+
 }

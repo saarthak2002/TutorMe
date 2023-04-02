@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
-from .views import index, student_requests_view, tutor_requests_view, tutor_my_classes_view, tutor_add_classes_view, tutor_profile_view, student_profile_view, edit_profile_view
+from .views import index, student_requests_view, tutor_requests_view, tutor_my_classes_view, tutor_add_classes_view, tutor_profile_view, student_profile_view, edit_profile_view, edit_tutor_profile_view
 
 urlpatterns = [
     path('', index, name='index'),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('tutor/profiles/', tutor_profile_view),
     path('profile/', student_profile_view),
     path('profile/edit', edit_profile_view),
+    path('tutor/profiles/edit', edit_tutor_profile_view),
 ]

@@ -135,7 +135,10 @@ def tutor_requests_view(request):
         time = item.created_timestamp
         str_time = time.strftime("sent on %m-%d-%Y at %H:%M:%S")
         status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
-        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time})
+        date = item.date_requested
+        start = item.start_time_requested
+        end = item.end_time_requested
+        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end})
 
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
@@ -202,10 +205,12 @@ def tutor_add_classes_view(request):
 def tutor_profile_view(request):
     classes_list = []
     ratings_list = []
+    bio_list = []
     tutor_user_id = request.user.id
     tutor_app_id = AppUser.objects.filter(user_id__id = tutor_user_id).values('id')[0]['id']
     rating_query_result = Ratings.objects.filter(tutor_who_was_rated__id = tutor_app_id)
     classes_query_result = Tutor.objects.filter(user_id__id = tutor_app_id)
+    tutor_query_result = AppUser.objects.filter(user_id__id = tutor_user_id)
     for rating in rating_query_result:
         from_student = rating.student_who_rated.user.username
         student_name = rating.student_who_rated.user.first_name + ' ' + rating.student_who_rated.user.last_name
@@ -216,13 +221,20 @@ def tutor_profile_view(request):
     for class_tutored in classes_query_result:
         course = class_tutored.course
         classes_list.append({'course': course})
-    context = {'ratings_list': ratings_list, 'classes_list': classes_list}
+    bio_list.append({'bio': tutor_query_result[0].bio})
+    context = {'ratings_list': ratings_list, 'classes_list': classes_list, 'bio_list': bio_list}
     return render(request, 'tutorme/tutorProfile.html', context)
 
 def student_profile_view(request):
     user = request.user.id
     student_app_id = AppUser.objects.filter(user_id__id = user).values('id')[0]['id']
     stu_bio = Student_Profile.objects.filter(user_id__id=student_app_id)
+    class_request_query = Request.objects.filter(from_student=student_app_id)
+    courses_requested_list = []
+    for class_requested in class_request_query:
+        course = class_requested.course
+        courses_requested_list.append(course)
+    context = {'courses_requested': courses_requested_list}
     #student = Student_Profile.objects.filter(user=user)
     #bio = Student_Profile.objects.filter(bio=bio)
 
@@ -237,7 +249,7 @@ def student_profile_view(request):
     # else:
     #     profile_form = UpdateProfileForm(instance=request.user.profile)
     # return render(request, 'tutorme/studentProfile.html', {'profile_form': profile_form})
-    return render(request, 'tutorme/studentProfile.html')
+    return render(request, 'tutorme/studentProfile.html', context)
 
 def edit_profile_view(request):
     # context = {}
@@ -258,3 +270,13 @@ def edit_profile_view(request):
         profile_form = UpdateProfileForm(instance=request.user)
     return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
     # return render(request, 'tutorme/editProfile.html', context)
+
+def edit_tutor_profile_view(request):
+    tutor_user_id = request.user.id
+
+    if request.method == 'POST':
+        bio = request.POST.get('bio')
+        current_tutor = AppUser.objects.get(user_id__id = tutor_user_id)
+        current_tutor.bio = bio
+        current_tutor.save()
+    return render(request, 'tutorme/editTutorProfile.html')
