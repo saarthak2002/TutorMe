@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor, AppUser, Request, Ratings, Student_Profile
-from .forms import UpdateProfileForm
+# from .models import Tutor, AppUser, Request, Ratings, Student_Profile
+# from .forms import UpdateProfileForm
+from .models import Tutor, AppUser, Request, Ratings
 
 # student view class search page (Search)
 def index(request):
@@ -226,15 +227,23 @@ def tutor_profile_view(request):
     return render(request, 'tutorme/tutorProfile.html', context)
 
 def student_profile_view(request):
+    year_list = []
+    help_description_list = []
+    bio_list = []
     user = request.user.id
     student_app_id = AppUser.objects.filter(user_id__id = user).values('id')[0]['id']
-    stu_bio = Student_Profile.objects.filter(user_id__id=student_app_id)
+    student_query_result = AppUser.objects.filter(user_id__id = user)
+    # stu_bio = Student_Profile.objects.filter(user_id__id=student_app_id)
     class_request_query = Request.objects.filter(from_student=student_app_id)
     courses_requested_list = []
     for class_requested in class_request_query:
         course = class_requested.course
         courses_requested_list.append(course)
-    context = {'courses_requested': courses_requested_list}
+    year_list.append({'year': student_query_result[0].year})
+    help_description_list.append({'help_description': student_query_result[0].help_description})
+    bio_list.append({'bio': student_query_result[0].bio})
+    context = {'year': year_list, 'help_description': help_description_list, 'bio': bio_list, 'courses_requested': courses_requested_list}
+    
     #student = Student_Profile.objects.filter(user=user)
     #bio = Student_Profile.objects.filter(bio=bio)
 
@@ -254,23 +263,37 @@ def student_profile_view(request):
 def edit_profile_view(request):
     # context = {}
    # print("here")
+
+    # student_user_id = request.user.id
+    # if request.method == 'POST':
+    #     profile_form = UpdateProfileForm(request.POST, instance=request.user)
+    #     if profile_form.is_valid():
+    #         profile_form.save()
+    #         year = request.POST.get('year')
+    #         bio = request.POST.get('bio')
+    #         student = Student_Profile.objects.get(user_id__id = student_user_id)
+    #         student.year = year
+    #         student.bio = bio
+    #         student.save()
+    #         messages.success(request, 'Your profile is updated successfully')
+    #         args = {'UpdateProfileForm': UpdateProfileForm}
+    #         return render(request, 'tutorme/studentProfile.html', args)
+    # else:
+    #     profile_form = UpdateProfileForm(instance=request.user)
+    # return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
+
     student_user_id = request.user.id
     if request.method == 'POST':
-        profile_form = UpdateProfileForm(request.POST, instance=request.user)
-        if profile_form.is_valid():
-            profile_form.save()
-            year = request.POST.get('year')
-            bio = request.POST.get('bio')
-            student = Student_Profile.objects.get(user_id__id = student_user_id)
-            student.year = year
-            student.bio = bio
-            student.save()
-            messages.success(request, 'Your profile is updated successfully')
-            args = {'UpdateProfileForm': UpdateProfileForm}
-            return render(request, 'tutorme/studentProfile.html', args)
-    else:
-        profile_form = UpdateProfileForm(instance=request.user)
-    return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
+        year = request.POST.get('year')
+        help_description = request.POST.get('help_description')
+        bio = request.POST.get('bio')
+        current_student = AppUser.objects.get(user_id__id = student_user_id)
+        current_student_year = year
+        current_student_bio = bio
+        current_student_help_description = help_description
+        current_student.save()
+    return render(request, 'tutorme/editProfile.html')
+
     # return render(request, 'tutorme/editProfile.html', context)
 
 def edit_tutor_profile_view(request):
