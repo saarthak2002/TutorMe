@@ -34,7 +34,6 @@ def index(request):
             end_time_requested = end_time_requested
         )
         new_request.save()
-
     # displays list of classes in table on clicking "Search" button after entering search parameters in search bar
     # queries SIS API for list of classes based on parameters
     if request.method == 'GET' and 'search' in request.GET:
@@ -186,7 +185,8 @@ def tutor_my_classes_view(request):
 
     for item in course_query:
         course = item.course
-        course_list.append(course)
+        available_times = item.available_times
+        course_list.append([course, available_times])
 
     context = {'course_list' : course_list}
     return render(request, 'tutorme/tutorMyClassesView.html', context)

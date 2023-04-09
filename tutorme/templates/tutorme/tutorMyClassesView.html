@@ -29,17 +29,29 @@
                 <div class="col-9">
                     <h1 class="display-1 heading"> My Classes</h1>
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+                    <div class="row">
                         {% for course in course_list %}
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                              <h5 class="card-title">{{ course }}</h5>
-                              <div class="d-flex justify-content-center">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger tutor-class-card-remove-button" course = "{{ course }}">Remove</button>
-                              </div>
+                             <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ course.0 }}</h5>
+                                            <hr>
+                                                <h6 class="card-subtitle mb-2 text-muted">Available Times:</h6>
+                                                <ul class="list-unstyled">
+                                                    {% for key, value in course.1.items %}
+                                                        <li><strong>{{ key }}:</strong> {{ value }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            <hr>
+                                            <div class="text-center">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger tutor-class-card-remove-button" course="{{ course.0 }}">Remove</button>
+                                            </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                         {% endfor %}
+                    </div>
                     </div>
                 </div>
             </div>

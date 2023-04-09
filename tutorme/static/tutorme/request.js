@@ -63,7 +63,7 @@ function handleCardButtonPress() {
             const buttonLeft = buttonRect.left;
 
             const popup = document.createElement('div')
-            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded')
+            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded', 'border', 'border-dark')
             popup.innerHTML = `
             <h2 class="mb-4">Select a time</h2>
             <div class="form-group">
@@ -82,7 +82,7 @@ function handleCardButtonPress() {
                 <button id="submit" class="btn btn-primary">Submit</button>
                 <button id="cancel" class="btn btn-danger">Cancel</button>
             </div>
-        `;
+            `;
 
             const { top, left, height } = button.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -260,6 +260,12 @@ function handleTutorAddPress() {
             submitButton.addEventListener('click', function(){
                 console.log("added ran");
                 const daysOfTheWeek = ['monday', 'tuesday', 'wednesday','thursday', 'friday'];
+                const timesOfDay = {
+                    'morning':'9:00 AM - 12:00 PM', 
+                    'afternoon': '12:00 PM - 5:00 PM', 
+                    'evening': '5:00 PM - 9:00 PM', 
+                    'night' : '9:00 PM - 12:00 AM'
+                }
                 const mondayCheckedBoxes = [];
                 const tuesdayCheckedBoxes = [];
                 const wednesdayCheckedBoxes = []
@@ -273,19 +279,19 @@ function handleTutorAddPress() {
                     checkboxes.forEach(function(checkbox) {
                         if (checkbox.checked) {
                             if(daysOfTheWeek[i] == 'monday'){
-                                mondayCheckedBoxes.push(checkbox.value); 
+                                mondayCheckedBoxes.push(timesOfDay[checkbox.value]); 
                             }
                             if(daysOfTheWeek[i] == 'tuesday'){
-                                tuesdayCheckedBoxes.push(checkbox.value); 
+                                tuesdayCheckedBoxes.push(timesOfDay[checkbox.value]); 
                             }
                             if(daysOfTheWeek[i] == 'wednesday'){
-                                wednesdayCheckedBoxes.push(checkbox.value); 
+                                wednesdayCheckedBoxes.push(timesOfDay[checkbox.value]); 
                             }
                             if(daysOfTheWeek[i] == 'thursday'){
-                                thursdayCheckedBoxes.push(checkbox.value); 
+                                thursdayCheckedBoxes.push(timesOfDay[checkbox.value]); 
                             }
                             if(daysOfTheWeek[i] == 'friday'){
-                                fridayCheckedBoxes.push(checkbox.value); 
+                                fridayCheckedBoxes.push(timesOfDay[checkbox.value]); 
                             }
                         }
                     });
