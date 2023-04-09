@@ -182,7 +182,7 @@ class StudentRequestsViewTests(TestCase):
     def setUp(self):
         self.client = StudentRequestsViewTests.client
         # create request
-        self.tutoring_request = Request.objects.create(from_student=self.student, to_tutor=self.student, course=self.course)
+        self.tutoring_request = Request.objects.create(from_student=self.student, to_tutor=self.tutor, course=self.course)
         # navigate to request view
         self.response = self.client.get(reverse(views.student_requests_view)) 
 
@@ -245,3 +245,21 @@ class StudentSearchClassesViewTests(TestCase):
         self.assertContains(response, 'Financial Mathematics')
         self.assertContains(response, '1140')
         self.assertContains(response, 'MATH')
+
+
+class StudentProfileViewTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.client, cls.student = login_as_student()
+        _, cls.tutor = login_as_tutor()
+
+    def setUp(self):
+        self.course = "Calculus I"
+        self.client = StudentProfileViewTests.client
+        # create request
+        self.tutoring_request = Request.objects.create(from_student=self.student, to_tutor=self.tutor, course=self.course)
+
+    def test_course_on_student_profile(self):
+        # check the course appears on the tutor profile
+        response = self.client.get(reverse(views.student_profile_view)) 
+        self.assertContains(response, self.course)
