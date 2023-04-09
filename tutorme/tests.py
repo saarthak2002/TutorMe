@@ -264,3 +264,27 @@ class StudentProfileViewTests(TestCase):
         # check the course appears on the tutor profile
         response = self.client.get(reverse(views.student_profile_view)) 
         self.assertContains(response, self.course)
+
+
+class NoLoginTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = Client(SERVER_NAME=server)
+        cls.all_views = [ views.index,
+            views.student_requests_view,
+            views.student_profile_view,
+            views.edit_profile_view,
+            views.tutor_requests_view,
+            views.tutor_my_classes_view,
+            views.tutor_add_classes_view,
+            views.tutor_profile_view,
+            views.edit_tutor_profile_view ]
+
+    def setUp(self):
+        self.client = NoLoginTests.client
+
+    def test_no_user_logged_in(self):
+        for view in self.all_views:
+            response = self.client.get(reverse(view))
+            self.assertContains(response, "Login with Google")
+
