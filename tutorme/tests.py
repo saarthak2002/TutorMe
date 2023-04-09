@@ -210,12 +210,13 @@ class StudentRequestsViewTests(TestCase):
 
     def test_delete_request(self):
         # reject request 
-        self.tutoring_request.status = 3
-        self.tutoring_request.save()
+        entries_deleted = self.tutoring_request.delete()
+        # check that something was actually deleted
+        self.assertGreaterEqual(entries_deleted[0], 1)
         #reload page
         self.response = self.client.get(reverse(views.student_requests_view)) 
         # check request status is declined
-        self.assertContains(self.response, 'Declined')
+        self.assertNotContains(self.response, self.course)
 
 
 class StudentSearchClassesViewTests(TestCase):
