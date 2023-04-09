@@ -65,6 +65,9 @@ def index(request):
 
 # student view requests page (My Requests)
 def student_requests_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
     request_list = []
 
     # handle clicking "Remove" button on a card in the My Requests page in the Student View, removes Request from database
@@ -103,6 +106,9 @@ def student_requests_view(request):
 
 # tutor view requests page (My Requests)
 def tutor_requests_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
     request_list = []
 
     # handles clicking "Accept" or "Reject" button on a card in the My Requests page in the Tutor View,
@@ -167,6 +173,9 @@ def tutor_requests_view(request):
 
 # tutor view classes page (My Classes)
 def tutor_my_classes_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
 
     course_list = []
     curr_user = request.user.username
@@ -200,6 +209,9 @@ def tutor_my_classes_view(request):
 
 # tutor view search classes (Add Classes)
 def tutor_add_classes_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
     classList = []
     searchParams = ''
 
@@ -246,6 +258,9 @@ def tutor_add_classes_view(request):
     return render(request, 'tutorme/tutorAddClassesView.html', context)
 
 def tutor_profile_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
     classes_list = []
     ratings_list = []
     bio_list = []
@@ -269,6 +284,9 @@ def tutor_profile_view(request):
     return render(request, 'tutorme/tutorProfile.html', context)
 
 def student_profile_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
     bio_list = []
     help_list = []
     user = request.user.id
@@ -288,6 +306,9 @@ def student_profile_view(request):
     return render(request, 'tutorme/studentProfile.html', context)
 
 def edit_profile_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
     if request.method == 'POST':
         bio = request.POST.get('bioText')
         help_description_test = request.POST.get('helpText')
@@ -300,6 +321,9 @@ def edit_profile_view(request):
     return render(request, 'tutorme/editProfile.html')
 
 def edit_tutor_profile_view(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+
     tutor_user_id = request.user.id
 
     if request.method == 'POST':
