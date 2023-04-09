@@ -202,11 +202,31 @@ def tutor_add_classes_view(request):
         course = request.POST.get('course')
         curr_user = request.user.username
         current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
-        
+        monday_times = request.POST.get('mondayTimes')
+        tuesday_times = request.POST.get('tuesdayTimes')
+        wednesday_times = request.POST.get('wednesdayTimes')
+        thursday_times = request.POST.get('thursdayTimes')
+        friday_times = request.POST.get('fridayTimes')
+        #   tutor.available_times = {
+        #              'Monday': [
+        #                  {'start_time': '9:00 AM', 'end_time': '10:00 AM'},
+        #                  {'start_time': '10:00 AM', 'end_time': '11:00 AM'},
+        #              ],
+        #              'Tuesday': [
+        #                  {'start_time': '1:00 PM', 'end_time': '2:00 PM'},
+        #              ],
+        #          }
         new_tutor, created = Tutor.objects.get_or_create(
             user = current_tutor,
-            course = course
+            course = course,
         )
+        new_tutor.available_times = {
+                'Monday': monday_times,
+                'Tuesday': tuesday_times,
+                'Wednesday': wednesday_times,
+                'Thursday': thursday_times,
+                'Friday': friday_times
+            }
         new_tutor.save()
 
     # handles clicking "Search" button in the Add Classes page in the Tutor View,

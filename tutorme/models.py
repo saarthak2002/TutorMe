@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime
 
+
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     USER_TYPE_CHOICES = (
@@ -33,6 +34,7 @@ def app_user_create(sender, instance=None, created=False, **kwargs):
 class Tutor(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     course = models.CharField(max_length=150)
+    available_times = models.JSONField(default=dict)
     def __str__(self):
         return self.user.user.username + ' - ' + self.course
     

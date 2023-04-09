@@ -244,20 +244,85 @@ function handleTutorAddPress() {
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
             console.log("add button pressed");
-            var csrftoken = Cookies.get('csrftoken');
-            const course = this.getAttribute('course');
-            const url = new URL(window.location.href);
+            //when add button is pressed open modal to select available times
+            const self = this;
+            const modal = document.getElementById('availability_modal');
+            const modalInstance = M.Modal.init(modal);
+            modalInstance.open();
 
-            this.disabled = true;
-            this.innerHTML = "Added";
+            const closeModalButtonn = modal.querySelector('.modal-close-button');
+            closeModalButtonn.addEventListener('click', function() {
+                // Close the modal when the close button is pressed
+                modalInstance.close();
+            });
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', url.toString());
+            const submitButton = modal.querySelector('.modal-submit-button');
+            submitButton.addEventListener('click', function(){
+                console.log("added ran");
+                const daysOfTheWeek = ['monday', 'tuesday', 'wednesday','thursday', 'friday'];
+                const mondayCheckedBoxes = [];
+                const tuesdayCheckedBoxes = [];
+                const wednesdayCheckedBoxes = []
+                const thursdayCheckedBoxes = []
+                const fridayCheckedBoxes = []
+                for(let i = 0; i < daysOfTheWeek.length; i++){
+                    const day = daysOfTheWeek[i] + '-available-times';
+                    const arrayToAdd = daysOfTheWeek[i]+'CheckedBoxes';
+                    const dayFormGroup = document.querySelector('.'+day);
+                    const checkboxes = dayFormGroup.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(function(checkbox) {
+                        if (checkbox.checked) {
+                            if(daysOfTheWeek[i] == 'monday'){
+                                mondayCheckedBoxes.push(checkbox.value); 
+                            }
+                            if(daysOfTheWeek[i] == 'tuesday'){
+                                tuesdayCheckedBoxes.push(checkbox.value); 
+                            }
+                            if(daysOfTheWeek[i] == 'wednesday'){
+                                wednesdayCheckedBoxes.push(checkbox.value); 
+                            }
+                            if(daysOfTheWeek[i] == 'thursday'){
+                                thursdayCheckedBoxes.push(checkbox.value); 
+                            }
+                            if(daysOfTheWeek[i] == 'friday'){
+                                fridayCheckedBoxes.push(checkbox.value); 
+                            }
+                        }
+                    });
+                }
+                
+                // tutor.available_times = {
+                //     'Monday': [
+                //         {'start_time': '9:00 AM', 'end_time': '10:00 AM'},
+                //         {'start_time': '10:00 AM', 'end_time': '11:00 AM'},
+                //     ],
+                //     'Tuesday': [
+                //         {'start_time': '1:00 PM', 'end_time': '2:00 PM'},
+                //     ],
+                // }
 
-            const formData = new FormData();
-            formData.append('course', course);
-            formData.append('csrfmiddlewaretoken', csrftoken);
-            xhr.send(formData);
+                var csrftoken = Cookies.get('csrftoken');
+                const course = self.getAttribute('course');
+                const url = new URL(window.location.href);
+
+                self.disabled = true;
+                self.innerHTML = "Added";
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', url.toString());
+
+                const formData = new FormData();
+                formData.append('course', course);
+                formData.append('csrfmiddlewaretoken', csrftoken);
+                formData.append('mondayTimes', mondayCheckedBoxes)
+                formData.append('tuesdayTimes', tuesdayCheckedBoxes)
+                formData.append('wednesdayTimes', wednesdayCheckedBoxes)
+                formData.append('thursdayTimes', thursdayCheckedBoxes)
+                formData.append('fridayTimes', fridayCheckedBoxes)
+
+                xhr.send(formData);
+                modalInstance.close();
+            });   
 
         });
     });
