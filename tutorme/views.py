@@ -5,6 +5,13 @@ import tutorme.apiutils as sisapi
 import urllib.parse
 from .models import Tutor, AppUser, Request, Ratings
 
+# check what kind of user is logged in, if any
+def check_logged_in(request):
+    if request.user.is_authenticated:
+        return request.user.appuser.user_type
+    else:
+        return 0
+
 # student view class search page (Search)
 def index(request):
     
