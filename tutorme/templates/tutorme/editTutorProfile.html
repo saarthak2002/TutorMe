@@ -31,13 +31,12 @@
                             <div class="card-body">
                             <h4 class="display-5 heading">Edit Tutor Bio</h1>
 
-                              <!-- year dropdown, class search and description on what they need help in, about me/fun facts (major, hobbies, fun facts, favorite things) -->
 
                               <form method="post" action="/tutorme/tutor/profiles/edit">
                                 {% csrf_token %}
                                
 
-                                <h6 class="text-black-100 fs-3">About Me</h6> {{ profile_form.bio }}
+                                <h6 class="text-black-100 fs-3">About Me</h6> 
                                 <textarea name="bio" id="edit-tutor-bio-textbox" class="form-control" rows="5" placeholder="Enter your bio here" required></textarea>
 
 

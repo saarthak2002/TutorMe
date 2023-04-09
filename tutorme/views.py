@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db.models import Q
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor, AppUser, Request, Ratings, Student_Profile
-from .forms import UpdateProfileForm
+from .models import Tutor, AppUser, Request, Ratings
 
 # student view class search page (Search)
 def index(request):
@@ -106,16 +106,32 @@ def tutor_requests_view(request):
         change_status_from_student = request.POST.get('from')
         change_status_to_tutor = request.POST.get('to')
         change_status_course = request.POST.get('course')
-        
+        start_time_requested = request.POST.get('start_time_requested')
+        end_time_requested = request.POST.get('end_time_requested')
+        date_requested = request.POST.get('date_requested')
         user_student = AppUser.objects.filter(user__username__contains = change_status_from_student).first()
         user_tutor = AppUser.objects.filter(user__username__contains = change_status_to_tutor).first()
+        tutor_user_id = request.user.id
+        tutor_app_id = AppUser.objects.filter(user_id__id = tutor_user_id).values('id')[0]['id']
+        all_requests_to_tutor = Request.objects.filter(to_tutor_id__id = tutor_app_id)
+        scheduling_conflict = False
         
+
+
         request_to_change = Request.objects.filter(
             from_student = user_student,
             to_tutor = user_tutor,
             course = change_status_course
         ).first()
+
         if change_status_request_type == 'accept':
+            # for existing_request in all_requests_to_tutor:
+            #     if existing_request.date_requested == date_requested:
+            #         print('date conflict')
+            #         conflict_query = Q(start_time_requested__range=(start_time_requested, end_time_requested)) | \
+            #         Q(end_time_requested__range=(start_time_requested, end_time_requested)) | \
+            #         Q(start_time_requested__lte=request.start_time_requested, end_time_requested__gte=request.end_time_requested)
+            print('accepting here')
             request_to_change.status = 2
             request_to_change.save()
         elif change_status_request_type == 'reject':
@@ -226,52 +242,35 @@ def tutor_profile_view(request):
     return render(request, 'tutorme/tutorProfile.html', context)
 
 def student_profile_view(request):
+    bio_list = []
+    help_list = []
     user = request.user.id
     student_app_id = AppUser.objects.filter(user_id__id = user).values('id')[0]['id']
-    stu_bio = Student_Profile.objects.filter(user_id__id=student_app_id)
+    student_profile_query = AppUser.objects.filter(user_id__id=user)[0]
+    year = student_profile_query.year
+    stu_bio = student_profile_query.bio
+    stu_help_descr = student_profile_query.help_description
+    bio_list.append({'bio':stu_bio})
+    help_list.append({'help': stu_help_descr})
     class_request_query = Request.objects.filter(from_student=student_app_id)
     courses_requested_list = []
     for class_requested in class_request_query:
         course = class_requested.course
-        courses_requested_list.append(course)
-    context = {'courses_requested': courses_requested_list}
-    #student = Student_Profile.objects.filter(user=user)
-    #bio = Student_Profile.objects.filter(bio=bio)
-
-   
-    # if request.method == 'POST':
-    #     profile_form = UpdateProfileForm(request.POST, instance=request.user)
-
-    #     if profile_form.is_valid():
-    #         profile_form.save()
-    #         messages.success(request, 'Your profile is updated successfully')
-    #         return redirect(to='users-profile')
-    # else:
-    #     profile_form = UpdateProfileForm(instance=request.user.profile)
-    # return render(request, 'tutorme/studentProfile.html', {'profile_form': profile_form})
+        courses_requested_list.append({'course':course})
+    context = {'courses_requested': courses_requested_list, 'bio_list': bio_list, 'year': year, 'help_description': stu_help_descr}
     return render(request, 'tutorme/studentProfile.html', context)
 
 def edit_profile_view(request):
-    # context = {}
-   # print("here")
-    student_user_id = request.user.id
     if request.method == 'POST':
-        profile_form = UpdateProfileForm(request.POST, instance=request.user)
-        if profile_form.is_valid():
-            profile_form.save()
-            year = request.POST.get('year')
-            bio = request.POST.get('bio')
-            student = Student_Profile.objects.get(user_id__id = student_user_id)
-            student.year = year
-            student.bio = bio
-            student.save()
-            messages.success(request, 'Your profile is updated successfully')
-            args = {'UpdateProfileForm': UpdateProfileForm}
-            return render(request, 'tutorme/studentProfile.html', args)
-    else:
-        profile_form = UpdateProfileForm(instance=request.user)
-    return render(request, 'tutorme/editProfile.html', {'profile_form': profile_form})
-    # return render(request, 'tutorme/editProfile.html', context)
+        bio = request.POST.get('bioText')
+        help_description_test = request.POST.get('helpText')
+        student_year = request.POST.get('studentYear')
+        current_student = AppUser.objects.get(user_id__id = request.user.id)
+        current_student.bio = bio
+        current_student.year = student_year
+        current_student.help_description = help_description_test
+        current_student.save()
+    return render(request, 'tutorme/editProfile.html')
 
 def edit_tutor_profile_view(request):
     tutor_user_id = request.user.id

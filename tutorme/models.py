@@ -11,6 +11,15 @@ class AppUser(models.Model):
       (1, 'student'),
       (2, 'tutor'),
     )
+    YEAR_CHOICES = [
+    (1, 'First Year'),
+    (2, 'Second Year'),
+    (3, 'Third Year'),
+    (4, 'Fourth Year'),
+    (5, 'Graduate')
+    ]
+    year = models.CharField(max_length=12, choices=YEAR_CHOICES, default=1)
+    help_description = models.TextField(default="I'm looking for a tutor!")
     bio = models.TextField(default="Hi, I'm excited to use TutorMe!")
     user_type = models.PositiveSmallIntegerField(default=1, choices=USER_TYPE_CHOICES)
     def __str__(self):
@@ -62,17 +71,3 @@ class Ratings(models.Model):
   def __str__(self):
         return 'from: ' + self.student_who_rated.user.username + ' to: ' + self.tutor_who_was_rated.user.username + ' rating: ' + ('Poor' if self.rating == 1 else 'Fair' if self.rating == 2 else 'Good' if self.rating == 3 else 'Very Good' if self.rating == 4 else 'Excellent') + ' review: ' + self.review
 
-class Student_Profile(models.Model):
-  user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
-  YEAR_CHOICES = [
-    (1, 'First Year'),
-    (2, 'Second Year'),
-    (3, 'Third Year'),
-    (4, 'Fourth Year'),
-    (5, 'Graduate')
-  ]
-  year = models.CharField(max_length=12, choices=YEAR_CHOICES)
-  help_description = models.TextField()
-  bio = models.TextField()
-  def __str__(self):
-      return str(self.student_profile)

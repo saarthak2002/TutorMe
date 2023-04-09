@@ -7,6 +7,7 @@
     handleTutorAddPress();
     handleTutorRemovePress();
     handleTutorEditProfileButton();
+    handleStudentEditProfileButton();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -17,6 +18,7 @@
         handleTutorAddPress();
         handleTutorRemovePress();
         handleTutorEditProfileButton();
+        handleStudentEditProfileButton();
     });
 }
 
@@ -177,6 +179,9 @@ function handleRequestAccept() {
             const to = this.getAttribute('tutor');
             const course = this.getAttribute('course');
             const type = this.getAttribute('request_type');
+            const end_time_requested = this.getAttribute('end_time')
+            const start_time_requested = this.getAttribute('start_time')
+            const date_requested = this.getAttribute('date')
             const url = new URL(window.location.href);
 
             url.searchParams.set('from', encodeURIComponent(from));
@@ -191,6 +196,9 @@ function handleRequestAccept() {
             formData.append('course', course);
             formData.append('request_type', type)
             formData.append('csrfmiddlewaretoken', csrftoken);
+            formData.append('start_time_requested', start_time_requested)
+            formData.append('end_time_requested', end_time_requested)
+            formData.append('date_requested', date_requested)
             xhr.send(formData);
 
         });
@@ -287,7 +295,7 @@ function handleTutorEditProfileButton(){
         button.addEventListener('click', function(){
             let csrftoken = Cookies.get('csrftoken');
             const bioText = document.getElementById("edit-tutor-bio-textbox").value;
-
+            const xhr = new XMLHttpRequest();
             const url = new URL(window.location.href);
 
             xhr.open('POST', url.toString());
@@ -301,4 +309,27 @@ function handleTutorEditProfileButton(){
         });
     });
 
+}
+
+function handleStudentEditProfileButton(){
+    const buttons = document.querySelectorAll('.student-profile-edit-button')
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(){
+            let csrftoken = Cookies.get('csrftoken');
+            const bioText = document.getElementById("edit-student-bio-textbox").value;
+            const helpText = document.getElementById("edit-student-help-description-textbox").value;
+            const studentYear = document.getElementById("year-in-college").value;
+        
+            const url = new URL(window.location.href);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            
+            const formData = new FormData();
+            formData.append('bioText', bioText);
+            formData.append('helpText', helpText);
+            formData.append('studentYear', studentYear);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+        });
+    });
 }

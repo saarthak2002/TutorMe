@@ -29,9 +29,7 @@
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
                         <div class="card w-100 mt-2" style ="font-size: large;">
                             <div class="card-body">
-                                <h4 class="display-5 heading">Edit Profile</h1>
-                              <h6 class="text-black-100 fs-3" >{{ user.first_name }}  {{ user.last_name }}</h6>
-                              <h6 class="text-muted" >{{ user.email }}</h6>
+                            <h4 class="display-5 heading">Edit Profile</h1>
 
                               <!-- year dropdown, class search and description on what they need help in, about me/fun facts (major, hobbies, fun facts, favorite things) -->
 
@@ -63,20 +61,29 @@
                                     <div class="form-text">Use this space to tell potential tutors about yourself! You can include information such as your major, hobbies, favorite things, etc.</div>
                                 </div> -->
 
-                                <h6 class="text-black-100 fs-3">Year at UVA</h6> {{ profile_form.year }}
-                                <h6 class="text-black-100 fs-3">What I Need Help With</h6> {{ profile_form.help_description }}
-                                <h6 class="text-black-100 fs-3">About Me</h6> {{ profile_form.bio }}
-                              
+                                <h6 class="text-black-100 fs-3">Year at UVA</h6> 
+                                    <select id="year-in-college" name="year_in_college" required>
+                                        <option value="" disabled selected>Choose year in college</option>
+                                        <option value="1">Freshman</option>
+                                        <option value="2">Sophomore</option>
+                                        <option value="3">Junior</option>
+                                        <option value="4">Senior</option>
+                                    </select>
+                                <h6 class="text-black-100 fs-3">What I Need Help With</h6> 
+                                <textarea name="student_help_description" id="edit-student-help-description-textbox" class="form-control" rows="5" placeholder="Enter what you need help with here" required></textarea>
+                                <h6 class="text-black-100 fs-3">About Me</h6>
+                                <textarea name="student_bio" id="edit-student-bio-textbox" class="form-control" rows="5" placeholder="Enter your bio here" required></textarea>
 
                                 <!-- <input class="btn btn-primary" type="submit" style="background-color: blue" value="Save Changes">
                                 <input class="btn btn-primary" type="reset" style="background-color: gray" value="Cancel"> -->
 
                                 <!-- https://dev.to/earthcomfy/django-update-user-profile-33ho -->
 
-                                <button type="submit" class="btn btn-primary" style="background-color: blue">Save Changes</button> 
-                                <!--<button type="submit" class="btn btn-primary" style="background-color: rgb(228, 231, 233)"><a href="/tutorme/profile/">Save Changes</a></button> -->
-                                <button type="reset" class="btn btn-primary" style="background-color: gray">Cancel</button>
-
+                                <div class = 'buttons' style=" margin-top: 20px;">
+                                    <button type="submit" class="btn btn-primary student-profile-edit-button" >Save Changes</button> 
+                                    <a href="/tutorme/profile/" class="btn btn-danger">Cancel</a>
+                                </div>
+                                
                               </form>
 
                             </div>
