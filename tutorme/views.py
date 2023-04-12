@@ -54,9 +54,11 @@ def index(request):
         data = urllib.parse.unquote(request.GET.get('data', ''))
         time = urllib.parse.unquote(request.GET.get('time', ''))
         date = urllib.parse.unquote(request.GET.get('date', ''))
+
         if date:
             format_date = datetime.strptime(date, "%Y-%m-%d")
             day_of_week = format_date.strftime("%A")
+            
         #THIS IS WHERE IT HAPPENS
         default_bio = 'Hello, I am a tutor for {}. Nice to meet you!'.format(data)
         query_result = Tutor.objects.filter(course__contains = data)
@@ -64,9 +66,11 @@ def index(request):
             available_at_requested_time = False
             tutor_id = tutor.user.id
             entry_exists = TutorTimes.objects.filter(user_id__id = tutor_id).exists()
+            hourly_rate = 10.00
             if entry_exists:
                 tutor_times_query = TutorTimes.objects.get(user_id__id = tutor_id)
                 available_times = tutor_times_query.available_times
+                hourly_rate = tutor_times_query.hourly_rate
                 day_requested_times = available_times[day_of_week]
                 if time in day_requested_times:
                     available_at_requested_time = True
@@ -74,7 +78,7 @@ def index(request):
                 name = tutor.user.user.first_name + ' ' + tutor.user.user.last_name
                 username = tutor.user.user.username
                 email = tutor.user.user.email
-                tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email})
+                tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email, 'hourly_rate':hourly_rate})
         
     context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'date_requested':date, 'time_requested': time}
 

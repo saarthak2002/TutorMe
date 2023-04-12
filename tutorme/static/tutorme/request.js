@@ -75,7 +75,7 @@ function handleButtonPress() {
                 <button id="cancel" class="btn btn-danger">Cancel</button>
             </div>
             `;
-
+            
             document.body.appendChild(popup)
             const { top, left, height } = button.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -86,14 +86,21 @@ function handleButtonPress() {
 
             const submitButton = popup.querySelector('#submit');
             const cancelButton = popup.querySelector('#cancel');
-
+            
             submitButton.addEventListener('click', function() {
                 console.log('submit for specific time pressed')
                 const data = self.getAttribute('request-data');
                 const selectedTime = popup.querySelector('input[name="time-selection"]:checked').value;
                 const date = popup.querySelector('#date').value;
+                const selectedDate = new Date(date)
+                const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const selectDayOfWeek = daysOfWeek[selectedDate.getUTCDay()];
+                
                 if(date == ""){
                     alert("please select a date")
+                }
+                if(selectDayOfWeek == "Saturday" || selectDayOfWeek == "Sunday"){
+                    alert("please select week day")
                 }
                 else{
                     const url = new URL(window.location.href);
