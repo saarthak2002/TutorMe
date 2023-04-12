@@ -71,14 +71,15 @@ def index(request):
                 tutor_times_query = TutorTimes.objects.get(user_id__id = tutor_id)
                 available_times = tutor_times_query.available_times
                 hourly_rate = tutor_times_query.hourly_rate
-                day_requested_times = available_times[day_of_week]
-                if time in day_requested_times:
-                    available_at_requested_time = True
-            if available_at_requested_time is True:
-                name = tutor.user.user.first_name + ' ' + tutor.user.user.last_name
-                username = tutor.user.user.username
-                email = tutor.user.user.email
-                tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email, 'hourly_rate':hourly_rate})
+                if available_times:
+                    day_requested_times = available_times[day_of_week]
+                    if time in day_requested_times:
+                        available_at_requested_time = True
+                if available_at_requested_time is True:
+                    name = tutor.user.user.first_name + ' ' + tutor.user.user.last_name
+                    username = tutor.user.user.username
+                    email = tutor.user.user.email
+                    tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email, 'hourly_rate':hourly_rate})
         
     context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'date_requested':date, 'time_requested': time}
 
