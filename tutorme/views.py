@@ -4,6 +4,7 @@ from django.db.models import Q
 import tutorme.apiutils as sisapi
 import urllib.parse
 from .models import Tutor, AppUser, Request, Ratings, TutorTimes
+from datetime import datetime
 
 # check what kind of user is logged in, if any
 def check_logged_in(request):
@@ -19,7 +20,8 @@ def index(request):
     searchParams = ''
     data = request.GET.get('data')
     tutorList = []
-
+    date = ""
+    time = ""
     # handle clicking "Request Help" button after search and display tutor list, adds new Request to database
     if request.method == 'POST':
         from_student = request.POST.get('from')
@@ -50,16 +52,31 @@ def index(request):
     # displays list of tutor cards on clicking "Request" button for a course in the search results table
     if request.method == 'GET' and 'data' in request.GET:
         data = urllib.parse.unquote(request.GET.get('data', ''))
+        time = urllib.parse.unquote(request.GET.get('time', ''))
+        date = urllib.parse.unquote(request.GET.get('date', ''))
+        if date:
+            format_date = datetime.strptime(date, "%Y-%m-%d")
+            day_of_week = format_date.strftime("%A")
+        #THIS IS WHERE IT HAPPENS
         default_bio = 'Hello, I am a tutor for {}. Nice to meet you!'.format(data)
         query_result = Tutor.objects.filter(course__contains = data)
         for tutor in query_result:
-            name = tutor.user.user.first_name + ' ' + tutor.user.user.last_name
-            username = tutor.user.user.username
-            email = tutor.user.user.email
-            tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email})
-            
+            available_at_requested_time = False
+            tutor_id = tutor.user.id
+            entry_exists = TutorTimes.objects.filter(user_id__id = tutor_id).exists()
+            if entry_exists:
+                tutor_times_query = TutorTimes.objects.get(user_id__id = tutor_id)
+                available_times = tutor_times_query.available_times
+                day_requested_times = available_times[day_of_week]
+                if time in day_requested_times:
+                    available_at_requested_time = True
+            if available_at_requested_time is True:
+                name = tutor.user.user.first_name + ' ' + tutor.user.user.last_name
+                username = tutor.user.user.username
+                email = tutor.user.user.email
+                tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email})
         
-    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList}
+    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'date_requested':date, 'time_requested': time}
 
     return render(request, 'tutorme/index.html', context)
 

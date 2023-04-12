@@ -10,7 +10,7 @@
             <h6 class="text-black-50">{{ tutor.email }}</h6>
             <p class="card-text">{{ tutor.Bio }}</p>
             {% csrf_token %}
-            <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}">Request Help</button>
+            <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}" time_requested = "{{time_requested}}" date_requested ="{{date_requested}}">Request Help</button>
             </div>
         </div>
     {% endfor %}

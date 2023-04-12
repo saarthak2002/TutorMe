@@ -52,8 +52,8 @@ class Request(models.Model):
     )
     status = models.PositiveSmallIntegerField(choices=REQUEST_STATUS_CHOICES, default=1)
     date_requested = models.DateField(default=datetime.now)
-    start_time_requested = models.TimeField(default=datetime.now)
-    end_time_requested = models.TimeField(default=datetime.now)
+    start_time_requested = models.CharField(max_length=10, default='')
+    end_time_requested = models.CharField(max_length=10, default='')
     def __str__(self):
         return 'from: ' + self.from_student.user.username + ' to: ' + self.to_tutor.user.username + ' course: ' + self.course + ' status: ' + ('pending' if self.status == 1 else 'accepted' if self.status == 2 else 'declined')
     

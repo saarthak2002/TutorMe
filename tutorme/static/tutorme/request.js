@@ -30,18 +30,88 @@ function handleButtonPress() {
     const buttons = document.querySelectorAll('.request-button');
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
-            const data = this.getAttribute('request-data');
-            const url = new URL(window.location.href);
-            url.searchParams.set('data', encodeURIComponent(data));
-            
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url.toString());
-            xhr.onload = function() {
-                const response = xhr.responseText;
-                window.location.href = url.toString();
-            };
-            xhr.send();
-            
+            self = this;
+            console.log("request for class pressed");
+            const popup = document.createElement('div')
+            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded', 'border', 'border-dark')
+            popup.innerHTML = `
+            <h2 class="mb-4">Select a time</h2>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Time:</label><br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="8AM-9AM" required> 8AM-9AM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="9AM-10AM" required> 9AM-10AM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="10AM-11AM" required> 10AM-11AM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="11AM-12PM" required> 11AM-12PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="12PM-1PM" required> 12PM-1PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="1PM-2PM" required> 1PM-2PM
+                <br>
+                <input type="radio"  id = "time-selection" name = "time-selection" value="2PM-3PM" required> 2PM-3PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="3PM-4PM" required> 3PM-4PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="4PM-5PM" required> 4PM-5PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="5PM-6PM" required> 5PM-6PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="6PM-7PM" required> 6PM-7PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="7PM-8PM" required> 7PM-8PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="8PM-9PM" required> 8PM-9PM
+            </div>
+            <div class="buttons">
+                <button id="submit" class="btn btn-primary">Submit</button>
+                <button id="cancel" class="btn btn-danger">Cancel</button>
+            </div>
+            `;
+
+            document.body.appendChild(popup)
+            const { top, left, height } = button.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const popupTop = top + scrollTop + height;
+            popup.style.position = 'absolute';
+            popup.style.top = popupTop + 'px';
+            popup.style.left = left-125+'px';
+
+            const submitButton = popup.querySelector('#submit');
+            const cancelButton = popup.querySelector('#cancel');
+
+            submitButton.addEventListener('click', function() {
+                const data = self.getAttribute('request-data');
+                const selectedTime = popup.querySelector('input[name="time-selection"]:checked').value;
+                const date = popup.querySelector('#date').value;
+                if(date == ""){
+                    alert("please select a date")
+                }
+                else{
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('data', encodeURIComponent(data));
+                    url.searchParams.set('time', encodeURIComponent(selectedTime));
+                    url.searchParams.set('date', encodeURIComponent(date));
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', url.toString());
+                    xhr.onload = function() {
+                        const response = xhr.responseText;
+                        window.location.href = url.toString();
+                    };
+                    xhr.send();
+                    
+                    popup.remove();
+                }
+            });
+            cancelButton.addEventListener('click', function(){
+                popup.remove();
+            });
         });
     });
 }
@@ -57,81 +127,25 @@ function handleCardButtonPress() {
             const from = this.getAttribute('from_user');
             const to = this.getAttribute('to_tutor');
             const course = this.getAttribute('course');
+            const date = this.getAttribute('date_requested');
+            const time = this.getAttribute('time_requested');
+            const startTime = time.split("-")[0]; 
+            const endTime = time.split("-")[1]; 
             const url = new URL(window.location.href);
 
-
-            const buttonRect = button.getBoundingClientRect();
-            const buttonTop = buttonRect.top;
-            const buttonLeft = buttonRect.left;
-
-            const popup = document.createElement('div')
-            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded', 'border', 'border-dark')
-            popup.innerHTML = `
-            <h2 class="mb-4">Select a time</h2>
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="start-time">Start Time:</label>
-                <input type="time" id="start-time" name="start-time" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="end-time">End Time:</label>
-                <input type="time" id="end-time" name="end-time" class="form-control" required>
-            </div>
-            <div class = "buttons">
-                <button id="submit" class="btn btn-primary">Submit</button>
-                <button id="cancel" class="btn btn-danger">Cancel</button>
-            </div>
-            `;
-
-            const { top, left, height } = button.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const popupTop = top + scrollTop + height;
-            popup.style.position = 'absolute';
-            popup.style.top = popupTop + 'px';
-            popup.style.left = left + 'px';
-            
-
-            
-            document.body.appendChild(popup)
-            const submitButton = popup.querySelector('#submit');
-            const cancelButton = popup.querySelector('#cancel');
-            submitButton.addEventListener('click', function() {
-                const date = popup.querySelector('#date').value;
-                const startTime = popup.querySelector('#start-time').value;
-                const endTime = popup.querySelector('#end-time').value;
-                
-                const formData = new FormData();
-                formData.append('from', from);
-                formData.append('to', to);
-                formData.append('course', course);
-                formData.append('date', date);
-                formData.append('start', startTime);
-                formData.append('end', endTime);
-                formData.append('csrfmiddlewaretoken', csrftoken);
-                
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', url.toString());
-                xhr.send(formData);
-                
-                this.disabled = true;
-                this.innerHTML = 'Request Sent';
-                
-                popup.remove();
-            });
-            cancelButton.addEventListener('click', function(){
-                popup.remove();
-            });
-            // const xhr = new XMLHttpRequest();
-            // xhr.open('POST', url.toString());
-            // const formData = new FormData();
-            // formData.append('from', from);
-            // formData.append('to', to);
-            // formData.append('course', course);
-            // formData.append('csrfmiddlewaretoken', csrftoken);
-            // xhr.send(formData);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+            formData.append('from', from);
+            formData.append('to', to);
+            formData.append('course', course);
+            formData.append('date', date);
+            formData.append('start', startTime);
+            formData.append('end', endTime);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+            this.disabled = true;
+            this.innerHTML = 'Request Sent';
 
         });
     });
