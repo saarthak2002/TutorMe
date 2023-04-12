@@ -9,6 +9,7 @@
     handleTutorEditProfileButton();
     handleStudentEditProfileButton();
     handleTutorAddingAvailableTimes();
+    handleTutorApplication();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -21,6 +22,7 @@
         handleTutorEditProfileButton();
         handleStudentEditProfileButton();
         handleTutorAddingAvailableTimes();
+        handleTutorApplication();
     });
 }
 
@@ -416,5 +418,28 @@ function handleTutorAddingAvailableTimes(){
             }, 100);  
         });
     });
+}
+
+function handleTutorApplication(){
+    const buttons = document.querySelectorAll('.prior-experience-button');
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(){
+            const url = new URL(window.location.href);
+            let csrftoken = Cookies.get('csrftoken');
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+            console.log('ran up here')
+            console.log(xhr.status)
+            this.innerHTML = "Applied";
+            setTimeout(function() {
+                console.log('redirected');
+                console.log(window.location.origin);
+                window.location.href = window.location.origin + '/tutorme/';
+            }, 3000); 
+        });
+    }); 
 }
                 

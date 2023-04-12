@@ -26,7 +26,17 @@
                     {% include "tutorme/navMenu.html" %}
                 </div>
                 <div class="col-9">
-                    APPLY TO BE A TUTOR HERE
+                    <h2 class="text-center mb-4" style = "padding-top: 20px;">Tutor Application!</h2>
+                    <form method="post" action="/tutorme/applyToBeATutor/">
+                        {% csrf_token %}
+                        <h6 class="text-black-100 fs-3">Prior Experience</h6> 
+                        <textarea name="prior-experience" id="apply-prior-experience" class = "form-control" rows="5" placeholder="Describe your prior experience" required></textarea>
+                        
+                        <div style = "padding-top: 20px;">
+                            <button type = "button" class="btn btn-primary prior-experience-button">Apply</button> 
+                        </div>
+                    </form>
+                        
                     <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
                 </div>                
             </div>

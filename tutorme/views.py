@@ -385,4 +385,35 @@ def add_tutor_available_times(request):
     return render(request, 'tutorme/tutorAddTimes.html',context)
 
 def apply_to_be_a_tutor(request):
+    print('ran out here')
+    if request.method == "POST":
+        print('new tutor made')
+        user_id = request.user.id
+        user_to_change =  AppUser.objects.get(user_id__id = user_id)
+        user_to_change.user_type = 2
+        user_to_change.save()
+
+        app_id = AppUser.objects.filter(user_id__id = user_id).values('id')[0]['id']
+
+        #remove all requests made by student becoming a tutor
+        remove_query = Request.objects.filter(
+            from_student = app_id,
+        ).delete()
+        
+        #enter new tutor into tutorTimes table
+        new_tutor_user = AppUser.objects.get(id = app_id)
+
+        new_tutor, created = TutorTimes.objects.get_or_create(
+            user = new_tutor_user,
+        )
+        new_tutor.available_times =  {
+                                    'Monday':[],
+                                    'Tuesday': [],
+                                    'Wednesday': [],
+                                    'Thursday': [],
+                                    'Friday': []
+                                    }
+        new_tutor.hourly_rate = 10.00
+        new_tutor.save()
+    
     return render(request, 'tutorme/applyToBeATutor.html')
