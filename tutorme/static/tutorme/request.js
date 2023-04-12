@@ -88,21 +88,23 @@ function handleButtonPress() {
             const cancelButton = popup.querySelector('#cancel');
             
             submitButton.addEventListener('click', function() {
-                console.log('submit for specific time pressed')
                 const data = self.getAttribute('request-data');
-                const selectedTime = popup.querySelector('input[name="time-selection"]:checked').value;
+                const selectedTimeBox = popup.querySelector('input[name="time-selection"]:checked');
                 const date = popup.querySelector('#date').value;
                 const selectedDate = new Date(date)
                 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                 const selectDayOfWeek = daysOfWeek[selectedDate.getUTCDay()];
-                
-                if(date == ""){
-                    alert("please select a date")
+                if(selectedTimeBox == null){
+                    alert("please select a time");
                 }
-                if(selectDayOfWeek == "Saturday" || selectDayOfWeek == "Sunday"){
-                    alert("please select week day")
+                else if(date == ""){
+                    alert("please select a date");
                 }
-                else{
+                else if(selectDayOfWeek == "Saturday" || selectDayOfWeek == "Sunday"){
+                    alert("please select week day");
+                }
+                else {
+                    selectedTime = selectedTimeBox.value;
                     const url = new URL(window.location.href);
                     url.searchParams.set('data', encodeURIComponent(data));
                     url.searchParams.set('time', encodeURIComponent(selectedTime));
