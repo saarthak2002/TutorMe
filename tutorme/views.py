@@ -243,15 +243,6 @@ def tutor_add_classes_view(request):
         wednesday_times = request.POST.get('wednesdayTimes')
         thursday_times = request.POST.get('thursdayTimes')
         friday_times = request.POST.get('fridayTimes')
-        #   tutor.available_times = {
-        #              'Monday': [
-        #                  {'start_time': '9:00 AM', 'end_time': '10:00 AM'},
-        #                  {'start_time': '10:00 AM', 'end_time': '11:00 AM'},
-        #              ],
-        #              'Tuesday': [
-        #                  {'start_time': '1:00 PM', 'end_time': '2:00 PM'},
-        #              ],
-        #          }
         new_tutor, created = Tutor.objects.get_or_create(
             user = current_tutor,
             course = course,
@@ -275,11 +266,17 @@ def tutor_profile_view(request):
     classes_list = []
     ratings_list = []
     bio_list = []
+    hourly_rate = 10.00
     tutor_user_id = request.user.id
     tutor_app_id = AppUser.objects.filter(user_id__id = tutor_user_id).values('id')[0]['id']
     rating_query_result = Ratings.objects.filter(tutor_who_was_rated__id = tutor_app_id)
     classes_query_result = Tutor.objects.filter(user_id__id = tutor_app_id)
     tutor_query_result = AppUser.objects.filter(user_id__id = tutor_user_id)
+
+    entry_exists = TutorTimes.objects.filter(user_id__id = tutor_app_id).exists()
+    if entry_exists:
+        tutor_times_query = TutorTimes.objects.get(user_id__id = tutor_app_id)
+        hourly_rate = tutor_times_query.hourly_rate
     for rating in rating_query_result:
         from_student = rating.student_who_rated.user.username
         student_name = rating.student_who_rated.user.first_name + ' ' + rating.student_who_rated.user.last_name
@@ -291,7 +288,7 @@ def tutor_profile_view(request):
         course = class_tutored.course
         classes_list.append({'course': course})
     bio_list.append({'bio': tutor_query_result[0].bio})
-    context = {'ratings_list': ratings_list, 'classes_list': classes_list, 'bio_list': bio_list}
+    context = {'ratings_list': ratings_list, 'classes_list': classes_list, 'bio_list': bio_list, 'hourly_rate': hourly_rate}
     return render(request, 'tutorme/tutorProfile.html', context)
 
 def student_profile_view(request):
@@ -339,9 +336,22 @@ def edit_tutor_profile_view(request):
 
     if request.method == 'POST':
         bio = request.POST.get('bio')
-        current_tutor = AppUser.objects.get(user_id__id = tutor_user_id)
-        current_tutor.bio = bio
-        current_tutor.save()
+        hourly_rate = request.POST.get('hourlyRate')
+        print(bio)
+        print(hourly_rate)
+        tutor_app_id = AppUser.objects.filter(user_id__id = tutor_user_id).values('id')[0]['id']
+        
+        current_tutor_change_bio = AppUser.objects.get(user_id__id = tutor_user_id)
+
+        current_tutor_change_bio.bio = bio
+        entry_exists = TutorTimes.objects.filter(user_id__id = tutor_app_id).exists()
+        if entry_exists and hourly_rate is not None:
+            current_tutor_change_rate = TutorTimes.objects.get(user_id__id = tutor_app_id)
+            current_tutor_change_rate.hourly_rate = hourly_rate
+            current_tutor_change_rate.save()
+
+        current_tutor_change_bio.save()
+
     return render(request, 'tutorme/editTutorProfile.html')
 
 def add_tutor_available_times(request):
@@ -373,3 +383,6 @@ def add_tutor_available_times(request):
         new_tutor.save()
     context = {'available_times_dict': current_times}
     return render(request, 'tutorme/tutorAddTimes.html',context)
+
+def apply_to_be_a_tutor(request):
+    return render(request, 'tutorme/applyToBeATutor.html')

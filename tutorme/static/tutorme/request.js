@@ -86,6 +86,7 @@ function handleButtonPress() {
             const cancelButton = popup.querySelector('#cancel');
 
             submitButton.addEventListener('click', function() {
+                console.log('submit for specific time pressed')
                 const data = self.getAttribute('request-data');
                 const selectedTime = popup.querySelector('input[name="time-selection"]:checked').value;
                 const date = popup.querySelector('#date').value;
@@ -311,13 +312,15 @@ function handleTutorEditProfileButton(){
         button.addEventListener('click', function(){
             let csrftoken = Cookies.get('csrftoken');
             const bioText = document.getElementById("edit-tutor-bio-textbox").value;
+            const hourlyRate = document.getElementById("hourly-rate").value;
             const xhr = new XMLHttpRequest();
             const url = new URL(window.location.href);
 
             xhr.open('POST', url.toString());
             
             const formData = new FormData();
-            formData.append('bio', bio);
+            formData.append('bio', bioText);
+            formData.append('hourlyRate', hourlyRate);
             formData.append('csrfmiddlewaretoken', csrftoken);
 
             xhr.send(formData);

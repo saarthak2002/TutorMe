@@ -39,6 +39,7 @@ class Tutor(models.Model):
 class TutorTimes(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     available_times = models.JSONField(default=dict)
+    hourly_rate = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
 
 class Request(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True)
