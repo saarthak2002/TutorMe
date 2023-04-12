@@ -33,10 +33,13 @@ def app_user_create(sender, instance=None, created=False, **kwargs):
 class Tutor(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     course = models.CharField(max_length=150)
-    available_times = models.JSONField(default=dict)
     def __str__(self):
         return self.user.user.username + ' - ' + self.course
-    
+
+class TutorTimes(models.Model):
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    available_times = models.JSONField(default=dict)
+
 class Request(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True)
     from_student = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='from_student')

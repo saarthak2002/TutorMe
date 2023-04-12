@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor, AppUser, Request, Ratings
+from .models import Tutor, AppUser, Request, Ratings, TutorTimes
 
 # check what kind of user is logged in, if any
 def check_logged_in(request):
@@ -201,11 +201,11 @@ def tutor_my_classes_view(request):
 
     for item in course_query:
         course = item.course
-        available_times = item.available_times
-        course_list.append([course, available_times])
+        course_list.append(course)
 
     context = {'course_list' : course_list}
     return render(request, 'tutorme/tutorMyClassesView.html', context)
+
 
 # tutor view search classes (Add Classes)
 def tutor_add_classes_view(request):
@@ -239,13 +239,7 @@ def tutor_add_classes_view(request):
             user = current_tutor,
             course = course,
         )
-        new_tutor.available_times = {
-                'Monday': monday_times,
-                'Tuesday': tuesday_times,
-                'Wednesday': wednesday_times,
-                'Thursday': thursday_times,
-                'Friday': friday_times
-            }
+      
         new_tutor.save()
 
     # handles clicking "Search" button in the Add Classes page in the Tutor View,
@@ -332,3 +326,33 @@ def edit_tutor_profile_view(request):
         current_tutor.bio = bio
         current_tutor.save()
     return render(request, 'tutorme/editTutorProfile.html')
+
+def add_tutor_available_times(request):
+    user_id = request.user.id
+    current_times_list = []
+    tutor_app_id = AppUser.objects.filter(user_id__id = user_id).values('id')[0]['id']
+    current_times = TutorTimes.objects.get(user_id__id = tutor_app_id).available_times
+    
+    if request.method == 'POST':
+        user_id = request.user.id
+        tutor_app_id = AppUser.objects.filter(user_id__id = user_id).values('id')[0]['id']
+        curr_user = request.user.username
+        current_tutor = AppUser.objects.filter(user__username__contains = curr_user).first()
+        monday_times = request.POST.get('mondayTimes')
+        tuesday_times = request.POST.get('tuesdayTimes')
+        wednesday_times = request.POST.get('wednesdayTimes')
+        thursday_times = request.POST.get('thursdayTimes')
+        friday_times = request.POST.get('fridayTimes')
+        new_tutor, created = TutorTimes.objects.get_or_create(
+            user = current_tutor
+        )
+        new_tutor.available_times = {
+            'Monday': monday_times,
+            'Tuesday': tuesday_times,
+            'Wednesday': wednesday_times,
+            'Thursday': thursday_times,
+            'Friday': friday_times
+        }
+        new_tutor.save()
+    context = {'available_times_dict': current_times}
+    return render(request, 'tutorme/tutorAddTimes.html',context)

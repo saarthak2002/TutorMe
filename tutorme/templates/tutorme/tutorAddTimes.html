@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Tutor Me</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+
+        {% load socialaccount %}
+
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+
+        {% load static %} 
+        <script src="{% static 'tutorme/request.js' %}" async></script>
+    </head>
+
+    <body>
+        <div style="margin: 0; padding: 0;">
+            <div class="row" style="width: 100%;">
+                <div class="col">
+                    {% include "tutorme/navMenuTutor.html" %}
+                </div>
+
+                <div class="col-9">
+                    <div class="row justify-content-center">
+                        <h2 class="text-center mb-4" style = "padding-top: 20px;">Select Tutor Availability</h2>
+                        <form method="GET" action ="/tutorme/tutor/chooseAvailableTimes/">
+                            {% csrf_token %}
+                            <div class = "container">
+                                <div class = "row form-group rounded border border-dark p-3">
+                                    <div class = "col form-group monday-available-times">
+                                        <h4 class="text-center mb-3">Monday</h4>
+                                        <div class = "text-center">
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "8AM-9AM"> 8 AM - 9 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "9AM-10AM"> 9 AM - 10 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "10AM-11AM"> 10 AM - 11 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="11AM-12PM"> 11 AM - 12 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="12PM-1PM"> 12 PM - 1 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="1PM-2PM"> 1 PM - 2 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="2PM-3PM"> 2 PM - 3 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="3PM-4PM"> 3 PM - 4 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="4PM-5PM"> 4 PM - 5 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="5PM-6PM"> 5 PM - 6 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="6PM-7PM"> 6 PM - 7 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="7PM-8PM"> 7 PM - 8 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="8PM-9PM"> 8 PM - 9 PM
+                                            </div>
+                                            </div>
+                                    </div>
+                                    <div class = "col form-group tuesday-available-times">
+                                        <h4 class="text-center mb-3">Tuesday</h4>
+                                        <div class = "text-center">
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "8AM-9AM"> 8 AM - 9 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "9AM-10AM"> 9 AM - 10 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "10AM-11AM"> 10 AM - 11 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="11AM-12PM"> 11 AM - 12 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="12PM-1PM"> 12 PM - 1 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="1PM-2PM"> 1 PM - 2 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="2PM-3PM"> 2 PM - 3 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="3PM-4PM"> 3 PM - 4 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="4PM-5PM"> 4 PM - 5 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="5PM-6PM"> 5 PM - 6 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="6PM-7PM"> 6 PM - 7 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="7PM-8PM"> 7 PM - 8 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="8PM-9PM"> 8 PM - 9 PM
+                                            </div>
+                                            </div>
+                                    </div>
+                                    <div class = "col form-group wednesday-available-times">
+                                        <h4 class="text-center mb-3">Wednesday</h4>
+                                        <div class = "text-center">
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "8AM-9AM"> 8 AM - 9 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "9AM-10AM"> 9 AM - 10 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "10AM-11AM"> 10 AM - 11 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="11AM-12PM"> 11 AM - 12 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="12PM-1PM"> 12 PM - 1 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="1PM-2PM"> 1 PM - 2 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="2PM-3PM"> 2 PM - 3 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="3PM-4PM"> 3 PM - 4 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="4PM-5PM"> 4 PM - 5 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="5PM-6PM"> 5 PM - 6 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="6PM-7PM"> 6 PM - 7 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="7PM-8PM"> 7 PM - 8 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="8PM-9PM"> 8 PM - 9 PM
+                                            </div>
+                                            </div>
+                                    </div>
+                                    <div class = "col form-group thursday-available-times">
+                                        <h4 class="text-center mb-3">Thursday</h4>
+                                        <div class = "text-center">
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "8AM-9AM"> 8 AM - 9 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "9AM-10AM"> 9 AM - 10 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "10AM-11AM"> 10 AM - 11 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="11AM-12PM"> 11 AM - 12 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="12PM-1PM"> 12 PM - 1 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="1PM-2PM"> 1 PM - 2 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="2PM-3PM"> 2 PM - 3 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="3PM-4PM"> 3 PM - 4 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="4PM-5PM"> 4 PM - 5 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="5PM-6PM"> 5 PM - 6 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="6PM-7PM"> 6 PM - 7 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="7PM-8PM"> 7 PM - 8 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="8PM-9PM"> 8 PM - 9 PM
+                                            </div>
+                                            </div>
+                                    </div>
+                                    <div class = "col form-group friday-available-times">
+                                        <h4 class="text-center mb-3">Friday</h4>
+                                        <div class = "text-center">
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "8AM-9AM"> 8 AM - 9 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "9AM-10AM"> 9 AM - 10 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value = "10AM-11AM"> 10 AM - 11 AM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="11AM-12PM"> 11 AM - 12 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="12PM-1PM"> 12 PM - 1 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="1PM-2PM"> 1 PM - 2 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="2PM-3PM"> 2 PM - 3 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="3PM-4PM"> 3 PM - 4 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="4PM-5PM"> 4 PM - 5 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="5PM-6PM"> 5 PM - 6 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="6PM-7PM"> 6 PM - 7 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="7PM-8PM"> 7 PM - 8 PM
+                                            </div>
+                                            <div class="form-check">
+                                                <input class = "form-check-input" type="checkbox" value="8PM-9PM"> 8 PM - 9 PM
+                                            </div>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class = "buttons" style = "padding-top: 10px;">
+                                    <button type="submit" class="btn btn-primary tutor-select-available-times-button" tutor ="{{user.id}}">Submit Times</button> 
+                                </div>
+                            </div>
+                        </form>
+                        <h5 class="card-title"></h5>
+                            <hr>
+                            <h6 class="card-subtitle mb-2 text-muted">Current Available Times:</h6>
+                                <ul class="list-group">
+                                {% for key, value in available_times_dict.items %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>{{ key }}:</strong> {{ value }}
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
