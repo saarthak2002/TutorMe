@@ -7,6 +7,9 @@
     handleTutorAddPress();
     handleTutorRemovePress();
     handleTutorEditProfileButton();
+    handleStudentEditProfileButton();
+    handleTutorAddingAvailableTimes();
+    handleTutorApplication();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -17,6 +20,9 @@
         handleTutorAddPress();
         handleTutorRemovePress();
         handleTutorEditProfileButton();
+        handleStudentEditProfileButton();
+        handleTutorAddingAvailableTimes();
+        handleTutorApplication();
     });
 }
 
@@ -26,18 +32,98 @@ function handleButtonPress() {
     const buttons = document.querySelectorAll('.request-button');
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
-            const data = this.getAttribute('request-data');
-            const url = new URL(window.location.href);
-            url.searchParams.set('data', encodeURIComponent(data));
+            self = this;
+            console.log("request for class pressed");
+            const popup = document.createElement('div')
+            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded', 'border', 'border-dark')
+            popup.innerHTML = `
+            <h2 class="mb-4">Select a time</h2>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Time:</label><br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="8AM-9AM" required> 8AM-9AM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="9AM-10AM" required> 9AM-10AM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="10AM-11AM" required> 10AM-11AM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="11AM-12PM" required> 11AM-12PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="12PM-1PM" required> 12PM-1PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="1PM-2PM" required> 1PM-2PM
+                <br>
+                <input type="radio"  id = "time-selection" name = "time-selection" value="2PM-3PM" required> 2PM-3PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="3PM-4PM" required> 3PM-4PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="4PM-5PM" required> 4PM-5PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="5PM-6PM" required> 5PM-6PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="6PM-7PM" required> 6PM-7PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="7PM-8PM" required> 7PM-8PM
+                <br>
+                <input type="radio" id = "time-selection" name = "time-selection" value="8PM-9PM" required> 8PM-9PM
+            </div>
+            <div class="buttons">
+                <button id="submit" class="btn btn-primary">Submit</button>
+                <button id="cancel" class="btn btn-danger">Cancel</button>
+            </div>
+            `;
             
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url.toString());
-            xhr.onload = function() {
-                const response = xhr.responseText;
-                window.location.href = url.toString();
-            };
-            xhr.send();
+            document.body.appendChild(popup)
+            const { top, left, height } = button.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const popupTop = top + scrollTop + height;
+            popup.style.position = 'absolute';
+            popup.style.top = popupTop + 'px';
+            popup.style.left = left-125+'px';
+
+            const submitButton = popup.querySelector('#submit');
+            const cancelButton = popup.querySelector('#cancel');
             
+            submitButton.addEventListener('click', function() {
+                const data = self.getAttribute('request-data');
+                const selectedTimeBox = popup.querySelector('input[name="time-selection"]:checked');
+                const date = popup.querySelector('#date').value;
+                const selectedDate = new Date(date)
+                const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const selectDayOfWeek = daysOfWeek[selectedDate.getUTCDay()];
+                if(selectedTimeBox == null){
+                    alert("please select a time");
+                }
+                else if(date == ""){
+                    alert("please select a date");
+                }
+                else if(selectDayOfWeek == "Saturday" || selectDayOfWeek == "Sunday"){
+                    alert("please select week day");
+                }
+                else {
+                    selectedTime = selectedTimeBox.value;
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('data', encodeURIComponent(data));
+                    url.searchParams.set('time', encodeURIComponent(selectedTime));
+                    url.searchParams.set('date', encodeURIComponent(date));
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', url.toString());
+                    xhr.onload = function() {
+                        const response = xhr.responseText;
+                        window.location.href = url.toString();
+                    };
+                    xhr.send();
+                    
+                    popup.remove();
+                }
+            });
+            cancelButton.addEventListener('click', function(){
+                popup.remove();
+            });
         });
     });
 }
@@ -53,81 +139,25 @@ function handleCardButtonPress() {
             const from = this.getAttribute('from_user');
             const to = this.getAttribute('to_tutor');
             const course = this.getAttribute('course');
+            const date = this.getAttribute('date_requested');
+            const time = this.getAttribute('time_requested');
+            const startTime = time.split("-")[0]; 
+            const endTime = time.split("-")[1]; 
             const url = new URL(window.location.href);
 
-
-            const buttonRect = button.getBoundingClientRect();
-            const buttonTop = buttonRect.top;
-            const buttonLeft = buttonRect.left;
-
-            const popup = document.createElement('div')
-            popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded')
-            popup.innerHTML = `
-            <h2 class="mb-4">Select a time</h2>
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="start-time">Start Time:</label>
-                <input type="time" id="start-time" name="start-time" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="end-time">End Time:</label>
-                <input type="time" id="end-time" name="end-time" class="form-control" required>
-            </div>
-            <div class = "buttons">
-                <button id="submit" class="btn btn-primary">Submit</button>
-                <button id="cancel" class="btn btn-danger">Cancel</button>
-            </div>
-        `;
-
-            const { top, left, height } = button.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const popupTop = top + scrollTop + height;
-            popup.style.position = 'absolute';
-            popup.style.top = popupTop + 'px';
-            popup.style.left = left + 'px';
-            
-
-            
-            document.body.appendChild(popup)
-            const submitButton = popup.querySelector('#submit');
-            const cancelButton = popup.querySelector('#cancel');
-            submitButton.addEventListener('click', function() {
-                const date = popup.querySelector('#date').value;
-                const startTime = popup.querySelector('#start-time').value;
-                const endTime = popup.querySelector('#end-time').value;
-                
-                const formData = new FormData();
-                formData.append('from', from);
-                formData.append('to', to);
-                formData.append('course', course);
-                formData.append('date', date);
-                formData.append('start', startTime);
-                formData.append('end', endTime);
-                formData.append('csrfmiddlewaretoken', csrftoken);
-                
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', url.toString());
-                xhr.send(formData);
-                
-                this.disabled = true;
-                this.innerHTML = 'Request Sent';
-                
-                popup.remove();
-            });
-            cancelButton.addEventListener('click', function(){
-                popup.remove();
-            });
-            // const xhr = new XMLHttpRequest();
-            // xhr.open('POST', url.toString());
-            // const formData = new FormData();
-            // formData.append('from', from);
-            // formData.append('to', to);
-            // formData.append('course', course);
-            // formData.append('csrfmiddlewaretoken', csrftoken);
-            // xhr.send(formData);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+            formData.append('from', from);
+            formData.append('to', to);
+            formData.append('course', course);
+            formData.append('date', date);
+            formData.append('start', startTime);
+            formData.append('end', endTime);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+            this.disabled = true;
+            this.innerHTML = 'Request Sent';
 
         });
     });
@@ -177,6 +207,9 @@ function handleRequestAccept() {
             const to = this.getAttribute('tutor');
             const course = this.getAttribute('course');
             const type = this.getAttribute('request_type');
+            const end_time_requested = this.getAttribute('end_time')
+            const start_time_requested = this.getAttribute('start_time')
+            const date_requested = this.getAttribute('date')
             const url = new URL(window.location.href);
 
             url.searchParams.set('from', encodeURIComponent(from));
@@ -191,6 +224,9 @@ function handleRequestAccept() {
             formData.append('course', course);
             formData.append('request_type', type)
             formData.append('csrfmiddlewaretoken', csrftoken);
+            formData.append('start_time_requested', start_time_requested)
+            formData.append('end_time_requested', end_time_requested)
+            formData.append('date_requested', date_requested)
             xhr.send(formData);
 
         });
@@ -287,13 +323,15 @@ function handleTutorEditProfileButton(){
         button.addEventListener('click', function(){
             let csrftoken = Cookies.get('csrftoken');
             const bioText = document.getElementById("edit-tutor-bio-textbox").value;
-
+            const hourlyRate = document.getElementById("hourly-rate").value;
+            const xhr = new XMLHttpRequest();
             const url = new URL(window.location.href);
 
             xhr.open('POST', url.toString());
             
             const formData = new FormData();
-            formData.append('bio', bio);
+            formData.append('bio', bioText);
+            formData.append('hourlyRate', hourlyRate);
             formData.append('csrfmiddlewaretoken', csrftoken);
 
             xhr.send(formData);
@@ -302,3 +340,115 @@ function handleTutorEditProfileButton(){
     });
 
 }
+
+function handleStudentEditProfileButton(){
+    const buttons = document.querySelectorAll('.student-profile-edit-button')
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(){
+            let csrftoken = Cookies.get('csrftoken');
+            const bioText = document.getElementById("edit-student-bio-textbox").value;
+            const helpText = document.getElementById("edit-student-help-description-textbox").value;
+            const studentYear = document.getElementById("year-in-college").value;
+        
+            const url = new URL(window.location.href);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            
+            const formData = new FormData();
+            formData.append('bioText', bioText);
+            formData.append('helpText', helpText);
+            formData.append('studentYear', studentYear);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+        });
+    });
+}
+
+function handleTutorAddingAvailableTimes(){
+    const buttons = document.querySelectorAll('.tutor-select-available-times-button');
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(){
+            console.log('submit times button pressed');
+            const daysOfTheWeek = ['monday', 'tuesday', 'wednesday','thursday', 'friday'];
+            const mondayCheckedBoxes = [];
+            const tuesdayCheckedBoxes = [];
+            const wednesdayCheckedBoxes = [];
+            const thursdayCheckedBoxes = [];
+            const fridayCheckedBoxes = [];
+            for(let i = 0; i < daysOfTheWeek.length; i++){
+                const day = daysOfTheWeek[i] + '-available-times';
+                const dayFormGroup = document.querySelector('.'+day);
+                const checkboxes = dayFormGroup.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(function(checkbox) {
+                    if (checkbox.checked) {
+                        if(daysOfTheWeek[i] == 'monday'){
+                            mondayCheckedBoxes.push(checkbox.value); 
+                        }
+                        if(daysOfTheWeek[i] == 'tuesday'){
+                            tuesdayCheckedBoxes.push(checkbox.value); 
+                        }
+                        if(daysOfTheWeek[i] == 'wednesday'){
+                            wednesdayCheckedBoxes.push(checkbox.value); 
+                        }
+                        if(daysOfTheWeek[i] == 'thursday'){
+                            thursdayCheckedBoxes.push(checkbox.value); 
+                        }
+                        if(daysOfTheWeek[i] == 'friday'){
+                            fridayCheckedBoxes.push(checkbox.value); 
+                        }
+                    }
+                });
+            }
+            // console.log(mondayCheckedBoxes);
+            // console.log(tuesdayCheckedBoxes);
+            // console.log(wednesdayCheckedBoxes);
+            // console.log(thursdayCheckedBoxes);
+            // console.log(fridayCheckedBoxes);
+            var csrftoken = Cookies.get('csrftoken');
+            const tutor = this.getAttribute('tutor');
+            console.log(tutor);
+            const url = new URL(window.location.href);
+            this.disabled = true;
+            this.innerHTML = "Submitted";
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            formData.append('mondayTimes', mondayCheckedBoxes)
+            formData.append('tuesdayTimes', tuesdayCheckedBoxes)
+            formData.append('wednesdayTimes', wednesdayCheckedBoxes)
+            formData.append('thursdayTimes', thursdayCheckedBoxes)
+            formData.append('fridayTimes', fridayCheckedBoxes)
+            xhr.send(formData);
+            setTimeout(function() {
+                location.reload();
+            }, 100);  
+        });
+    });
+}
+
+function handleTutorApplication(){
+    const buttons = document.querySelectorAll('.prior-experience-button');
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(){
+            const url = new URL(window.location.href);
+            let csrftoken = Cookies.get('csrftoken');
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            xhr.send(formData);
+            console.log('ran up here')
+            console.log(xhr.status)
+            this.innerHTML = "Applied";
+            setTimeout(function() {
+                console.log('redirected');
+                console.log(window.location.origin);
+                window.location.href = window.location.origin + '/tutorme/';
+            }, 3000); 
+        });
+    }); 
+}
+                

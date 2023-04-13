@@ -182,7 +182,7 @@ class StudentRequestsViewTests(TestCase):
     def setUp(self):
         self.client = StudentRequestsViewTests.client
         # create request
-        self.tutoring_request = Request.objects.create(from_student=self.student, to_tutor=self.student, course=self.course)
+        self.tutoring_request = Request.objects.create(from_student=self.student, to_tutor=self.tutor, course=self.course)
         # navigate to request view
         self.response = self.client.get(reverse(views.student_requests_view)) 
 
@@ -210,12 +210,13 @@ class StudentRequestsViewTests(TestCase):
 
     def test_delete_request(self):
         # reject request 
-        self.tutoring_request.status = 3
-        self.tutoring_request.save()
+        entries_deleted = self.tutoring_request.delete()
+        # check that something was actually deleted
+        self.assertGreaterEqual(entries_deleted[0], 1)
         #reload page
         self.response = self.client.get(reverse(views.student_requests_view)) 
         # check request status is declined
-        self.assertContains(self.response, 'Declined')
+        self.assertNotContains(self.response, self.course)
 
 
 class StudentSearchClassesViewTests(TestCase):
@@ -245,3 +246,45 @@ class StudentSearchClassesViewTests(TestCase):
         self.assertContains(response, 'Financial Mathematics')
         self.assertContains(response, '1140')
         self.assertContains(response, 'MATH')
+
+
+class StudentProfileViewTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.client, cls.student = login_as_student()
+        _, cls.tutor = login_as_tutor()
+
+    def setUp(self):
+        self.course = "Calculus I"
+        self.client = StudentProfileViewTests.client
+        # create request
+        self.tutoring_request = Request.objects.create(from_student=self.student, to_tutor=self.tutor, course=self.course)
+
+    def test_course_on_student_profile(self):
+        # check the course appears on the tutor profile
+        response = self.client.get(reverse(views.student_profile_view)) 
+        self.assertContains(response, self.course)
+
+
+class NoLoginTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = Client(SERVER_NAME=server)
+        cls.all_views = [ views.index,
+            views.student_requests_view,
+            views.student_profile_view,
+            views.edit_profile_view,
+            views.tutor_requests_view,
+            views.tutor_my_classes_view,
+            views.tutor_add_classes_view,
+            views.tutor_profile_view,
+            views.edit_tutor_profile_view ]
+
+    def setUp(self):
+        self.client = NoLoginTests.client
+
+    def test_no_user_logged_in(self):
+        for view in self.all_views:
+            response = self.client.get(reverse(view))
+            self.assertContains(response, "Login with Google")
+

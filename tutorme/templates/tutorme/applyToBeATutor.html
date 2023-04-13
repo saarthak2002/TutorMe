@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Tutor Me</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+
+        {% load socialaccount %}
+
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+
+        {% load static %} 
+        <script src="{% static 'tutorme/request.js' %}" async></script>
+    </head>
+
+    <body>
+        <div style="margin: 0; padding: 0;">
+            <div class="row" style="width: 100%;">
+                <div class="col">
+                    {% include "tutorme/navMenu.html" %}
+                </div>
+                <div class="col-9">
+                    <h2 class="text-center mb-4" style = "padding-top: 20px;">Tutor Application!</h2>
+                    <form method="post" action="/tutorme/applyToBeATutor/">
+                        {% csrf_token %}
+                        <h6 class="text-black-100 fs-3">Prior Experience</h6> 
+                        <textarea name="prior-experience" id="apply-prior-experience" class = "form-control" rows="5" placeholder="Describe your prior experience" required></textarea>
+                        
+                        <div style = "padding-top: 20px;">
+                            <button type = "button" class="btn btn-primary prior-experience-button">Apply</button> 
+                        </div>
+                    </form>
+                        
+                    <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
+                </div>                
+            </div>
+        </div>
+    </body>
+
+</html>

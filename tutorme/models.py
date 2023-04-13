@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime
+
 
 class AppUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -11,6 +11,15 @@ class AppUser(models.Model):
       (1, 'student'),
       (2, 'tutor'),
     )
+    YEAR_CHOICES = [
+    (1, 'First Year'),
+    (2, 'Second Year'),
+    (3, 'Third Year'),
+    (4, 'Fourth Year'),
+    (5, 'Graduate')
+    ]
+    year = models.CharField(max_length=12, choices=YEAR_CHOICES, default=1)
+    help_description = models.TextField(default="I'm looking for a tutor!")
     bio = models.TextField(default="Hi, I'm excited to use TutorMe!")
     YEAR_CHOICES = [
     (1, 'First Year'),
@@ -35,7 +44,12 @@ class Tutor(models.Model):
     course = models.CharField(max_length=150)
     def __str__(self):
         return self.user.user.username + ' - ' + self.course
-    
+
+class TutorTimes(models.Model):
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    available_times = models.JSONField(default=dict)
+    hourly_rate = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
+
 class Request(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True)
     from_student = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='from_student')
@@ -48,8 +62,8 @@ class Request(models.Model):
     )
     status = models.PositiveSmallIntegerField(choices=REQUEST_STATUS_CHOICES, default=1)
     date_requested = models.DateField(default=datetime.now)
-    start_time_requested = models.TimeField(default=datetime.now)
-    end_time_requested = models.TimeField(default=datetime.now)
+    start_time_requested = models.CharField(max_length=10, default='')
+    end_time_requested = models.CharField(max_length=10, default='')
     def __str__(self):
         return 'from: ' + self.from_student.user.username + ' to: ' + self.to_tutor.user.username + ' course: ' + self.course + ' status: ' + ('pending' if self.status == 1 else 'accepted' if self.status == 2 else 'declined')
     
@@ -71,17 +85,3 @@ class Ratings(models.Model):
   def __str__(self):
         return 'from: ' + self.student_who_rated.user.username + ' to: ' + self.tutor_who_was_rated.user.username + ' rating: ' + ('Poor' if self.rating == 1 else 'Fair' if self.rating == 2 else 'Good' if self.rating == 3 else 'Very Good' if self.rating == 4 else 'Excellent') + ' review: ' + self.review
 
-# class Student_Profile(models.Model):
-#   user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
-#   YEAR_CHOICES = [
-#     (1, 'First Year'),
-#     (2, 'Second Year'),
-#     (3, 'Third Year'),
-#     (4, 'Fourth Year'),
-#     (5, 'Graduate')
-#   ]
-#   year = models.CharField(max_length=12, choices=YEAR_CHOICES)
-#   help_description = models.TextField()
-#   bio = models.TextField()
-#   def __str__(self):
-#       return str(self.student_profile)

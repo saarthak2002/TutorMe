@@ -64,8 +64,12 @@
                 {% if requestedClass %}
                 <div class="d-flex justify-content-center">
                     <div class="d-flex flex-column text-center">
-                        <h1>Tutors For {{ requestedClass }}</h1>
-                        {% include "tutorme/cardView.html" %}
+                        {% if tutorList %}
+                            <h1>Tutors For {{ requestedClass }}</h1>
+                            {% include "tutorme/cardView.html" %}
+                        {% else %}
+                            <h1>No tutors available at requested time</h1>
+                        {% endif %}
                     </div>
                 </div>
                 <br>

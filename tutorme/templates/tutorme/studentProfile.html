@@ -29,25 +29,56 @@
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
                         <div class="card w-100 mt-2" style ="font-size: large;">
                             <div class="card-body">
-                                <h4 class="display-5 heading">{{ user.first_name }}'s Student Profile!</h1>
-                                <a href="/tutorme/profile/edit" style="text-align: center; padding-left: 95%;">Edit</a>
+                                <a href='/tutorme/profile/edit' style="text-align: center; padding-left: 95%;">Edit</a>
+                                <h4 class="display-5 heading">{{ user.username }}'s Student Profile!</h1>
                               <h6 class="text-black-100 fs-3" >{{ user.first_name }}  {{ user.last_name }}</h6>
+                                {% if year == '1' %}
+                                <h6 class="text-muted" >{{ year }}st year</h6>
+                                {% elif year == '2' %}
+                                <h6 class="text-muted" >{{ year }}nd year</h6>
+                                {% elif year == '3' %}
+                                <h6 class="text-muted" >{{ year }}rd year</h6>
+                                {% else %}
+                                <h6 class="text-muted" >{{ year }}th year</h6>
+                                {% endif %}
                               <h6 class="text-muted" >{{ user.email }}</h6>
-                              <h6 class="text-muted">{{ profile_form.year }}</h6>
-                              <h6 class="text-black-100 fs-3">What I Need Help With</h6> {{ profile_form.help_description }}
-                              <h6 class="text-black-100 fs-3">About Me</h6> {{ user.bio }}
-                            
                               <!--
-                                  maybe create a new model so students can add a little bio for their profile
+                                  maybe create a new model so tutors can add a little bio for their profile
                                   <h6 class="text-black-100">About myself: Add new model with tutor intro to put here</h6>
                               -->
                             </div>
                         </div>
                     </div>
-                    <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
-
+                    <h6 class="text-black-100" style="font-size: xx-large;">About me</h6>
+                    <div class="d-flex justify-content-start flex-wrap" style="gap: 10px;">
+                        {% for bio in bio_list%}  
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h6 class="text-black-50">{{bio.bio}}</h6>
+                            </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <h6 class="text-black-100" style="font-size: xx-large;">What I need help with</h6>
+                    <div class="d-flex justify-content-start flex-wrap" style="gap: 10px;">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h6 class="text-black-50">{{help_description}}</h6>
+                            </div>
+                            </div>
+                    </div>
+                    <h6 class="text-black-100" style="font-size: xx-large;">Courses requested</h6>
+                    <div class="d-flex justify-content-start flex-wrap" style="gap: 10px;">
+                        {% for classes in courses_requested %}
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                              <h6 class="text-black-50">{{classes.course }}</h6>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                     
-
+                    <div></div><a href="{% url 'account_logout' %}" style="text-align: center;">Logout</a></div>
                 </div>                
             </div>
         </div>

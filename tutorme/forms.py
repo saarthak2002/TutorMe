@@ -1,7 +1,7 @@
 # from django import forms
 
-# from django.contrib.auth.models import User
-# from .models import Student_Profile
+from django.contrib.auth.models import User
+from .models import AppUser
 
 
 # class UpdateProfileForm(forms.ModelForm):
@@ -17,6 +17,6 @@
 #     help_description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}))
 #     bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
 
-#     class Meta:
-#         model = Student_Profile
-#         fields = ['username', 'year', 'help_description', 'bio']
+class Meta:
+    model = AppUser()
+    fields = ['username', 'year', 'help_description', 'bio']
