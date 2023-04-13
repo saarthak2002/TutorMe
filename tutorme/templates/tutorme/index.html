@@ -12,6 +12,8 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tutorme/landing_page.css' %}" />
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" /> 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" />
@@ -32,6 +34,7 @@
   </head>
 
   <body>
+    <div class="landing">
     {% if user.is_authenticated %}
       
       {% if user.appuser.user_type == 1 %}
@@ -44,10 +47,12 @@
       {% endif %}
     
     {% else %}
-      <h1 class="display-1 heading">Welcome to Tutor Me</h1>
+      <h1 class="display-1 heading" style="padding-top: 30px;">Welcome</h1>
       <div class="d-flex justify-content-center">
 
         <div class="container login-container" style="width: 40%; height: 400px;">
+          {% load static %}
+          <img src="{% static 'tutorme/logo-no-background.png' %}" alt="My image" height="10%" style="margin-bottom: 50px;">
           <h1>Login to Continue</h1>
           <p>Find tutors for your classes</p>
           <a class="btn btn-outline-dark" href="{% provider_login_url 'google' %}" role="button" style="text-transform:none">
@@ -58,12 +63,12 @@
         
       </div>
       <footer class="fixed-bottom">
-        <div class="text-center p-4" style="background-color: lightblue;">
-          <span style="color: white">© 2023 Copyright</span>
-          <a class="fw-bold" href="#" style="color: white; text-decoration: none;">Tutor Me</a>
+        <div class="text-center p-4" style="background-color: #fcfcfc;">
+          <span style="color: black">© 2023 Copyright</span>
+          <a class="fw-bold" href="#" style="color: black; text-decoration: none;">Tutor Me</a>
         </div>
       </footer>
     {% endif %}
-
+  </div>
   </body>
 </html>
