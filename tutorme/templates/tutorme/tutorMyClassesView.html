@@ -32,8 +32,8 @@
                         {% for course in course_list %}
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
-                              <h5 class="card-title">{{ course }}</h5>
-                              <div class="d-flex justify-content-center">
+                              <h5 class="card-title" style="text-align: center;">{{ course }}</h5>
+                              <div class="d-flex justify-content-center" style="padding-top: 5px;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger tutor-class-card-remove-button" course = "{{ course }}">Remove</button>
                               </div>
