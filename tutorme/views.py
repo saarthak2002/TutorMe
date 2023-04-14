@@ -34,6 +34,11 @@ def index(request):
         user_student = AppUser.objects.filter(user__username__contains = from_student).first()
         user_tutor = AppUser.objects.filter(user__username__contains = to_tutor).first()
         # TO FIX: CHECK IF REQUEST WITH PARAMETERS ALREADY EXISTS
+        to_check_dup_query = Request.objects.filter(to_tutor__user__username__contains = to_tutor,
+                                                    from_student__user__username__contains = from_student,
+                                                    course__contains = course)
+        # delete all previous requests with the same tutor and class for the same student
+        to_check_dup_query.delete()
 
         new_request , created = Request.objects.get_or_create(
             from_student = user_student,
