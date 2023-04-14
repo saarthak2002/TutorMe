@@ -14,6 +14,11 @@
                 {% for request in request_list %}
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
+                      <div style="display: flex; justify-content: space-between;">
+                        <h4>{{ request.day_name }}</h4>
+                        <h4>{{ request.day_num }}</h4>
+                      </div>
+                      
                       <h5 class="card-title">{{ request.student_name }}</h5>
                       <h6 class="text-black-50">username: {{ request.from_student }}</h6>
                       <h6 class="text-black-50">{{ request.student_email }}</h6>

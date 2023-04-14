@@ -5,6 +5,7 @@ import tutorme.apiutils as sisapi
 import urllib.parse
 from .models import Tutor, AppUser, Request, Ratings, TutorTimes
 from datetime import datetime
+from operator import itemgetter
 
 # check what kind of user is logged in, if any
 def check_logged_in(request):
@@ -103,12 +104,15 @@ def index(request):
             str_time = time.strftime("sent on %m-%d-%Y at %H:%M:%S")
             status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
             date = item.date_requested
+            day_name = date.strftime("%A")
+            day_num = date.strftime("%d")
             start = item.start_time_requested
             end = item.end_time_requested
             # Show the tutor the accepted sessions they have scheduled in the next 7 days
             if(item.is_upcoming() and item.status == 2):
-                request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end})
+                request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end, 'day_name':day_name, 'day_num':day_num})
     
+    request_list = sorted(request_list, key=itemgetter('date', 'start'))
     context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'date_requested':date, 'time_requested': time, 'request_list':request_list}
     
     return render(request, 'tutorme/index.html', context)
@@ -178,8 +182,6 @@ def tutor_requests_view(request):
         all_requests_to_tutor = Request.objects.filter(to_tutor_id__id = tutor_app_id)
         scheduling_conflict = False
         
-
-
         request_to_change = Request.objects.filter(
             from_student = user_student,
             to_tutor = user_tutor,
