@@ -32,7 +32,14 @@
                         {% for request in request_list %}
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
-                              <h5 class="card-title">{{ request.student_name }}</h5>
+
+                              <!-- <div style="width:60%;padding:10px;background-color: rgba(0,0,0,0.05); border-radius: 10px;"> -->
+                                <img src="{{ request.profile_pic }}" style="display: block;
+                                margin-left: auto;
+                                margin-right: auto;"/>
+                                <h5 class="card-title" style="text-align: center;">{{ request.student_name }}</h5>
+                              <!-- </div> -->
+                              
                               <h6 class="text-black-50">username: {{ request.from_student }}</h6>
                               <h6 class="text-black-50">{{ request.student_email }}</h6>
                               <h6 class="text-black-50">date: {{ request.date }}</h6>

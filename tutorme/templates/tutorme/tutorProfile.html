@@ -29,11 +29,12 @@
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
                         <div class="card w-100 mt-2" style ="font-size: large;">
                             <div class="card-body">
-                                <h4 class="display-5 heading">{{ user.username }}'s Tutoring Profile!</h1>
-                                    <a href='/tutorme/tutor/profiles/edit' style="text-align: center; padding-left: 95%;">Edit</a>
-                              <h6 class="text-black-100 fs-3" >{{ user.first_name }}  {{ user.last_name }}</h6>
-                              <h6 class="text-muted" >Hourly Rate: ${{hourly_rate}}</h6>
-                              <h6 class="text-muted" >{{ user.email }}</h6>
+                                <h4 class="display-5 heading">{{ user.username }}'s Tutoring Profile</h4>
+                                <a href='/tutorme/tutor/profiles/edit' style="text-align: center; padding-left: 95%;">Edit</a>
+                                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+                                <h6 class="text-black-100 fs-3" >{{ user.first_name }}  {{ user.last_name }}</h6>
+                                <h6 class="text-muted" >Hourly Rate: ${{hourly_rate}}</h6>
+                                <h6 class="text-muted" >{{ user.email }}</h6>
                             </div>
                         </div>
                     </div>

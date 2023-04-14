@@ -218,7 +218,8 @@ def tutor_requests_view(request):
         date = item.date_requested
         start = item.start_time_requested
         end = item.end_time_requested
-        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end})
+        profile_pic = item.from_student.user.socialaccount_set.filter(provider='google')[0].extra_data['picture']
+        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end,'profile_pic':profile_pic})
 
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)

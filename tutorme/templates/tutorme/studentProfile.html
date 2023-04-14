@@ -29,8 +29,11 @@
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
                         <div class="card w-100 mt-2" style ="font-size: large;">
                             <div class="card-body">
-                                <a href='/tutorme/profile/edit' style="text-align: center; padding-left: 95%;">Edit</a>
-                                <h4 class="display-5 heading">{{ user.username }}'s Student Profile!</h1>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <h5 class="display-5 heading">{{ user.username }}'s Student Profile</h1>
+                                    <a href='/tutorme/profile/edit' style="text-align: center;">Edit</a>
+                                </div>
+                                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
                               <h6 class="text-black-100 fs-3" >{{ user.first_name }}  {{ user.last_name }}</h6>
                                 {% if year == '1' %}
                                 <h6 class="text-muted" >{{ year }}st year</h6>
