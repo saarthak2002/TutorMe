@@ -22,6 +22,7 @@ def index(request):
     tutorList = []
     date = ""
     time = ""
+    request_list = []
     # handle clicking "Request Help" button after search and display tutor list, adds new Request to database
     if request.method == 'POST':
         from_student = request.POST.get('from')
@@ -32,6 +33,7 @@ def index(request):
         end_time_requested = request.POST.get('end')
         user_student = AppUser.objects.filter(user__username__contains = from_student).first()
         user_tutor = AppUser.objects.filter(user__username__contains = to_tutor).first()
+        # TO FIX: CHECK IF REQUEST WITH PARAMETERS ALREADY EXISTS
 
         new_request , created = Request.objects.get_or_create(
             from_student = user_student,
@@ -80,9 +82,30 @@ def index(request):
                     username = tutor.user.user.username
                     email = tutor.user.user.email
                     tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email, 'hourly_rate':hourly_rate})
-        
-    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'date_requested':date, 'time_requested': time}
+    
+    test_if_tutor = AppUser.objects.filter(user__username__contains = request.user.username).first()
+    
+    if test_if_tutor.user_type == 2:
+        username = request.user.username
+        query_result = Request.objects.filter(to_tutor__user__username__contains = username)
 
+        for item in query_result:
+            from_student = item.from_student.user.username
+            student_name = item.from_student.user.first_name + ' ' + item.from_student.user.last_name
+            student_email = item.from_student.user.email
+            course = item.course
+            time = item.created_timestamp
+            str_time = time.strftime("sent on %m-%d-%Y at %H:%M:%S")
+            status = 'Pending' if item.status == 1 else 'Accepted' if item.status == 2 else 'Declined'
+            date = item.date_requested
+            start = item.start_time_requested
+            end = item.end_time_requested
+            # Show the tutor the accepted sessions they have scheduled in the next 7 days
+            if(item.is_upcoming() and item.status == 2):
+                request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end})
+    
+    context = {'classList': classList, 'search':searchParams, 'requestedClass':data, 'tutorList':tutorList, 'date_requested':date, 'time_requested': time, 'request_list':request_list}
+    
     return render(request, 'tutorme/index.html', context)
 
 # student view requests page (My Requests)

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class AppUser(models.Model):
@@ -66,7 +66,13 @@ class Request(models.Model):
     end_time_requested = models.CharField(max_length=10, default='')
     def __str__(self):
         return 'from: ' + self.from_student.user.username + ' to: ' + self.to_tutor.user.username + ' course: ' + self.course + ' status: ' + ('pending' if self.status == 1 else 'accepted' if self.status == 2 else 'declined')
-    
+    def is_upcoming(self):
+        now = datetime.now()
+        seven_days_from_now = now + timedelta(days=7)
+        if now.date() <= self.date_requested <= seven_days_from_now.date():
+            return 1
+        else:
+            return 0
     
 class Ratings(models.Model):
   created_timestamp_rating = models.DateTimeField(auto_now_add=True)
