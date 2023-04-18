@@ -36,6 +36,7 @@ function handleButtonPress() {
         button.addEventListener('click', function() {
             self = this;
             console.log("request for class pressed");
+            
             const popup = document.createElement('div');
             const overlay = document.querySelector('#overlay');
             overlay.style.display = 'block';
@@ -89,7 +90,9 @@ function handleButtonPress() {
             </div>
             </div>
             `;
-            document.body.appendChild(popup)
+            window.scrollTo(0, 0);
+            document.body.appendChild(popup);
+            
             const { top, left, height } = button.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const popupTop = top + scrollTop + height;
@@ -142,6 +145,12 @@ function handleButtonPress() {
             });
         });
     });
+    if (document.querySelector('.card')) {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+    if (document.querySelector('.no-tutor')) {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
 }
 
 // Student View - "Search" tab
