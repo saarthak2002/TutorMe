@@ -36,56 +36,68 @@ function handleButtonPress() {
         button.addEventListener('click', function() {
             self = this;
             console.log("request for class pressed");
-            const popup = document.createElement('div')
+            const popup = document.createElement('div');
+            const overlay = document.querySelector('#overlay');
+            overlay.style.display = 'block';
             popup.classList.add('time-request-popup', 'p-3', 'bg-white', 'rounded', 'border', 'border-dark')
             popup.innerHTML = `
+            <div>
             <h2 class="mb-4">Select a time</h2>
             <div class="form-group">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" class="form-control" required>
             </div>
             <div class="form-group">
+                
                 <label>Time:</label><br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="8AM-9AM" required> 8AM-9AM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="9AM-10AM" required> 9AM-10AM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="10AM-11AM" required> 10AM-11AM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="11AM-12PM" required> 11AM-12PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="12PM-1PM" required> 12PM-1PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="1PM-2PM" required> 1PM-2PM
-                <br>
-                <input type="radio"  id = "time-selection" name = "time-selection" value="2PM-3PM" required> 2PM-3PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="3PM-4PM" required> 3PM-4PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="4PM-5PM" required> 4PM-5PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="5PM-6PM" required> 5PM-6PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="6PM-7PM" required> 6PM-7PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="7PM-8PM" required> 7PM-8PM
-                <br>
-                <input type="radio" id = "time-selection" name = "time-selection" value="8PM-9PM" required> 8PM-9PM
+                <div style="display:flex;">
+                    <div style="padding:10px;">
+                    <input type="radio" id = "time-selection" name = "time-selection" value="8AM-9AM" required> 8AM-9AM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="9AM-10AM" required> 9AM-10AM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="10AM-11AM" required> 10AM-11AM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="11AM-12PM" required> 11AM-12PM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="12PM-1PM" required> 12PM-1PM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="1PM-2PM" required> 1PM-2PM
+                    <br>
+                    <input type="radio"  id = "time-selection" name = "time-selection" value="2PM-3PM" required> 2PM-3PM
+                    <br>
+                    </div>
+                    <div style="padding:10px;">
+                    <input type="radio" id = "time-selection" name = "time-selection" value="3PM-4PM" required> 3PM-4PM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="4PM-5PM" required> 4PM-5PM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="5PM-6PM" required> 5PM-6PM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="6PM-7PM" required> 6PM-7PM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="7PM-8PM" required> 7PM-8PM
+                    <br>
+                    <input type="radio" id = "time-selection" name = "time-selection" value="8PM-9PM" required> 8PM-9PM
+                    </div>
+                </div>
+                
             </div>
             <div class="buttons">
                 <button id="submit" class="btn btn-primary">Submit</button>
                 <button id="cancel" class="btn btn-danger">Cancel</button>
             </div>
+            </div>
             `;
-            
             document.body.appendChild(popup)
             const { top, left, height } = button.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const popupTop = top + scrollTop + height;
             popup.style.position = 'absolute';
-            popup.style.top = popupTop + 'px';
-            popup.style.left = left-125+'px';
-
+            popup.style.top = "20%"; //popupTop + 'px'
+            popup.style.left = "50%"; //left-125+'px'
+            popup.style.zIndex = "2";
+            console.log(popupTop);
             const submitButton = popup.querySelector('#submit');
             const cancelButton = popup.querySelector('#cancel');
             
@@ -121,10 +133,12 @@ function handleButtonPress() {
                     xhr.send();
                     
                     popup.remove();
+                    overlay.style.display = 'none';
                 }
             });
             cancelButton.addEventListener('click', function(){
                 popup.remove();
+                overlay.style.display = 'none';
             });
         });
     });
