@@ -472,3 +472,7 @@ def apply_to_be_a_tutor(request):
         new_tutor.save()
     
     return render(request, 'tutorme/applyToBeATutor.html')
+
+def leave_a_review(request):
+    student_user_id = request.user.id
+    return render(request, 'tutorme/leaveReview.html')

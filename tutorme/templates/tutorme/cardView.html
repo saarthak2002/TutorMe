@@ -5,13 +5,13 @@
         <div class="card" style="width: 18rem;">
             <!-- <img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
-            <h5 class="card-title">{{ tutor.name }}</h5>
-            <h6 class="text-black-50">hourly rate: {{ tutor.hourly_rate }}</h6>
-            <h6 class="text-black-50">username: {{ tutor.username }}</h6>
-            <h6 class="text-black-50">{{ tutor.email }}</h6>
-            <p class="card-text">{{ tutor.Bio }}</p>
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}" time_requested = "{{time_requested}}" date_requested ="{{date_requested}}">Request Help</button>
+                <h5 class="card-title">{{ tutor.name }}</h5>
+                <h6 class="text-black-50">hourly rate: {{ tutor.hourly_rate }}</h6>
+                <h6 class="text-black-50">username: {{ tutor.username }}</h6>
+                <h6 class="text-black-50">{{ tutor.email }}</h6>
+                <p class="card-text">{{ tutor.Bio }}</p>
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}" time_requested = "{{time_requested}}" date_requested ="{{date_requested}}">Request Help</button>
             </div>
         </div>
     {% endfor %}
