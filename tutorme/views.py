@@ -477,3 +477,40 @@ def leave_a_review(request):
     tutor_to_be_viewed = request.GET.get('tutor')
     context = {'tutor_to_be_viewed': tutor_to_be_viewed}
     return render(request, 'tutorme/leaveReview.html', context)
+
+def view_all_reviews(request):
+    ratings_list = []
+    tutor_to_be_viewed = request.GET.get('tutor')
+    print(tutor_to_be_viewed)
+    current_tutor = AppUser.objects.filter(user__username = tutor_to_be_viewed).first()
+    student_who_rated = AppUser.objects.filter(user__username = request.user.username).first()
+    print(student_who_rated)
+    print(current_tutor)
+
+    if request.method == "POST":
+        rating = request.POST.get('rating')
+        review = request.POST.get('review-comment')
+        print(rating)
+        print(review)
+        new_rating, created = Ratings.objects.get_or_create(
+           student_who_rated = student_who_rated,
+           tutor_who_was_rated = current_tutor,
+           rating = rating,
+           review = review,
+        )
+
+    rating_query_result = Ratings.objects.filter(tutor_who_was_rated = current_tutor)
+    print(rating_query_result)
+
+    for rating in rating_query_result:
+        from_student = rating.student_who_rated.user.username
+        student_name = rating.student_who_rated.user.first_name + ' ' + rating.student_who_rated.user.last_name
+        student_email = rating.student_who_rated.user.email
+        given_rating = rating.rating
+        review = rating.review
+        ratings_list.append({'from_student':from_student, 'student_name':student_name, 'rating':given_rating, 'review': review, 'student_email':student_email})
+
+    context = {'tutor_to_be_viewed':tutor_to_be_viewed, 'ratings_list':ratings_list}
+    return render(request, 'tutorme/viewReviews.html', context)
+
+    

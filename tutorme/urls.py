@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
-from .views import index, student_requests_view, tutor_requests_view, tutor_my_classes_view, tutor_add_classes_view, tutor_profile_view, student_profile_view, edit_profile_view, edit_tutor_profile_view, add_tutor_available_times, apply_to_be_a_tutor, leave_a_review
+from .views import index, student_requests_view, tutor_requests_view, tutor_my_classes_view, tutor_add_classes_view, tutor_profile_view, student_profile_view, edit_profile_view, edit_tutor_profile_view, add_tutor_available_times, apply_to_be_a_tutor, leave_a_review, view_all_reviews
 
 urlpatterns = [
     path('', index, name='index'),
@@ -20,5 +20,6 @@ urlpatterns = [
     path('tutor/profiles/edit', edit_tutor_profile_view),
     path('tutor/chooseAvailableTimes/', add_tutor_available_times), 
     path('applyToBeATutor/', apply_to_be_a_tutor),
-    path('review/', leave_a_review)
+    path('review/', leave_a_review),
+    path('viewreview/', view_all_reviews),
 ]

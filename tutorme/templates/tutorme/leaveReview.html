@@ -31,7 +31,7 @@
                             <div class="card-body">
                             <h4 class="display-5 heading">Leave a Review For {{ tutor_to_be_viewed }}</h1>
 
-                              <form method="post" action="/tutorme/tutor/profiles/">
+                              <form method="post" action="/tutorme/viewreview/?tutor={{ tutor_to_be_viewed }}">
                                 {% csrf_token %}
 
 
