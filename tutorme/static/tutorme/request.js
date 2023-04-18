@@ -10,6 +10,7 @@
     handleStudentEditProfileButton();
     handleTutorAddingAvailableTimes();
     handleTutorApplication();
+    handleReviewButtonPress();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -23,6 +24,7 @@
         handleStudentEditProfileButton();
         handleTutorAddingAvailableTimes();
         handleTutorApplication();
+        handleReviewButtonPress();
     });
 }
 
@@ -158,6 +160,23 @@ function handleCardButtonPress() {
             xhr.send(formData);
             this.disabled = true;
             this.innerHTML = 'Request Sent';
+
+        });
+    });
+}
+
+function handleReviewButtonPress() {
+    const buttons = document.querySelectorAll('.request-card-review-button');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            
+            var csrftoken = Cookies.get('csrftoken');
+            const to = this.getAttribute('to_tutor');
+            const url = "/tutorme/review/?tutor=" + to;
+            console.log(url);
+            this.disabled = true;
+            this.innerHTML = 'Reviewed';
+            window.location.href = url;
 
         });
     });

@@ -474,5 +474,6 @@ def apply_to_be_a_tutor(request):
     return render(request, 'tutorme/applyToBeATutor.html')
 
 def leave_a_review(request):
-    student_user_id = request.user.id
-    return render(request, 'tutorme/leaveReview.html')
+    tutor_to_be_viewed = request.GET.get('tutor')
+    context = {'tutor_to_be_viewed': tutor_to_be_viewed}
+    return render(request, 'tutorme/leaveReview.html', context)

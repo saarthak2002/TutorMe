@@ -29,12 +29,11 @@
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
                         <div class="card w-100 mt-2" style ="font-size: large;">
                             <div class="card-body">
-                            <h4 class="display-5 heading">Leave a Review</h1>
+                            <h4 class="display-5 heading">Leave a Review For {{ tutor_to_be_viewed }}</h1>
 
                               <form method="post" action="/tutorme/tutor/profiles/">
                                 {% csrf_token %}
 
-                                <h6 class="text-black-100 fs-3">{{ tutor.username }}</h6>
 
                                 <h6 class="text-black-100 fs-3">Rating</h6> 
                                     <select id="rating" name="rating" required>
