@@ -12,7 +12,6 @@
                 <p class="card-text">{{ tutor.Bio }}</p>
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}" time_requested = "{{time_requested}}" date_requested ="{{date_requested}}">Request Help</button>
-                <a href="/tutorme/review/" class="btn btn-primary leave-review-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}">Leave a Review</a>
             </div>
         </div>
     {% endfor %}
