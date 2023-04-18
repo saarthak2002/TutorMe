@@ -290,6 +290,8 @@ def tutor_add_classes_view(request):
         wednesday_times = request.POST.get('wednesdayTimes')
         thursday_times = request.POST.get('thursdayTimes')
         friday_times = request.POST.get('fridayTimes')
+        saturday_times = request.POST.get('saturdayTimes')
+        sunday_times = request.POST.get('sundayTimes')
         new_tutor, created = Tutor.objects.get_or_create(
             user = current_tutor,
             course = course,
@@ -417,6 +419,8 @@ def add_tutor_available_times(request):
         wednesday_times = request.POST.get('wednesdayTimes')
         thursday_times = request.POST.get('thursdayTimes')
         friday_times = request.POST.get('fridayTimes')
+        saturday_times = request.POST.get('saturdayTimes')
+        sunday_times = request.POST.get('sundayTimes')
         new_tutor, created = TutorTimes.objects.get_or_create(
             user = current_tutor
         )
@@ -425,7 +429,9 @@ def add_tutor_available_times(request):
             'Tuesday': tuesday_times,
             'Wednesday': wednesday_times,
             'Thursday': thursday_times,
-            'Friday': friday_times
+            'Friday': friday_times,
+            'Saturday': saturday_times,
+            'Sunday': sunday_times
         }
         new_tutor.save()
     context = {'available_times_dict': current_times}
@@ -458,7 +464,9 @@ def apply_to_be_a_tutor(request):
                                     'Tuesday': [],
                                     'Wednesday': [],
                                     'Thursday': [],
-                                    'Friday': []
+                                    'Friday': [],
+                                    'Saturday': [],
+                                    'Sunday': []
                                     }
         new_tutor.hourly_rate = 10.00
         new_tutor.save()

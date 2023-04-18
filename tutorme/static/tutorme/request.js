@@ -100,9 +100,9 @@ function handleButtonPress() {
                 else if(date == ""){
                     alert("please select a date");
                 }
-                else if(selectDayOfWeek == "Saturday" || selectDayOfWeek == "Sunday"){
-                    alert("please select week day");
-                }
+                // else if(selectDayOfWeek == "Saturday" || selectDayOfWeek == "Sunday"){
+                //     alert("please select week day");
+                // }
                 else {
                     selectedTime = selectedTimeBox.value;
                     const url = new URL(window.location.href);
@@ -369,12 +369,14 @@ function handleTutorAddingAvailableTimes(){
     buttons.forEach(function(button){
         button.addEventListener('click', function(){
             console.log('submit times button pressed');
-            const daysOfTheWeek = ['monday', 'tuesday', 'wednesday','thursday', 'friday'];
+            const daysOfTheWeek = ['monday', 'tuesday', 'wednesday','thursday', 'friday', 'saturday', 'sunday'];
             const mondayCheckedBoxes = [];
             const tuesdayCheckedBoxes = [];
             const wednesdayCheckedBoxes = [];
             const thursdayCheckedBoxes = [];
             const fridayCheckedBoxes = [];
+            const saturdayCheckedBoxes = [];
+            const sundayCheckedBoxes = [];
             for(let i = 0; i < daysOfTheWeek.length; i++){
                 const day = daysOfTheWeek[i] + '-available-times';
                 const dayFormGroup = document.querySelector('.'+day);
@@ -395,6 +397,12 @@ function handleTutorAddingAvailableTimes(){
                         }
                         if(daysOfTheWeek[i] == 'friday'){
                             fridayCheckedBoxes.push(checkbox.value); 
+                        }
+                        if(daysOfTheWeek[i] == 'saturday'){
+                            saturdayCheckedBoxes.push(checkbox.value); 
+                        }
+                        if(daysOfTheWeek[i] == 'sunday'){
+                            sundayCheckedBoxes.push(checkbox.value); 
                         }
                     }
                 });
@@ -421,6 +429,8 @@ function handleTutorAddingAvailableTimes(){
             formData.append('wednesdayTimes', wednesdayCheckedBoxes)
             formData.append('thursdayTimes', thursdayCheckedBoxes)
             formData.append('fridayTimes', fridayCheckedBoxes)
+            formData.append('saturdayTimes', saturdayCheckedBoxes)
+            formData.append('sundayTimes', sundayCheckedBoxes)
             xhr.send(formData);
             setTimeout(function() {
                 location.reload();
