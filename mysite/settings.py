@@ -168,6 +168,12 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Comment this out if you want to test locally
 SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+# COMMENT OUT FOR LOCAL
 
 # Activate Django-Heroku.
 # Use this code to avoid the psycopg2 / django-heroku error!  
