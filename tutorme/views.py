@@ -6,6 +6,8 @@ import urllib.parse
 from .models import Tutor, AppUser, Request, Ratings, TutorTimes
 from datetime import datetime
 from operator import itemgetter
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 # check what kind of user is logged in, if any
 def check_logged_in(request):
@@ -199,6 +201,31 @@ def tutor_requests_view(request):
             print('accepting here')
             request_to_change.status = 2
             request_to_change.save()
+            student_email = user_student.user.email
+            tutor_first_name = user_tutor.user.first_name
+            tutor_last_name = user_tutor.user.last_name
+
+            mail_body = tutor_first_name + ' ' + tutor_last_name + ' has accepted your tutoring request for ' + change_status_course + ' on ' + date_requested + ' from ' + start_time_requested + ' to ' + end_time_requested + '.'
+            print(student_email)
+            print(mail_body)
+            message = Mail(
+                from_email='a29.test.tutor@gmail.com',
+                to_emails=student_email,
+                subject='Tutor Me: Tutoring Request Accepted',
+                html_content='''
+                    <img src="https://i.postimg.cc/qR0GG60V/Screenshot-2023-04-19-at-1-15-44-AM.png" alt="tutor me logo" />
+                    <strong>''' + mail_body + '''</strong>
+                '''
+            )
+            try:
+                sg = SendGridAPIClient('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')
+                response = sg.send(message)
+                print(response.status_code)
+                print(response.body)
+                print(response.headers)
+            except Exception as e:
+                print(e.message)
+
         elif change_status_request_type == 'reject':
             request_to_change.status = 3
             request_to_change.save()
