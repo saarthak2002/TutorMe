@@ -145,7 +145,7 @@ function handleButtonPress() {
             });
         });
     });
-    if (document.querySelector('.card')) {
+    if (document.querySelector('.found-tutors-in-search-unique')) {
         window.scrollTo(0, document.body.scrollHeight);
     }
     if (document.querySelector('.no-tutor')) {
@@ -196,7 +196,6 @@ function handleReviewButtonPress() {
             var csrftoken = Cookies.get('csrftoken');
             const to = this.getAttribute('to_tutor');
             const url = "/tutorme/review/?tutor=" + to;
-            console.log(url);
             this.disabled = true;
             this.innerHTML = 'Reviewed';
             window.location.href = url;
@@ -313,7 +312,6 @@ function handleTutorAddPress() {
     const buttons = document.querySelectorAll('.tutor-add-class-request-button');
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
-            console.log("add button pressed");
             var csrftoken = Cookies.get('csrftoken');
             const course = this.getAttribute('course');
             const url = new URL(window.location.href);
@@ -410,7 +408,7 @@ function handleTutorAddingAvailableTimes(){
     const buttons = document.querySelectorAll('.tutor-select-available-times-button');
     buttons.forEach(function(button){
         button.addEventListener('click', function(){
-            console.log('submit times button pressed');
+            
             const daysOfTheWeek = ['monday', 'tuesday', 'wednesday','thursday', 'friday', 'saturday', 'sunday'];
             const mondayCheckedBoxes = [];
             const tuesdayCheckedBoxes = [];

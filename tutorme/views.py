@@ -41,11 +41,6 @@ def index(request):
         # delete all previous requests with the same tutor and class for the same student
         to_check_dup_query.delete()
 
-        # USER DUP BUG
-        print(AppUser.objects.filter(user__username = from_student))
-        print(user_student)
-
-
         new_request , created = Request.objects.get_or_create(
             from_student = user_student,
             to_tutor = user_tutor,
@@ -386,8 +381,6 @@ def edit_tutor_profile_view(request):
     if request.method == 'POST':
         bio = request.POST.get('bio')
         hourly_rate = request.POST.get('hourlyRate')
-        print(bio)
-        print(hourly_rate)
         tutor_app_id = AppUser.objects.filter(user_id__id = tutor_user_id).values('id')[0]['id']
         
         current_tutor_change_bio = AppUser.objects.get(user_id__id = tutor_user_id)
@@ -438,9 +431,7 @@ def add_tutor_available_times(request):
     return render(request, 'tutorme/tutorAddTimes.html',context)
 
 def apply_to_be_a_tutor(request):
-    print('ran out here')
     if request.method == "POST":
-        print('new tutor made')
         user_id = request.user.id
         user_to_change =  AppUser.objects.get(user_id__id = user_id)
         user_to_change.user_type = 2
@@ -481,17 +472,12 @@ def leave_a_review(request):
 def view_all_reviews(request):
     ratings_list = []
     tutor_to_be_viewed = request.GET.get('tutor')
-    print(tutor_to_be_viewed)
     current_tutor = AppUser.objects.filter(user__username = tutor_to_be_viewed).first()
     student_who_rated = AppUser.objects.filter(user__username = request.user.username).first()
-    print(student_who_rated)
-    print(current_tutor)
 
     if request.method == "POST":
         rating = request.POST.get('rating')
         review = request.POST.get('review-comment')
-        print(rating)
-        print(review)
         new_rating, created = Ratings.objects.get_or_create(
            student_who_rated = student_who_rated,
            tutor_who_was_rated = current_tutor,
@@ -500,7 +486,6 @@ def view_all_reviews(request):
         )
 
     rating_query_result = Ratings.objects.filter(tutor_who_was_rated = current_tutor)
-    print(rating_query_result)
 
     for rating in rating_query_result:
         from_student = rating.student_who_rated.user.username
@@ -512,5 +497,4 @@ def view_all_reviews(request):
 
     context = {'tutor_to_be_viewed':tutor_to_be_viewed, 'ratings_list':ratings_list}
     return render(request, 'tutorme/viewReviews.html', context)
-
     
