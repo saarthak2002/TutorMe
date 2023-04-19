@@ -166,6 +166,9 @@ LOGIN_REDIRECT_URL = 'tutorme/'
 LOGOUT_REDIRECT_URL = 'tutorme/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
+# Comment this out if you want to test locally
+SECURE_SSL_REDIRECT = True
+
 # Activate Django-Heroku.
 # Use this code to avoid the psycopg2 / django-heroku error!  
 # Do NOT import django-heroku above!
