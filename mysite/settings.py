@@ -165,6 +165,7 @@ SITE_ID = 2
 LOGIN_REDIRECT_URL = 'tutorme/'
 LOGOUT_REDIRECT_URL = 'tutorme/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_LOGOUT_ON_GET = True
 
 # Comment this out if you want to test locally
 SECURE_SSL_REDIRECT = True
