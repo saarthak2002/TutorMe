@@ -525,3 +525,5 @@ def view_all_reviews(request):
     context = {'tutor_to_be_viewed':tutor_to_be_viewed, 'ratings_list':ratings_list}
     return render(request, 'tutorme/viewReviews.html', context)
     
+def all_chats_view(request):
+    return render(request, 'tutorme/allChatsView.html')
