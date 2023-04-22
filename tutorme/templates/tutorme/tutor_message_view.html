@@ -23,7 +23,7 @@
         <div style="margin: 0; padding: 0;">
             <div class="row" style="width: 100%;">
                 <div class="col">
-                    {% include "tutorme/navMenu.html" %}
+                    {% include "tutorme/navMenuTutor.html" %}
                 </div>
 
                 <div class="col-9">
@@ -45,15 +45,15 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    
-                    <form method="post" action="/tutorme/chats/viewchat/?id={{chat_id}}" style="position: fixed; bottom: 0; width: 70%;">
+                    <div style="width: 100%;">
+                    <form method="post" action="/tutorme/tutor/chats/viewchat/?id={{chat_id}}" style="position: fixed; bottom: 0; width: 70%;">
                         {% csrf_token %}
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2%;">
                             <input name="message" type="text"  id="message" class="form-control" placeholder="Message"/>
                             <button type="submit" class="btn btn-primary mb-2" style="margin-left: 1%;">Send</button>
                         </div>
                     </form>
-                    
+                    </div>
                 </div>
             </div>
         </div>

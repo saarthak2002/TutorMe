@@ -28,18 +28,22 @@
 
                 <div class="col-9">
                     <h1 class="display-1 heading">Your Chats</h1>
-                    <ul class="list-group">
-                        {% for chat in chat_list %}
-                        
-                            <a href="/tutorme/tutor/chats/viewchat/?id={{ chat.chat_id }}" class="list-group-item list-group-item-action">
-                                <div style="display: flex; align-items: center;">
-                                <img src="{{ chat.profile_pic }}" />
-                                <h5 style="margin-left: 2%;">Student: {{chat.student_name}}</h5>
-                                </div>
-                            </a>
-                        
-                        {% endfor %}
-                    </ul>
+                    {% if chat_list %}
+                        <ul class="list-group">
+                            {% for chat in chat_list %}
+                            
+                                <a href="/tutorme/tutor/chats/viewchat/?id={{ chat.chat_id }}" class="list-group-item list-group-item-action">
+                                    <div style="display: flex; align-items: center;">
+                                    <img src="{{ chat.profile_pic }}" />
+                                    <h5 style="margin-left: 2%;">Student: {{chat.student_name}}</h5>
+                                    </div>
+                                </a>
+                            
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <h2 class="heading" style="color: black;">You have no chats</h1>
+                    {% endif %}
                 </div>
             </div>
         </div>
