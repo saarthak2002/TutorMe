@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 import tutorme.apiutils as sisapi
 import urllib.parse
-from .models import Tutor, AppUser, Request, Ratings, TutorTimes
+from .models import Tutor, AppUser, Request, Ratings, TutorTimes, Chat, Message
 from datetime import datetime
 from operator import itemgetter
 from sendgrid import SendGridAPIClient
@@ -525,5 +525,34 @@ def view_all_reviews(request):
     context = {'tutor_to_be_viewed':tutor_to_be_viewed, 'ratings_list':ratings_list}
     return render(request, 'tutorme/viewReviews.html', context)
     
-def all_chats_view(request):
-    return render(request, 'tutorme/allChatsView.html')
+def all_chats_view_student(request):
+    user_id = request.user.id
+    user =  AppUser.objects.get(user_id__id = user_id)
+    chat_query = Chat.objects.filter(student_user = user)
+    chat_list = []
+    print(chat_query)
+    for chat in chat_query:
+        chat_id = chat.id
+        tutor_name = chat.tutor_user.user.first_name + ' ' + chat.tutor_user.user.last_name
+        profile_pic = chat.tutor_user.user.socialaccount_set.filter(provider='google')[0].extra_data['picture']
+        chat_list.append({'chat_id':chat_id, 'tutor_name':tutor_name, 'profile_pic':profile_pic})
+
+    context = {'chat_list':chat_list}
+    print(context)
+    return render(request, 'tutorme/allChatsView.html', context)
+
+def message_view_student(request):
+    message_list = []
+    message_from = ''
+    message_text = ''
+    chat_id = request.GET.get('id')
+    message_query = Message.objects.filter(chat__id = chat_id)
+    if message_query:
+        message_from = Chat.objects.filter(id = chat_id).values('tutor_user__user__username')[0]['tutor_user__user__username']
+    
+    print(message_from)
+    for message in message_query:
+        message_text = message.message
+        print(message_text)
+    
+    return render(request, 'tutorme/student_message_view.html')

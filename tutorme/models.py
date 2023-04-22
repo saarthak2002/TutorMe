@@ -95,9 +95,15 @@ class Chat(models.Model):
     student_user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='student_in_chat')
     tutor_user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='tutor_in_chat')
 
+    def __str__(self):
+        return 'from: ' + self.student_user.user.username + ' to: ' + self.tutor_user.user.username
+
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     created_timestamp_message = models.DateTimeField(auto_now_add=True)
     from_user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='user_who_sent_message')
     to_user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name='user_who_received_message')
     message = models.CharField(max_length=500)
+
+    def __str__(self):
+        return 'from: ' + self.from_user.user.username + ' to: ' + self.to_user.user.username
