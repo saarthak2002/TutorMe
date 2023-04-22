@@ -28,6 +28,7 @@
                 <div class="col-9">
                     <h6 class="text-black-100" style="font-size: xx-large; padding-top: 20px;">Reviews for {{tutor_to_be_viewed}}</h6>
                     <div class="d-flex justify-content-start flex-wrap" style="gap: 10px;">
+                        {% if ratings_list %}
                         {% for rating in ratings_list %}
                         <div class="card" style="width: 100%;">
                             <div class="card-body">
@@ -37,6 +38,9 @@
                             </div>
                         </div>
                         {% endfor %}
+                        {% else %}
+                            <h3 class="heading" style="color: black;">No reviews yet</h3>
+                        {% endif %}
                     </div>
                 </div>                
             </div>

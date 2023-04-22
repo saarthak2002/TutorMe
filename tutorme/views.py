@@ -39,10 +39,8 @@ def index(request):
             tutor_user = user_tutor,
         )
         parameter = '?id='+str(chat.id)
-        print(parameter)
         
     # handle clicking "Request Help" button after search and display tutor list, adds new Request to database
-    
     elif request.method == 'POST':
         from_student = request.POST.get('from')
         to_tutor = request.POST.get('to')
