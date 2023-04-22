@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Tutor Me</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+
+        {% load socialaccount %}
+
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'tutorme/index.css' %}" />
+
+        {% load static %} 
+        <script src="{% static 'tutorme/request.js' %}" async></script>
+    </head>
+
+    <body>
+        <div style="margin: 0; padding: 0;">
+            <div class="row" style="width: 100%;">
+                <div class="col">
+                    {% include "tutorme/navMenuTutor.html" %}
+                </div>
+
+                <div class="col-9">
+                    <h1 class="display-1 heading">Your Chats</h1>
+                    <ul class="list-group">
+                        {% for chat in chat_list %}
+                        
+                            <a href="/tutorme/tutor/chats/viewchat/?id={{ chat.chat_id }}" class="list-group-item list-group-item-action">
+                                <div style="display: flex; align-items: center;">
+                                <img src="{{ chat.profile_pic }}" />
+                                <h5 style="margin-left: 2%;">Student: {{chat.student_name}}</h5>
+                                </div>
+                            </a>
+                        
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

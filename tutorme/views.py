@@ -541,6 +541,22 @@ def all_chats_view_student(request):
     print(context)
     return render(request, 'tutorme/allChatsView.html', context)
 
+def all_chats_view_tutor(request):
+    user_id = request.user.id
+    user =  AppUser.objects.get(user_id__id = user_id)
+    chat_query = Chat.objects.filter(tutor_user = user)
+    chat_list = []
+
+    for chat in chat_query:
+        chat_id = chat.id
+        student_name = chat.student_user.user.first_name + ' ' + chat.student_user.user.last_name
+        profile_pic = chat.student_user.user.socialaccount_set.filter(provider='google')[0].extra_data['picture']
+        chat_list.append({'chat_id':chat_id, 'student_name':student_name, 'profile_pic':profile_pic})
+
+    context = {'chat_list':chat_list}
+    print(context)
+    return render(request, 'tutorme/allChatsViewTutor.html', context)
+
 def message_view_student(request):
     message_list = []
     message_from = ''
