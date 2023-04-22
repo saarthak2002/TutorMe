@@ -13,6 +13,7 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary tutor-card-request-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" course = "{{ requestedClass }}" time_requested = "{{time_requested}}" date_requested ="{{date_requested}}">Request Help</button>
                 <button class="btn btn-primary" onclick="location.href = '/tutorme/viewreview/?tutor={{ tutor.username }}';">Read Reviews</button>
+                <button type="submit" class="btn btn-primary tutor-card-chat-button" from_user="{{ user.username }}" to_tutor = "{{ tutor.username }}" style="margin-top: 1%; padding-left: 10%; padding-right: 10%;">Chat</button>
             </div>
         </div>
     {% endfor %}

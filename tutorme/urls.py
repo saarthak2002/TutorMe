@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from .views import index, student_requests_view, tutor_requests_view, tutor_my_classes_view, tutor_add_classes_view, tutor_profile_view, student_profile_view, edit_profile_view, edit_tutor_profile_view, add_tutor_available_times, apply_to_be_a_tutor, leave_a_review, view_all_reviews, all_chats_view_student, message_view_student, all_chats_view_tutor, message_view_tutor
 
+
 urlpatterns = [
     path('', index, name='index'),
     path('accounts/google/login/callback/tutorme/', index),
@@ -22,7 +23,7 @@ urlpatterns = [
     path('applyToBeATutor/', apply_to_be_a_tutor),
     path('review/', leave_a_review),
     path('viewreview/', view_all_reviews),
-    path('chats/', all_chats_view_student),
+    path('chats/', all_chats_view_student,name='chats'),
     path('chats/viewchat/', message_view_student),
     path('tutor/chats/', all_chats_view_tutor),
     path('tutor/chats/viewchat/', message_view_tutor),

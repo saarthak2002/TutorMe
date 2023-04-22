@@ -8,6 +8,7 @@ from datetime import datetime
 from operator import itemgetter
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from django.http import HttpResponseRedirect, HttpResponse
 
 # check what kind of user is logged in, if any
 def check_logged_in(request):
@@ -26,8 +27,23 @@ def index(request):
     date = ""
     time = ""
     request_list = []
+
+    if request.POST.get('value') == 'new_chat':
+        from_student = request.POST.get('from')
+        to_tutor = request.POST.get('to')
+        user_student = AppUser.objects.filter(user__username = from_student).first()
+        user_tutor = AppUser.objects.filter(user__username = to_tutor).first()
+        print(user_student,user_tutor)
+        chat, created = Chat.objects.get_or_create(
+            student_user = user_student,
+            tutor_user = user_tutor,
+        )
+        parameter = '?id='+str(chat.id)
+        print(parameter)
+        
     # handle clicking "Request Help" button after search and display tutor list, adds new Request to database
-    if request.method == 'POST':
+    
+    elif request.method == 'POST':
         from_student = request.POST.get('from')
         to_tutor = request.POST.get('to')
         course = request.POST.get('course')

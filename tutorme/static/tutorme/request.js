@@ -11,6 +11,7 @@
     handleTutorAddingAvailableTimes();
     handleTutorApplication();
     handleReviewButtonPress();
+    handleChatButtonPress();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         handleButtonPress();
@@ -25,6 +26,7 @@
         handleTutorAddingAvailableTimes();
         handleTutorApplication();
         handleReviewButtonPress();
+        handleChatButtonPress();
     });
 }
 
@@ -200,6 +202,37 @@ function handleReviewButtonPress() {
             this.innerHTML = 'Reviewed';
             window.location.href = url;
 
+        });
+    });
+}
+
+function handleChatButtonPress() {
+    const buttons = document.querySelectorAll('.tutor-card-chat-button');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            
+            var csrftoken = Cookies.get('csrftoken');
+            const from = this.getAttribute('from_user');
+            const to = this.getAttribute('to_tutor');
+
+            const url = new URL(window.location.href);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url.toString());
+            const formData = new FormData();
+
+            formData.append('from', from);
+            formData.append('to', to);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            formData.append('value', 'new_chat');
+            xhr.send(formData);
+            this.disabled = true;
+            console.log('new chat');
+            console.log(from);
+            console.log(to);
+            setTimeout(function() {
+                window.location.href = "/tutorme/chats/";
+            }, 2000)
+            
         });
     });
 }
