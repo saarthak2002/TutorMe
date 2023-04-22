@@ -27,8 +27,31 @@
                 </div>
 
                 <div class="col-9">
-                    <h1 class="display-1 heading">Chat with</h1>
-                    </ul>
+                    <h1 class="heading" style="margin-top: 2%;">Chat with {{message_from}}</h1>
+                    <div>
+                        {% for message in message_list %}
+                            {% if message.message_type == 1 %}
+                                <div class="card text-white bg-secondary" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ message.message_text }}</p>
+                                    </div>
+                                </div>
+                            {% elif message.message_type == 2%}
+                                <div class="card text-white bg-primary" style="width: 18rem; margin-right: 0; margin-left: auto;">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ message.message_text }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <form method="post" action="/tutorme/chats/viewchat/?id={{chat_id}}" style="position: fixed; bottom: 0; width: 70%;">
+                        {% csrf_token %}
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2%;">
+                            <input name="message" type="text"  id="message" class="form-control" placeholder="Message"/>
+                            <button type="submit" class="btn btn-primary mb-2" style="margin-left: 1%;">Send</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

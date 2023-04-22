@@ -545,14 +545,36 @@ def message_view_student(request):
     message_list = []
     message_from = ''
     message_text = ''
+    current_student = AppUser.objects.filter(user__username = request.user.username).first()
     chat_id = request.GET.get('id')
-    message_query = Message.objects.filter(chat__id = chat_id)
+    chat_obj = Chat.objects.get(id = chat_id)
+    chatting_with = AppUser.objects.filter(user__username = chat_obj.tutor_user.user.username).first()
+
+    if request.method == "POST":
+        new_message = request.POST.get('message')
+        new_message = Message.objects.create(
+            chat = chat_obj,
+            from_user = current_student,
+            to_user = chatting_with,
+            message = new_message
+        )
+
+    message_query = Message.objects.filter(chat__id = chat_id).order_by('created_timestamp_message')
     if message_query:
         message_from = Chat.objects.filter(id = chat_id).values('tutor_user__user__username')[0]['tutor_user__user__username']
     
+    print(message_query)
     print(message_from)
     for message in message_query:
         message_text = message.message
-        print(message_text)
+        message_from_username = message.from_user.user.username
+        message_to_username = message.to_user.user.username
+        if(message.to_user == current_student): # this means this message was sent TO the current user - appears on left
+            message_type = 1
+        else: # this means this message was sent BY the current user - appears on right
+            message_type = 2
+        message_list.append({'message_text':message_text, 'message_from_username':message_from_username, 'message_to_username':message_to_username, 'message_type':message_type})
     
-    return render(request, 'tutorme/student_message_view.html')
+    context = {'message_list':message_list, 'message_from':message_from, 'chat_id':chat_id}
+    print(context)
+    return render(request, 'tutorme/student_message_view.html', context)
