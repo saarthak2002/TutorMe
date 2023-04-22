@@ -530,7 +530,7 @@ def all_chats_view_student(request):
     user =  AppUser.objects.get(user_id__id = user_id)
     chat_query = Chat.objects.filter(student_user = user)
     chat_list = []
-    print(chat_query)
+
     for chat in chat_query:
         chat_id = chat.id
         tutor_name = chat.tutor_user.user.first_name + ' ' + chat.tutor_user.user.last_name
@@ -538,7 +538,7 @@ def all_chats_view_student(request):
         chat_list.append({'chat_id':chat_id, 'tutor_name':tutor_name, 'profile_pic':profile_pic})
 
     context = {'chat_list':chat_list}
-    print(context)
+   
     return render(request, 'tutorme/allChatsView.html', context)
 
 def all_chats_view_tutor(request):
@@ -554,7 +554,7 @@ def all_chats_view_tutor(request):
         chat_list.append({'chat_id':chat_id, 'student_name':student_name, 'profile_pic':profile_pic})
 
     context = {'chat_list':chat_list}
-    print(context)
+    
     return render(request, 'tutorme/allChatsViewTutor.html', context)
 
 def message_view_student(request):
@@ -578,8 +578,6 @@ def message_view_student(request):
     message_query = Message.objects.filter(chat__id = chat_id).order_by('created_timestamp_message')
     message_from = Chat.objects.filter(id = chat_id).values('tutor_user__user__username')[0]['tutor_user__user__username']
     
-    print(message_query)
-    print(message_from)
     for message in message_query:
         message_text = message.message
         message_from_username = message.from_user.user.username
@@ -591,7 +589,7 @@ def message_view_student(request):
         message_list.append({'message_text':message_text, 'message_from_username':message_from_username, 'message_to_username':message_to_username, 'message_type':message_type})
     
     context = {'message_list':message_list, 'message_from':message_from, 'chat_id':chat_id}
-    print(context)
+    
     return render(request, 'tutorme/student_message_view.html', context)
 
 def message_view_tutor(request):
@@ -605,9 +603,6 @@ def message_view_tutor(request):
 
     if request.method == "POST":
         new_message = request.POST.get('message')
-        print(new_message)
-        print(current_tutor)
-        print(chatting_with)
         new_message = Message.objects.create(
             chat = chat_obj,
             from_user = current_tutor,
@@ -618,8 +613,6 @@ def message_view_tutor(request):
     message_query = Message.objects.filter(chat__id = chat_id).order_by('created_timestamp_message')
     message_from = Chat.objects.filter(id = chat_id).values('student_user__user__username')[0]['student_user__user__username']
     
-    print(message_query)
-    print(message_from)
     for message in message_query:
         message_text = message.message
         message_from_username = message.from_user.user.username
@@ -631,5 +624,5 @@ def message_view_tutor(request):
         message_list.append({'message_text':message_text, 'message_from_username':message_from_username, 'message_to_username':message_to_username, 'message_type':message_type})
     
     context = {'message_list':message_list, 'message_from':message_from, 'chat_id':chat_id}
-    print(context)
+ 
     return render(request, 'tutorme/tutor_message_view.html', context)
