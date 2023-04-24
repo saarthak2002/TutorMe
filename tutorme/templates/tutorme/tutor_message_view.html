@@ -46,11 +46,11 @@
                         {% endfor %}
                     </div>
                     <div style="width: 100%;">
-                    <form method="post" action="/tutorme/tutor/chats/viewchat/?id={{chat_id}}" style="position: fixed; bottom: 0; width: 70%;">
+                    <form method="post" action="/tutorme/tutor/chats/viewchat/?id={{chat_id}}" style="position: fixed; bottom: 0; width: 75%; background-color: white; padding: 10px;">
                         {% csrf_token %}
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2%;">
                             <input name="message" type="text"  id="message" class="form-control" placeholder="Message"/>
-                            <button type="submit" class="btn btn-primary mb-2" style="margin-left: 1%;">Send</button>
+                            <button type="submit" class="btn btn-primary mb-2" style="margin-left: 1%; margin-right: 5%;">Send</button>
                         </div>
                     </form>
                     </div>
