@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.db.models import Q
 import tutorme.apiutils as sisapi
 import urllib.parse
 from .models import Tutor, AppUser, Request, Ratings, TutorTimes, Chat, Message
@@ -8,7 +6,6 @@ from datetime import datetime
 from operator import itemgetter
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from django.http import HttpResponseRedirect, HttpResponse
 
 # check what kind of user is logged in, if any
 def check_logged_in(request):
@@ -33,7 +30,7 @@ def index(request):
         to_tutor = request.POST.get('to')
         user_student = AppUser.objects.filter(user__username = from_student).first()
         user_tutor = AppUser.objects.filter(user__username = to_tutor).first()
-        print(user_student,user_tutor)
+        
         chat, created = Chat.objects.get_or_create(
             student_user = user_student,
             tutor_user = user_tutor,
@@ -206,13 +203,7 @@ def tutor_requests_view(request):
         ).first()
 
         if change_status_request_type == 'accept':
-            # for existing_request in all_requests_to_tutor:
-            #     if existing_request.date_requested == date_requested:
-            #         print('date conflict')
-            #         conflict_query = Q(start_time_requested__range=(start_time_requested, end_time_requested)) | \
-            #         Q(end_time_requested__range=(start_time_requested, end_time_requested)) | \
-            #         Q(start_time_requested__lte=request.start_time_requested, end_time_requested__gte=request.end_time_requested)
-            print('accepting here')
+            
             request_to_change.status = 2
             request_to_change.save()
             student_email = user_student.user.email
@@ -220,8 +211,6 @@ def tutor_requests_view(request):
             tutor_last_name = user_tutor.user.last_name
 
             mail_body = tutor_first_name + ' ' + tutor_last_name + ' has accepted your tutoring request for ' + change_status_course + ' on ' + date_requested + ' from ' + start_time_requested + ' to ' + end_time_requested + '.'
-            print(student_email)
-            print(mail_body)
             message = Mail(
                 from_email='a29.test.tutor@gmail.com',
                 to_emails=student_email,
@@ -266,8 +255,17 @@ def tutor_requests_view(request):
             profile_pic = ''
         else:
             profile_pic = item.from_student.user.socialaccount_set.filter(provider='google')[0].extra_data['picture']
-        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end,'profile_pic':profile_pic})
 
+        item_has_conflict = False
+        for test_confllict_item in query_result:
+            if item != test_confllict_item:
+                if item.date_requested == test_confllict_item.date_requested:
+                    if (item.start_time_requested == test_confllict_item.start_time_requested) and (item.end_time_requested == test_confllict_item.end_time_requested):
+                        if test_confllict_item.status != 3:
+                            item_has_conflict = True
+        
+        request_list.append({'from_student':from_student, 'student_name':student_name, 'course':course, 'status':status, 'student_email':student_email, 'time':str_time, 'date': date, 'start': start, 'end':end,'profile_pic':profile_pic, 'item_has_conflict':item_has_conflict})
+    
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
 

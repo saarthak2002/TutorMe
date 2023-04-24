@@ -37,7 +37,6 @@ function handleButtonPress() {
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
             self = this;
-            console.log("request for class pressed");
             
             const popup = document.createElement('div');
             const overlay = document.querySelector('#overlay');
@@ -99,10 +98,9 @@ function handleButtonPress() {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const popupTop = top + scrollTop + height;
             popup.style.position = 'absolute';
-            popup.style.top = "20%"; //popupTop + 'px'
-            popup.style.left = "50%"; //left-125+'px'
+            popup.style.top = "20%";
+            popup.style.left = "50%";
             popup.style.zIndex = "2";
-            console.log(popupTop);
             const submitButton = popup.querySelector('#submit');
             const cancelButton = popup.querySelector('#cancel');
             
@@ -226,9 +224,7 @@ function handleChatButtonPress() {
             formData.append('value', 'new_chat');
             xhr.send(formData);
             this.disabled = true;
-            console.log('new chat');
-            console.log(from);
-            console.log(to);
+
             setTimeout(function() {
                 window.location.href = "/tutorme/chats/";
             }, 2000)
@@ -480,14 +476,9 @@ function handleTutorAddingAvailableTimes(){
                     }
                 });
             }
-            // console.log(mondayCheckedBoxes);
-            // console.log(tuesdayCheckedBoxes);
-            // console.log(wednesdayCheckedBoxes);
-            // console.log(thursdayCheckedBoxes);
-            // console.log(fridayCheckedBoxes);
+            
             var csrftoken = Cookies.get('csrftoken');
             const tutor = this.getAttribute('tutor');
-            console.log(tutor);
             const url = new URL(window.location.href);
             this.disabled = true;
             this.innerHTML = "Submitted";
@@ -523,12 +514,8 @@ function handleTutorApplication(){
             const formData = new FormData();
             formData.append('csrfmiddlewaretoken', csrftoken);
             xhr.send(formData);
-            console.log('ran up here')
-            console.log(xhr.status)
             this.innerHTML = "Applied";
             setTimeout(function() {
-                console.log('redirected');
-                console.log(window.location.origin);
                 window.location.href = window.location.origin + '/tutorme/';
             }, 3000); 
         });

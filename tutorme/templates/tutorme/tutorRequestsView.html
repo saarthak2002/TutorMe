@@ -32,7 +32,7 @@
                         {% for request in request_list %}
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
-
+                              
                               <!-- <div style="width:60%;padding:10px;background-color: rgba(0,0,0,0.05); border-radius: 10px;"> -->
                                 <img src="{{ request.profile_pic }}" style="display: block;
                                 margin-left: auto;
@@ -43,7 +43,10 @@
                               <h6 class="text-black-50">username: {{ request.from_student }}</h6>
                               <h6 class="text-black-50">{{ request.student_email }}</h6>
                               <h6 class="text-black-50">date: {{ request.date }}</h6>
-                              <h6 class="text-black-50">time: {{ request.start }} to {{ request.end }}</h6>
+                              <h6 class="text-black-50">
+                                time: {{ request.start }} to {{ request.end }}
+                                {% if request.item_has_conflict %} {% if request.status != "Declined" %} <span style="color: rgb(203, 68, 74); font-weight: bold;">conflict</span> {% endif %} {% endif %}
+                              </h6>
                               
                               {% if request.status == "Accepted" %}
                                 <h6 class="" style="color: rgb(64, 133, 88); font-weight: bold;">{{ request.status }}</h6>
