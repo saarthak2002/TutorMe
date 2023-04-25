@@ -236,7 +236,7 @@ def tutor_requests_view(request):
     # queries database for list of all Requests the current tutor has received, 
     # displaying all of them as cards in the My Requests view in the Tutor View
     username = request.user.username
-    query_result = Request.objects.filter(to_tutor__user__username = username)
+    query_result = Request.objects.filter(to_tutor__user__username = username).order_by('date_requested')
 
     for item in query_result:
         from_student = item.from_student.user.username

@@ -5,8 +5,11 @@ html, body {
 
 .landing {
     background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    background:  url('/static/tutorme/download.svg'), linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
     margin: 0;
+    background-size: 100% 100%, auto;
+    background-position: center, 0% 0%;
+    background-repeat: no-repeat, repeat;
     height: 100%;
 }
 
