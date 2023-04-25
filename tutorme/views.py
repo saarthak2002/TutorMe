@@ -221,7 +221,7 @@ def tutor_requests_view(request):
                 '''
             )
             try:
-                sg = SendGridAPIClient('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')
+                sg = SendGridAPIClient('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')
                 response = sg.send(message)
                 print(response.status_code)
                 print(response.body)
