@@ -212,7 +212,7 @@ def tutor_requests_view(request):
 
             mail_body = tutor_first_name + ' ' + tutor_last_name + ' has accepted your tutoring request for ' + change_status_course + ' on ' + date_requested + ' from ' + start_time_requested + ' to ' + end_time_requested + '.'
             message = Mail(
-                from_email='a29.test.tutor@gmail.com',
+                from_email='a29.test.tutor.2@gmail.com',
                 to_emails=student_email,
                 subject='Tutor Me: Tutoring Request Accepted',
                 html_content='''
@@ -221,7 +221,7 @@ def tutor_requests_view(request):
                 '''
             )
             try:
-                sg = SendGridAPIClient('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')
+                sg = SendGridAPIClient('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')
                 response = sg.send(message)
                 print(response.status_code)
                 print(response.body)
