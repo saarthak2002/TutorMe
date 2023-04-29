@@ -6,6 +6,7 @@ from datetime import datetime
 from operator import itemgetter
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from django.http import HttpResponse
 
 # check what kind of user is logged in, if any
 def check_logged_in(request):
@@ -47,7 +48,7 @@ def index(request):
         end_time_requested = request.POST.get('end')
         user_student = AppUser.objects.filter(user__username = from_student).first()
         user_tutor = AppUser.objects.filter(user__username = to_tutor).first()
-        # TO FIX: CHECK IF REQUEST WITH PARAMETERS ALREADY EXISTS
+        # CHECK IF REQUEST WITH PARAMETERS ALREADY EXISTS
         to_check_dup_query = Request.objects.filter(to_tutor__user__username = to_tutor,
                                                     from_student__user__username = from_student,
                                                     course__contains = course)
@@ -80,7 +81,6 @@ def index(request):
             format_date = datetime.strptime(date, "%Y-%m-%d")
             day_of_week = format_date.strftime("%A")
             
-        #THIS IS WHERE IT HAPPENS
         default_bio = 'Hello, I am a tutor for {}. Nice to meet you!'.format(data)
         query_result = Tutor.objects.filter(course__contains = data)
         for tutor in query_result:
@@ -131,11 +131,13 @@ def index(request):
     
     return render(request, 'tutorme/index.html', context)
 
-# student view requests page (My Requests)
+# student (1) view requests page (My Requests)
 def student_requests_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
-
+    if check_logged_in(request) != 1:
+        return HttpResponse("You are not authorized to view this page.")
+    
     request_list = []
 
     # handle clicking "Remove" button on a card in the My Requests page in the Student View, removes Request from database
@@ -172,10 +174,12 @@ def student_requests_view(request):
     context = {'request_list': request_list}
     return render(request, 'tutorme/studentRequestsView.html', context)
 
-# tutor view requests page (My Requests)
+# tutor (2) view requests page (My Requests)
 def tutor_requests_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 2:
+        return HttpResponse("You are not authorized to view this page.")
 
     request_list = []
 
@@ -269,10 +273,12 @@ def tutor_requests_view(request):
     context = {'request_list':request_list}
     return render(request, 'tutorme/tutorRequestsView.html', context)
 
-# tutor view classes page (My Classes)
+# tutor (2) view classes page (My Classes)
 def tutor_my_classes_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 2:
+        return HttpResponse("You are not authorized to view this page.")
 
 
     course_list = []
@@ -305,10 +311,12 @@ def tutor_my_classes_view(request):
     return render(request, 'tutorme/tutorMyClassesView.html', context)
 
 
-# tutor view search classes (Add Classes)
+# tutor (2) view search classes (Add Classes)
 def tutor_add_classes_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 2:
+        return HttpResponse("You are not authorized to view this page.")
 
     classList = []
     searchParams = ''
@@ -342,9 +350,12 @@ def tutor_add_classes_view(request):
     context = {'classList': classList, 'search':searchParams}
     return render(request, 'tutorme/tutorAddClassesView.html', context)
 
+# tutor (2) view profile page
 def tutor_profile_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 2:
+        return HttpResponse("You are not authorized to view this page.")
 
     classes_list = []
     ratings_list = []
@@ -374,9 +385,12 @@ def tutor_profile_view(request):
     context = {'ratings_list': ratings_list, 'classes_list': classes_list, 'bio_list': bio_list, 'hourly_rate': hourly_rate}
     return render(request, 'tutorme/tutorProfile.html', context)
 
+# student (1) view profile page
 def student_profile_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 1:
+        return HttpResponse("You are not authorized to view this page.")
 
     bio_list = []
     help_list = []
@@ -399,6 +413,8 @@ def student_profile_view(request):
 def edit_profile_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 1:
+        return HttpResponse("You are not authorized to view this page.")
 
     if request.method == 'POST':
         bio = request.POST.get('bioText')
@@ -414,6 +430,8 @@ def edit_profile_view(request):
 def edit_tutor_profile_view(request):
     if not check_logged_in(request):
         return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 2:
+        return HttpResponse("You are not authorized to view this page.")
 
     tutor_user_id = request.user.id
 
@@ -436,6 +454,11 @@ def edit_tutor_profile_view(request):
     return render(request, 'tutorme/editTutorProfile.html')
 
 def add_tutor_available_times(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 2:
+        return HttpResponse("You are not authorized to view this page.")
+
     user_id = request.user.id
     current_times_list = []
     tutor_app_id = AppUser.objects.filter(user_id__id = user_id).values('id')[0]['id']
@@ -470,6 +493,11 @@ def add_tutor_available_times(request):
     return render(request, 'tutorme/tutorAddTimes.html',context)
 
 def apply_to_be_a_tutor(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 1:
+        return HttpResponse("You are not authorized to view this page.")
+
     if request.method == "POST":
         user_id = request.user.id
         user_to_change =  AppUser.objects.get(user_id__id = user_id)
@@ -504,11 +532,21 @@ def apply_to_be_a_tutor(request):
     return render(request, 'tutorme/applyToBeATutor.html')
 
 def leave_a_review(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 1:
+        return HttpResponse("You are not authorized to view this page.")
+
     tutor_to_be_viewed = request.GET.get('tutor')
     context = {'tutor_to_be_viewed': tutor_to_be_viewed}
     return render(request, 'tutorme/leaveReview.html', context)
 
 def view_all_reviews(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 1:
+        return HttpResponse("You are not authorized to view this page.")
+
     ratings_list = []
     tutor_to_be_viewed = request.GET.get('tutor')
     current_tutor = AppUser.objects.filter(user__username = tutor_to_be_viewed).first()
@@ -538,6 +576,11 @@ def view_all_reviews(request):
     return render(request, 'tutorme/viewReviews.html', context)
     
 def all_chats_view_student(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 1:
+        return HttpResponse("You are not authorized to view this page.")
+
     user_id = request.user.id
     user =  AppUser.objects.get(user_id__id = user_id)
     chat_query = Chat.objects.filter(student_user = user)
@@ -554,6 +597,11 @@ def all_chats_view_student(request):
     return render(request, 'tutorme/allChatsView.html', context)
 
 def all_chats_view_tutor(request):
+    if not check_logged_in(request):
+        return render(request, 'tutorme/index.html', None)
+    if check_logged_in(request) != 2:
+        return HttpResponse("You are not authorized to view this page.")
+
     user_id = request.user.id
     user =  AppUser.objects.get(user_id__id = user_id)
     chat_query = Chat.objects.filter(tutor_user = user)
