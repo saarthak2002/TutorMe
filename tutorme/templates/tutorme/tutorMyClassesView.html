@@ -29,6 +29,7 @@
                 <div class="col-9">
                     <h1 class="display-1 heading"> My Classes</h1>
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+                    {% if course_list%}
                         {% for course in course_list %}
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
@@ -40,6 +41,12 @@
                             </div>
                         </div>
                         {% endfor %}
+                    {% else %}
+                        <div>
+                        <h2 class="heading" style="color: black;">You have not added any classes</h1>
+                        <div><p style="text-align: center;">Use the Add Classes tab to choose classes to tutor</p></div>
+                        </div>
+                    {% endif %}
                     </div>
                     </div>
                 </div>

@@ -224,6 +224,7 @@ function handleChatButtonPress() {
             formData.append('value', 'new_chat');
             xhr.send(formData);
             this.disabled = true;
+            this.innerHTML = 'Processing...';
 
             setTimeout(function() {
                 window.location.href = "/tutorme/chats/";
@@ -390,6 +391,8 @@ function handleTutorEditProfileButton(){
     const buttons = document.querySelectorAll('.tutor-edit-bio-button')
     buttons.forEach(function(button){
         button.addEventListener('click', function(){
+            this.disabled = true;
+            this.innerHTML = "Processing...";
             let csrftoken = Cookies.get('csrftoken');
             const bioText = document.getElementById("edit-tutor-bio-textbox").value;
             const hourlyRate = document.getElementById("hourly-rate").value;
@@ -404,6 +407,10 @@ function handleTutorEditProfileButton(){
             formData.append('csrfmiddlewaretoken', csrftoken);
 
             xhr.send(formData);
+
+            setTimeout(function() {
+                window.location.href = "/tutorme/tutor/profiles/";
+            }, 2000)
             
         });
     });
@@ -414,6 +421,9 @@ function handleStudentEditProfileButton(){
     const buttons = document.querySelectorAll('.student-profile-edit-button')
     buttons.forEach(function(button){
         button.addEventListener('click', function(){
+            this.disabled = true;
+            this.innerHTML = "Processing...";
+            
             let csrftoken = Cookies.get('csrftoken');
             const bioText = document.getElementById("edit-student-bio-textbox").value;
             const helpText = document.getElementById("edit-student-help-description-textbox").value;
@@ -429,6 +439,10 @@ function handleStudentEditProfileButton(){
             formData.append('studentYear', studentYear);
             formData.append('csrfmiddlewaretoken', csrftoken);
             xhr.send(formData);
+
+            setTimeout(function() {
+                window.location.href = "/tutorme/profile/";
+            }, 2000)
         });
     });
 }

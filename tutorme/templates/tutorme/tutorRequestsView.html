@@ -29,6 +29,7 @@
                 <div class="col-9">
                     <h1 class="display-1 heading"> My Requests</h1>
                     <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+                      {% if request_list %}
                         {% for request in request_list %}
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
@@ -66,6 +67,10 @@
                             </div>
                         </div>
                         {% endfor %}
+                      {% else %}
+                        <h2 class="heading" style="color: black;">You have no requests :(</h1>
+                        
+                      {% endif %}
                     </div>
                 </div>
             </div>
