@@ -175,8 +175,12 @@ def student_requests_view(request):
         end = item.end_time_requested
         tutor_app_user = AppUser.objects.filter(user__username = to_tutor).first()
         print("tutor: ", tutor_app_user)
-        tutor_times_query = TutorTimes.objects.get(user_id__id = tutor_app_user.id)
-        tutor_price = tutor_times_query.hourly_rate
+        entry_exists = TutorTimes.objects.filter(user_id__id = tutor_app_user.id).exists()
+        if entry_exists:
+            tutor_times_query = TutorTimes.objects.get(user_id__id = tutor_app_user.id)
+            tutor_price = tutor_times_query.hourly_rate
+        else:
+            tutor_price = "no rate posted"
         request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course, 'status':status, 'tutor_email':tutor_email, 'time':str_time, 'date':date, 'start': start, 'end': end, 'hourly_rate': tutor_price})
     
     context = {'request_list': request_list}
