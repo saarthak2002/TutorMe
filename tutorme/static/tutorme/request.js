@@ -395,9 +395,6 @@ function handleTutorEditProfileButton(){
             const bioText = document.getElementById("edit-tutor-bio-textbox").value;
             const hourlyRate = document.getElementById("hourly-rate").value;
             const value = parseFloat(hourlyRate);
-            console.log("right above it");
-            console.log("value here")
-            console.log(value)
             if (isNaN(value) && hourlyRate != "" || value < 0 && hourlyRate != ""|| value > 9999.99 && hourlyRate != "") {
               alert('Please enter a number between 0 and 9999.99');
               document.getElementById("hourly-rate").value = 0; 
