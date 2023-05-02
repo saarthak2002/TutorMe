@@ -433,9 +433,12 @@ def edit_profile_view(request):
         help_description_test = request.POST.get('helpText')
         student_year = request.POST.get('studentYear')
         current_student = AppUser.objects.get(user_id__id = request.user.id)
-        current_student.bio = bio
-        current_student.year = student_year
-        current_student.help_description = help_description_test
+        if(bio != ""):
+            current_student.bio = bio
+        if(student_year != ""):
+            current_student.year = student_year
+        if(help_description_test != ""):
+            current_student.help_description = help_description_test
         current_student.save()
     return render(request, 'tutorme/editProfile.html')
 
@@ -481,9 +484,26 @@ def add_tutor_available_times(request):
     try:
         current_times = TutorTimes.objects.get(user_id__id = tutor_app_id).available_times
     except TutorTimes.DoesNotExist:
-        new_TutorTimes = TutorTimes(user_id = tutor_app_id, available_times={}, hourly_rate=10.0)
+        available_times_dict = {
+            'Monday':[],
+            'Tuesday': [],
+            'Wednesday': [],
+            'Thursday': [],
+            'Friday': [],
+            'Saturday': [],
+            'Sunday': []
+        }
+        new_TutorTimes = TutorTimes(user_id = tutor_app_id, available_times=available_times_dict, hourly_rate=10.0)
         new_TutorTimes.save()
-        current_times = {}
+        current_times = {
+            'Monday':[],
+            'Tuesday': [],
+            'Wednesday': [],
+            'Thursday': [],
+            'Friday': [],
+            'Saturday': [],
+            'Sunday': []
+        }
     
     if request.method == 'POST':
         user_id = request.user.id

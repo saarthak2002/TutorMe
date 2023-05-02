@@ -517,7 +517,7 @@ function handleTutorAddingAvailableTimes(){
             xhr.send(formData);
             setTimeout(function() {
                 location.reload();
-            }, 2000);  
+            }, 1000);  
         });
     });
 }
