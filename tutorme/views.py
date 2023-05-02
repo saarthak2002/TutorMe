@@ -475,9 +475,15 @@ def add_tutor_available_times(request):
         return HttpResponse("You are not authorized to view this page.")
 
     user_id = request.user.id
-    current_times_list = []
     tutor_app_id = AppUser.objects.filter(user_id__id = user_id).values('id')[0]['id']
-    current_times = TutorTimes.objects.get(user_id__id = tutor_app_id).available_times
+
+    # create new TutorTimes object if it doesn't already exist
+    try:
+        current_times = TutorTimes.objects.get(user_id__id = tutor_app_id).available_times
+    except TutorTimes.DoesNotExist:
+        new_TutorTimes = TutorTimes(user_id = tutor_app_id, available_times={}, hourly_rate=10.0)
+        new_TutorTimes.save()
+        current_times = {}
     
     if request.method == 'POST':
         user_id = request.user.id
