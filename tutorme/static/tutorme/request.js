@@ -391,27 +391,35 @@ function handleTutorEditProfileButton(){
     const buttons = document.querySelectorAll('.tutor-edit-bio-button')
     buttons.forEach(function(button){
         button.addEventListener('click', function(){
-            this.disabled = true;
-            this.innerHTML = "Processing...";
             let csrftoken = Cookies.get('csrftoken');
             const bioText = document.getElementById("edit-tutor-bio-textbox").value;
             const hourlyRate = document.getElementById("hourly-rate").value;
-            const xhr = new XMLHttpRequest();
-            const url = new URL(window.location.href);
+            const value = parseFloat(hourlyRate);
+            console.log("right above it");
+            console.log("value here")
+            console.log(value)
+            if (isNaN(value) && hourlyRate != "" || value < 0 && hourlyRate != ""|| value > 9999.99 && hourlyRate != "") {
+              alert('Please enter a number between 0 and 9999.99');
+              document.getElementById("hourly-rate").value = 0; 
+            }else{
+                this.disabled = true;
+                this.innerHTML = "Processing...";
+                const xhr = new XMLHttpRequest();
+                const url = new URL(window.location.href);
 
-            xhr.open('POST', url.toString());
-            
-            const formData = new FormData();
-            formData.append('bio', bioText);
-            formData.append('hourlyRate', hourlyRate);
-            formData.append('csrfmiddlewaretoken', csrftoken);
+                xhr.open('POST', url.toString());
+                
+                const formData = new FormData();
+                formData.append('bio', bioText);
+                formData.append('hourlyRate', hourlyRate);
+                formData.append('csrfmiddlewaretoken', csrftoken);
 
-            xhr.send(formData);
+                xhr.send(formData);
 
-            setTimeout(function() {
-                window.location.href = "/tutorme/tutor/profiles/";
-            }, 2000)
-            
+                setTimeout(function() {
+                    window.location.href = "/tutorme/tutor/profiles/";
+                }, 2000)
+            }
         });
     });
 
@@ -495,7 +503,7 @@ function handleTutorAddingAvailableTimes(){
             const tutor = this.getAttribute('tutor');
             const url = new URL(window.location.href);
             this.disabled = true;
-            this.innerHTML = "Submitted";
+            this.innerHTML = "Processing...";
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', url.toString());
@@ -512,7 +520,7 @@ function handleTutorAddingAvailableTimes(){
             xhr.send(formData);
             setTimeout(function() {
                 location.reload();
-            }, 100);  
+            }, 2000);  
         });
     });
 }

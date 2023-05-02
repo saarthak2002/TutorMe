@@ -83,9 +83,11 @@ def index(request):
             
         default_bio = 'Hello, I am a tutor for {}. Nice to meet you!'.format(data)
         query_result = Tutor.objects.filter(course__contains = data)
+        
         for tutor in query_result:
             available_at_requested_time = False
             tutor_id = tutor.user.id
+            tutor_app_bio = AppUser.objects.filter(id = tutor_id).values('bio')[0]['bio']
             entry_exists = TutorTimes.objects.filter(user_id__id = tutor_id).exists()
             hourly_rate = 10.00
             if entry_exists:
@@ -100,6 +102,8 @@ def index(request):
                     name = tutor.user.user.first_name + ' ' + tutor.user.user.last_name
                     username = tutor.user.user.username
                     email = tutor.user.user.email
+                    if tutor_app_bio !=  "Hi, I'm excited to use TutorMe!" and tutor_app_bio != "":
+                        default_bio = tutor_app_bio
                     tutorList.append({'name':name, 'class': data, 'Bio': default_bio, 'username': username, 'email': email, 'hourly_rate':hourly_rate})
     
     test_if_tutor = AppUser.objects.filter(user__username = request.user.username).first()
@@ -169,7 +173,11 @@ def student_requests_view(request):
         date = item.date_requested
         start = item.start_time_requested
         end = item.end_time_requested
-        request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course, 'status':status, 'tutor_email':tutor_email, 'time':str_time, 'date':date, 'start': start, 'end': end})
+        tutor_app_user = AppUser.objects.filter(user__username = to_tutor).first()
+        print("tutor: ", tutor_app_user)
+        tutor_times_query = TutorTimes.objects.get(user_id__id = tutor_app_user.id)
+        tutor_price = tutor_times_query.hourly_rate
+        request_list.append({'to_tutor':to_tutor, 'tutor_name':tutor_name, 'course':course, 'status':status, 'tutor_email':tutor_email, 'time':str_time, 'date':date, 'start': start, 'end': end, 'hourly_rate': tutor_price})
     
     context = {'request_list': request_list}
     return render(request, 'tutorme/studentRequestsView.html', context)
@@ -441,11 +449,14 @@ def edit_tutor_profile_view(request):
         tutor_app_id = AppUser.objects.filter(user_id__id = tutor_user_id).values('id')[0]['id']
         
         current_tutor_change_bio = AppUser.objects.get(user_id__id = tutor_user_id)
-
-        current_tutor_change_bio.bio = bio
+        if(bio != ""):
+            current_tutor_change_bio.bio = bio
         entry_exists = TutorTimes.objects.filter(user_id__id = tutor_app_id).exists()
+        
         if entry_exists and hourly_rate is not None:
             current_tutor_change_rate = TutorTimes.objects.get(user_id__id = tutor_app_id)
+            if(hourly_rate == "" ):
+                hourly_rate = current_tutor_change_rate.hourly_rate
             current_tutor_change_rate.hourly_rate = hourly_rate
             current_tutor_change_rate.save()
 
