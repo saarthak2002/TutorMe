@@ -37,10 +37,7 @@ class AppUser(models.Model):
 @receiver(post_save, sender=User)
 def app_user_create(sender, instance=None, created=False, **kwargs):
     if created:
-        if instance.email == 'cs3240.super@gmail.com':
-            AppUser.objects.create(user=instance, user_type=2)
-        else:
-            AppUser.objects.create(user=instance,)
+        AppUser.objects.create(user=instance,)
 
 class Tutor(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)

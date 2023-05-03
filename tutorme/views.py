@@ -237,7 +237,7 @@ def tutor_requests_view(request):
                 '''
             )
             try:
-                sg = SendGridAPIClient('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')
+                sg = SendGridAPIClient('API KEY REMOVED')
                 response = sg.send(message)
                 print(response.status_code)
                 print(response.body)
